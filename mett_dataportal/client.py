@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import csv
-import io
-import re
 from dataclasses import dataclass
 from typing import (
     Any,
@@ -41,6 +39,7 @@ from mett_dataportal_sdk.exceptions import ApiException
 
 from .config import Config, get_config
 from .exceptions import APIError, AuthenticationError
+from .request_utils import parse_tsv_response, request_json
 from .models import (
     DrugMIC,
     DrugMetabolism,
@@ -49,6 +48,7 @@ from .models import (
     Pagination,
     Species,
 )
+from .utils import normalize_params, normalize_species_entry
 
 T = TypeVar("T")
 ApiType = TypeVar("ApiType")
@@ -98,11 +98,11 @@ class DataPortalClient:
         self._http = self._build_http_session()
 
     # ------------------------------------------------------------------
-    # Public helpers
+    # Core API Methods
     # ------------------------------------------------------------------
     def list_species(self, *, format: str = "json") -> List[Species]:
         """List all species. Supports format='json' (default) or format='tsv'."""
-        payload = self._request_json("/api/species/", params={"format": format})
+        payload = request_json(self._http, self.config, "/api/species/", params={"format": format})
         if isinstance(payload, dict):
             raw_items = payload.get("data") or []
         elif isinstance(payload, list):
@@ -110,7 +110,7 @@ class DataPortalClient:
         else:
             raise APIError("Unexpected response for /api/species/")
 
-        return [self._normalize_species_entry(item) for item in raw_items]
+        return [normalize_species_entry(item) for item in raw_items]
 
     def list_genomes(self, *, format: str = "json", **params: Any) -> PaginatedResult[Genome]:
         """List all genomes. Supports format='json' (default) or format='tsv'."""
@@ -169,7 +169,9 @@ class DataPortalClient:
         )
         return response
 
-    # --------------------------- Experimental ---------------------------
+    # ------------------------------------------------------------------
+    # Experimental API Methods
+    # ------------------------------------------------------------------
     def search_drug_mic(self, *, format: str = "json", **params: Any) -> PaginatedResult[DrugMIC]:
         """Search drug MIC data. Supports format='json' (default) or format='tsv'."""
         if format == "tsv":
@@ -247,6 +249,9 @@ class DataPortalClient:
         )
         return response.model_dump()
 
+    # ------------------------------------------------------------------
+    # Interactions API Methods
+    # ------------------------------------------------------------------
     def search_ttp(self, **params: Any) -> Dict[str, Any]:
         response = self._call_api(
             self._api(PooledTTPInteractionsApi).dataportal_api_interactions_ttp_endpoints_search_interactions,
@@ -284,6 +289,9 @@ class DataPortalClient:
         )
         return response.model_dump()
 
+    # ------------------------------------------------------------------
+    # Raw API Access
+    # ------------------------------------------------------------------
     def raw_request(
         self,
         method: str,
@@ -379,7 +387,7 @@ class DataPortalClient:
         params: Optional[Dict[str, Any]] = None,
         **kwargs: Any,
     ) -> T:
-        normalized_params = self._normalize_params(params or {})
+        normalized_params = normalize_params(params or {})
         normalized_params.update(kwargs)
         normalized_params["_request_timeout"] = self._request_timeout
         return self._call(func, **normalized_params)
@@ -393,58 +401,6 @@ class DataPortalClient:
             message = exc.body or exc.reason or "API request failed"
             raise APIError(message, status_code=exc.status) from exc
 
-    def _request_json(self, endpoint: str, *, params: Optional[Dict[str, Any]] = None) -> Any:
-        """Direct HTTP GET for endpoints that don't match the published schema.
-        
-        Supports both JSON (default) and TSV (format=tsv) responses.
-        """
-        url = f"{self.config.base_url.rstrip('/')}{endpoint}"
-        format_type = (params or {}).get("format", "json")
-        
-        # Prepare headers based on format
-        headers = {}
-        if format_type == "tsv":
-            headers["Accept"] = "text/tab-separated-values"
-        else:
-            headers["Accept"] = "application/json"
-        
-        try:
-            resp = self._http.get(
-                url,
-                params=params,
-                headers=headers,
-                timeout=self.config.timeout,
-                verify=self.config.verify_ssl,
-            )
-            resp.raise_for_status()
-            
-            # Parse TSV if requested
-            if format_type == "tsv":
-                return self._parse_tsv_response(resp.text)
-            
-            # Default: parse JSON
-            return resp.json()
-        except requests.exceptions.HTTPError as exc:
-            if exc.response is not None and exc.response.status_code in {401, 403}:
-                raise AuthenticationError("Authentication failed", status_code=exc.response.status_code) from exc
-            status = exc.response.status_code if exc.response is not None else None
-            raise APIError(f"Request failed: {exc}", status_code=status) from exc
-        except requests.exceptions.RequestException as exc:
-            raise APIError(f"Request failed: {exc}") from exc
-        except (ValueError, csv.Error) as exc:
-            raise APIError(f"Failed to parse TSV response: {exc}") from exc
-
-    @staticmethod
-    def _parse_tsv_response(tsv_text: str) -> List[Dict[str, Any]]:
-        """Parse TSV response into a list of dictionaries.
-        
-        Assumes first row contains headers. Returns list of dicts where keys are header names.
-        """
-        if not tsv_text.strip():
-            return []
-        
-        reader = csv.DictReader(io.StringIO(tsv_text), delimiter="\t")
-        return [dict(row) for row in reader]
     
     def _request_tsv_paginated(
         self,
@@ -479,7 +435,7 @@ class DataPortalClient:
             resp.raise_for_status()
             
             # Parse TSV
-            rows = self._parse_tsv_response(resp.text)
+            rows = parse_tsv_response(resp.text)
             
             # Convert to model instances if model provided
             items: List[T]
@@ -504,50 +460,6 @@ class DataPortalClient:
         except (ValueError, csv.Error) as exc:
             raise APIError(f"Failed to parse TSV response: {exc}") from exc
     
-    @staticmethod
-    def _normalize_params(params: Dict[str, Any]) -> Dict[str, Any]:
-        normalized: Dict[str, Any] = {}
-        for key, value in params.items():
-            if value is None:
-                continue
-            if key.startswith("_"):
-                normalized[key] = value
-                continue
-            if any(ch.isupper() for ch in key):
-                snake = re.sub(r"(?<!^)(?=[A-Z])", "_", key).lower()
-                normalized[snake] = value
-            else:
-                normalized[key] = value
-        return normalized
-
-    @staticmethod
-    def _normalize_species_entry(entry: Any) -> Species:
-        if hasattr(entry, "model_dump"):
-            entry = entry.model_dump()
-        if not isinstance(entry, dict):
-            return {
-                "species_scientific_name": str(entry),
-                "species_acronym": None,
-                "genome_count": None,
-                "type_strain_count": None,
-                "description": None,
-                "taxonomy_id": None,
-            }
-
-        def _first(*keys: str) -> Optional[Any]:
-            for key in keys:
-                if key in entry and entry[key] not in (None, ""):
-                    return entry[key]
-            return None
-
-        return {
-            "species_acronym": _first("species_acronym", "acronym", "short_name"),
-            "species_scientific_name": _first("species_scientific_name", "scientific_name", "name"),
-            "genome_count": _first("genome_count", "genomes", "num_genomes"),
-            "type_strain_count": _first("type_strain_count", "type_strains"),
-            "description": _first("description", "common_name"),
-            "taxonomy_id": _first("taxonomy_id", "tax_id"),
-        }
 
     @staticmethod
     def _to_paginated(schema: Any) -> PaginatedResult[Any]:

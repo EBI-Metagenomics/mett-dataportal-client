@@ -39,7 +39,7 @@ When done, `conda deactivate`.
 
 ---
 
-## Set the environment variable once per shell (till the time we don't ahve the SSL certificate procured):
+## Set the environment variable once per shell (till the time we don't have the SSL certificate procured):
    ```bash
    export METT_VERIFY_SSL=false
    ```
