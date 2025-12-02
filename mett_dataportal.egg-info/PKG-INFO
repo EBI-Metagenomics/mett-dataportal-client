@@ -87,10 +87,8 @@ When done, `conda deactivate`.
    - For JWT-protected experimental data, set an env var or config file:
      ```bash
      export METT_JWT="eyJhbGciOi..."        # preferred
-     # or API key
-     export METT_API_KEY="token"
      # optional: custom base URL
-     export METT_BASE_URL="https://www.gut-microbes.org"
+    export METT_BASE_URL="https://www.gut-microbes.org"
      ```
      You can also create `~/.mett/config.toml`:
      ```toml
@@ -99,6 +97,7 @@ When done, `conda deactivate`.
      timeout = 60
      verify_ssl = true
      ```
+     The canonical host lives in `mett_dataportal.constants.DEFAULT_BASE_URL`. Update that single constant if the default ever changes; the CLI and client pick up overrides via `METT_BASE_URL` or config files as shown above.
 
 3. **Examples**
    - List species (no auth needed):
@@ -111,15 +110,25 @@ When done, `conda deactivate`.
      ```
    - Fetch experimental drug MIC data (requires JWT):
      ```bash
-     METT_JWT=... mett drugs mic --drug-name "imipenem" --species BU
+     METT_JWT=... mett drugs mic --drug-name "azithromycin" --species BU
      ```
    - JSON output for pipelines:
      ```bash
-     mett genomes search --query PV --output json | jq '.'
+     mett genomes search --query PV --format json | jq '.'
+     ```
+   - TSV format (more efficient for large datasets):
+     ```bash
+     mett genomes search --query "Bacteroides" --format tsv
+     mett species list --format tsv
      ```
 
-4. **Non-interactive pipelines**
-   - Combine with curl/jq/wget by using `--output json` or `--output csv` (coming soon).
+4. **Output Formats**
+   - **Table** (default, no `--format` specified): Requests JSON from API, displays results in a formatted table
+   - **JSON** (`--format json`): Requests JSON from API, displays raw JSON output
+   - **TSV** (`--format tsv`): Requests TSV from API, displays raw TSV output (ideal for bulk data export and spreadsheet tools)
+
+5. **Non-interactive pipelines**
+   - Combine with curl/jq/wget by using `--format json` or `--format tsv`.
    - Use `METT_TIMEOUT` and `METT_VERIFY_SSL=false` when running against dev environments.
 
 ---
@@ -173,11 +182,20 @@ pip install mett-dataportal
 python - <<'PY'
 from mett_dataportal import DataPortalClient
 client = DataPortalClient(jwt_token="...optional...")
-print(client.list_species()[:3])
+
+# JSON format (default)
+species = client.list_species(format="json")
+print(species[:3])
+
+# TSV format (more efficient for large datasets)
+genomes = client.search_genomes(format="tsv", query="Bacteroides")
+print(f"Found {len(genomes.items)} genomes")
 PY
 
 # CLI
-mett genomes search --query "PV"
+mett genomes search --query "PV"                # Table format (default)
+mett genomes search --query "PV" --format json   # JSON format
+mett genomes search --query "PV" --format tsv    # TSV format
 ```
 
 Document these steps (README or internal wiki) before sharing publicly.

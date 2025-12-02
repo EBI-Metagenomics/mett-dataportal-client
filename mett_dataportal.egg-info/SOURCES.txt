@@ -3,6 +3,7 @@ pyproject.toml
 mett_dataportal/__init__.py
 mett_dataportal/client.py
 mett_dataportal/config.py
+mett_dataportal/constants.py
 mett_dataportal/exceptions.py
 mett_dataportal.egg-info/PKG-INFO
 mett_dataportal.egg-info/SOURCES.txt

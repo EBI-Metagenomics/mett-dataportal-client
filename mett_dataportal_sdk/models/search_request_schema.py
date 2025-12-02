@@ -40,8 +40,8 @@ class SearchRequestSchema(BaseModel):
     dom_t: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="domT")
     inc_t: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="incT")
     incdom_t: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, alias="incdomT")
-    popen: Optional[Union[Annotated[float, Field(strict=True, ge=0.0)], Annotated[int, Field(strict=True, ge=0)]]] = Field(default=0.02, description="Gap open penalty")
-    pextend: Optional[Union[Annotated[float, Field(strict=True, ge=0.0)], Annotated[int, Field(strict=True, ge=0)]]] = Field(default=0.4, description="Gap extend penalty")
+    popen: Optional[Union[Annotated[float, Field(strict=True, ge=0)], Annotated[int, Field(strict=True, ge=0)]]] = Field(default=0.02, description="Gap open penalty")
+    pextend: Optional[Union[Annotated[float, Field(strict=True, ge=0)], Annotated[int, Field(strict=True, ge=0)]]] = Field(default=0.4, description="Gap extend penalty")
     __properties: ClassVar[List[str]] = ["database", "threshold", "threshold_value", "input", "mx", "E", "domE", "incE", "incdomE", "T", "domT", "incT", "incdomT", "popen", "pextend"]
 
     @field_validator('threshold')

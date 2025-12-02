@@ -590,7 +590,7 @@ class ProteinProteinInteractionsApi:
     def dataportal_api_interactions_ppi_endpoints_get_ppi_network(
         self,
         score_type: StrictStr,
-        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1.0, strict=True, ge=0.0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
+        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1, strict=True, ge=0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
         species_acronym: Annotated[Optional[StrictStr], Field(description="Species acronym filter")] = None,
         include_properties: Annotated[Optional[StrictBool], Field(description="Whether to include network properties")] = None,
         _request_timeout: Union[
@@ -669,7 +669,7 @@ class ProteinProteinInteractionsApi:
     def dataportal_api_interactions_ppi_endpoints_get_ppi_network_with_http_info(
         self,
         score_type: StrictStr,
-        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1.0, strict=True, ge=0.0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
+        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1, strict=True, ge=0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
         species_acronym: Annotated[Optional[StrictStr], Field(description="Species acronym filter")] = None,
         include_properties: Annotated[Optional[StrictBool], Field(description="Whether to include network properties")] = None,
         _request_timeout: Union[
@@ -748,7 +748,7 @@ class ProteinProteinInteractionsApi:
     def dataportal_api_interactions_ppi_endpoints_get_ppi_network_without_preload_content(
         self,
         score_type: StrictStr,
-        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1.0, strict=True, ge=0.0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
+        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1, strict=True, ge=0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
         species_acronym: Annotated[Optional[StrictStr], Field(description="Species acronym filter")] = None,
         include_properties: Annotated[Optional[StrictBool], Field(description="Whether to include network properties")] = None,
         _request_timeout: Union[
@@ -902,7 +902,7 @@ class ProteinProteinInteractionsApi:
     def dataportal_api_interactions_ppi_endpoints_get_ppi_network_properties(
         self,
         score_type: Annotated[StrictStr, Field(description="Score type for network construction")],
-        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1.0, strict=True, ge=0.0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
+        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1, strict=True, ge=0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
         species_acronym: Annotated[Optional[StrictStr], Field(description="Species acronym filter")] = None,
         _request_timeout: Union[
             None,
@@ -977,7 +977,7 @@ class ProteinProteinInteractionsApi:
     def dataportal_api_interactions_ppi_endpoints_get_ppi_network_properties_with_http_info(
         self,
         score_type: Annotated[StrictStr, Field(description="Score type for network construction")],
-        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1.0, strict=True, ge=0.0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
+        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1, strict=True, ge=0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
         species_acronym: Annotated[Optional[StrictStr], Field(description="Species acronym filter")] = None,
         _request_timeout: Union[
             None,
@@ -1052,7 +1052,7 @@ class ProteinProteinInteractionsApi:
     def dataportal_api_interactions_ppi_endpoints_get_ppi_network_properties_without_preload_content(
         self,
         score_type: Annotated[StrictStr, Field(description="Score type for network construction")],
-        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1.0, strict=True, ge=0.0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
+        score_threshold: Annotated[Optional[Union[Annotated[float, Field(le=1, strict=True, ge=0)], Annotated[int, Field(le=1, strict=True, ge=0)]]], Field(description="Score threshold for network construction")] = None,
         species_acronym: Annotated[Optional[StrictStr], Field(description="Species acronym filter")] = None,
         _request_timeout: Union[
             None,

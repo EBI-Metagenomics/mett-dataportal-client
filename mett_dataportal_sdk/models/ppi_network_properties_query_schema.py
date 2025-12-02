@@ -28,7 +28,7 @@ class PPINetworkPropertiesQuerySchema(BaseModel):
     Schema for PPI network properties query parameters.
     """ # noqa: E501
     score_type: StrictStr = Field(description="Score type for network construction")
-    score_threshold: Optional[Union[Annotated[float, Field(le=1.0, strict=True, ge=0.0)], Annotated[int, Field(le=1, strict=True, ge=0)]]] = Field(default=0.8, description="Score threshold for network construction")
+    score_threshold: Optional[Union[Annotated[float, Field(le=1, strict=True, ge=0)], Annotated[int, Field(le=1, strict=True, ge=0)]]] = Field(default=0.8, description="Score threshold for network construction")
     species_acronym: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = ["score_type", "score_threshold", "species_acronym"]
 

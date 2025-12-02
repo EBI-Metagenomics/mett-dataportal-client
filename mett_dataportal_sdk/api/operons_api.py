@@ -19,6 +19,7 @@ from typing_extensions import Annotated
 from pydantic import Field, StrictBool, StrictStr
 from typing import Optional
 from typing_extensions import Annotated
+from mett_dataportal_sdk.models.paginated_response_schema import PaginatedResponseSchema
 from mett_dataportal_sdk.models.success_response_schema import SuccessResponseSchema
 
 from mett_dataportal_sdk.api_client import ApiClient, RequestSerialized
@@ -324,7 +325,7 @@ class OperonsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> SuccessResponseSchema:
+    ) -> PaginatedResponseSchema:
         """Search operons with filters
 
         Search for operons with various filters and pagination
@@ -386,7 +387,7 @@ class OperonsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SuccessResponseSchema",
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -423,7 +424,7 @@ class OperonsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[SuccessResponseSchema]:
+    ) -> ApiResponse[PaginatedResponseSchema]:
         """Search operons with filters
 
         Search for operons with various filters and pagination
@@ -485,7 +486,7 @@ class OperonsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SuccessResponseSchema",
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -584,7 +585,7 @@ class OperonsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SuccessResponseSchema",
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,

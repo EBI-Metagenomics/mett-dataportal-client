@@ -91,6 +91,17 @@ When done, `conda deactivate`.
      mett genomes search --query "Bacteroides" --format tsv
      mett species list --format tsv
      ```
+   - Explore any API group (every endpoint now has a dedicated command):
+     ```bash
+     mett genes --help
+     mett proteomics search --help
+     mett pyhmmer search --help
+     ```
+   - Raw API access (full surface area):
+     ```bash
+     mett api request GET /api/health --format json
+     mett api request GET /api/genomes/autocomplete --format json --query query=bu --query limit=5
+     ```
 
 4. **Output Formats**
    - **Table** (default, no `--format` specified): Requests JSON from API, displays results in a formatted table
@@ -99,6 +110,7 @@ When done, `conda deactivate`.
 
 5. **Non-interactive pipelines**
    - Combine with curl/jq/wget by using `--format json` or `--format tsv`.
+   - See `docs/cli-examples-mett.md` for a catalog of `mett api request` examples covering every positive Postman scenario.
    - Use `METT_TIMEOUT` and `METT_VERIFY_SSL=false` when running against dev environments.
 
 ---

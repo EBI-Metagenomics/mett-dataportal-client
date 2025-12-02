@@ -20,7 +20,6 @@ from pydantic import Field, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Optional, Union
 from typing_extensions import Annotated
 from mett_dataportal_sdk.models.paginated_response_schema import PaginatedResponseSchema
-from mett_dataportal_sdk.models.success_response_schema import SuccessResponseSchema
 
 from mett_dataportal_sdk.api_client import ApiClient, RequestSerialized
 from mett_dataportal_sdk.api_response import ApiResponse
@@ -45,6 +44,8 @@ class DrugsApi:
         self,
         drug_name: Annotated[StrictStr, Field(description="Name of the drug")],
         species_acronym: Annotated[Optional[StrictStr], Field(description="Optional species acronym filter (BU, PV)")] = None,
+        page: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Page number")] = None,
+        per_page: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results per page")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -57,15 +58,19 @@ class DrugsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> SuccessResponseSchema:
+    ) -> PaginatedResponseSchema:
         """Get metabolism data by drug name
 
-        Retrieves all metabolism data for a specific drug across all strains. Optionally filter by species acronym to narrow results to specific species.
+        Retrieves metabolism data for a specific drug across all strains. Supports pagination and optional species filtering.
 
         :param drug_name: Name of the drug (required)
         :type drug_name: str
         :param species_acronym: Optional species acronym filter (BU, PV)
         :type species_acronym: str
+        :param page: Page number
+        :type page: int
+        :param per_page: Number of results per page
+        :type per_page: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -91,6 +96,8 @@ class DrugsApi:
         _param = self._dataportal_api_experimental_drug_endpoints_get_drug_metabolism_by_drug_serialize(
             drug_name=drug_name,
             species_acronym=species_acronym,
+            page=page,
+            per_page=per_page,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -98,7 +105,7 @@ class DrugsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SuccessResponseSchema",
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -116,6 +123,8 @@ class DrugsApi:
         self,
         drug_name: Annotated[StrictStr, Field(description="Name of the drug")],
         species_acronym: Annotated[Optional[StrictStr], Field(description="Optional species acronym filter (BU, PV)")] = None,
+        page: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Page number")] = None,
+        per_page: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results per page")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -128,15 +137,19 @@ class DrugsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[SuccessResponseSchema]:
+    ) -> ApiResponse[PaginatedResponseSchema]:
         """Get metabolism data by drug name
 
-        Retrieves all metabolism data for a specific drug across all strains. Optionally filter by species acronym to narrow results to specific species.
+        Retrieves metabolism data for a specific drug across all strains. Supports pagination and optional species filtering.
 
         :param drug_name: Name of the drug (required)
         :type drug_name: str
         :param species_acronym: Optional species acronym filter (BU, PV)
         :type species_acronym: str
+        :param page: Page number
+        :type page: int
+        :param per_page: Number of results per page
+        :type per_page: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -162,6 +175,8 @@ class DrugsApi:
         _param = self._dataportal_api_experimental_drug_endpoints_get_drug_metabolism_by_drug_serialize(
             drug_name=drug_name,
             species_acronym=species_acronym,
+            page=page,
+            per_page=per_page,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -169,7 +184,7 @@ class DrugsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SuccessResponseSchema",
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -187,6 +202,8 @@ class DrugsApi:
         self,
         drug_name: Annotated[StrictStr, Field(description="Name of the drug")],
         species_acronym: Annotated[Optional[StrictStr], Field(description="Optional species acronym filter (BU, PV)")] = None,
+        page: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Page number")] = None,
+        per_page: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results per page")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -202,12 +219,16 @@ class DrugsApi:
     ) -> RESTResponseType:
         """Get metabolism data by drug name
 
-        Retrieves all metabolism data for a specific drug across all strains. Optionally filter by species acronym to narrow results to specific species.
+        Retrieves metabolism data for a specific drug across all strains. Supports pagination and optional species filtering.
 
         :param drug_name: Name of the drug (required)
         :type drug_name: str
         :param species_acronym: Optional species acronym filter (BU, PV)
         :type species_acronym: str
+        :param page: Page number
+        :type page: int
+        :param per_page: Number of results per page
+        :type per_page: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -233,6 +254,8 @@ class DrugsApi:
         _param = self._dataportal_api_experimental_drug_endpoints_get_drug_metabolism_by_drug_serialize(
             drug_name=drug_name,
             species_acronym=species_acronym,
+            page=page,
+            per_page=per_page,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -240,7 +263,7 @@ class DrugsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SuccessResponseSchema",
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -253,6 +276,8 @@ class DrugsApi:
         self,
         drug_name,
         species_acronym,
+        page,
+        per_page,
         _request_auth,
         _content_type,
         _headers,
@@ -280,6 +305,14 @@ class DrugsApi:
         if species_acronym is not None:
             
             _query_params.append(('species_acronym', species_acronym))
+            
+        if page is not None:
+            
+            _query_params.append(('page', page))
+            
+        if per_page is not None:
+            
+            _query_params.append(('per_page', per_page))
             
         # process the header parameters
         # process the form parameters
@@ -323,6 +356,8 @@ class DrugsApi:
         self,
         drug_name: Annotated[StrictStr, Field(description="Name of the drug")],
         species_acronym: Annotated[Optional[StrictStr], Field(description="Optional species acronym filter (BU, PV)")] = None,
+        page: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Page number")] = None,
+        per_page: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results per page")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -335,15 +370,19 @@ class DrugsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> SuccessResponseSchema:
+    ) -> PaginatedResponseSchema:
         """Get MIC data by drug name
 
-        Retrieves all MIC data for a specific drug across all strains. Optionally filter by species acronym to narrow results to specific species.
+        Retrieves MIC data for a specific drug across all strains. Supports pagination and optional species filtering.
 
         :param drug_name: Name of the drug (required)
         :type drug_name: str
         :param species_acronym: Optional species acronym filter (BU, PV)
         :type species_acronym: str
+        :param page: Page number
+        :type page: int
+        :param per_page: Number of results per page
+        :type per_page: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -369,6 +408,8 @@ class DrugsApi:
         _param = self._dataportal_api_experimental_drug_endpoints_get_drug_mic_by_drug_serialize(
             drug_name=drug_name,
             species_acronym=species_acronym,
+            page=page,
+            per_page=per_page,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -376,7 +417,7 @@ class DrugsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SuccessResponseSchema",
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -394,6 +435,8 @@ class DrugsApi:
         self,
         drug_name: Annotated[StrictStr, Field(description="Name of the drug")],
         species_acronym: Annotated[Optional[StrictStr], Field(description="Optional species acronym filter (BU, PV)")] = None,
+        page: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Page number")] = None,
+        per_page: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results per page")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -406,15 +449,19 @@ class DrugsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[SuccessResponseSchema]:
+    ) -> ApiResponse[PaginatedResponseSchema]:
         """Get MIC data by drug name
 
-        Retrieves all MIC data for a specific drug across all strains. Optionally filter by species acronym to narrow results to specific species.
+        Retrieves MIC data for a specific drug across all strains. Supports pagination and optional species filtering.
 
         :param drug_name: Name of the drug (required)
         :type drug_name: str
         :param species_acronym: Optional species acronym filter (BU, PV)
         :type species_acronym: str
+        :param page: Page number
+        :type page: int
+        :param per_page: Number of results per page
+        :type per_page: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -440,6 +487,8 @@ class DrugsApi:
         _param = self._dataportal_api_experimental_drug_endpoints_get_drug_mic_by_drug_serialize(
             drug_name=drug_name,
             species_acronym=species_acronym,
+            page=page,
+            per_page=per_page,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -447,7 +496,7 @@ class DrugsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SuccessResponseSchema",
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -465,6 +514,8 @@ class DrugsApi:
         self,
         drug_name: Annotated[StrictStr, Field(description="Name of the drug")],
         species_acronym: Annotated[Optional[StrictStr], Field(description="Optional species acronym filter (BU, PV)")] = None,
+        page: Annotated[Optional[Annotated[int, Field(strict=True, ge=1)]], Field(description="Page number")] = None,
+        per_page: Annotated[Optional[Annotated[int, Field(le=100, strict=True, ge=1)]], Field(description="Number of results per page")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -480,12 +531,16 @@ class DrugsApi:
     ) -> RESTResponseType:
         """Get MIC data by drug name
 
-        Retrieves all MIC data for a specific drug across all strains. Optionally filter by species acronym to narrow results to specific species.
+        Retrieves MIC data for a specific drug across all strains. Supports pagination and optional species filtering.
 
         :param drug_name: Name of the drug (required)
         :type drug_name: str
         :param species_acronym: Optional species acronym filter (BU, PV)
         :type species_acronym: str
+        :param page: Page number
+        :type page: int
+        :param per_page: Number of results per page
+        :type per_page: int
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -511,6 +566,8 @@ class DrugsApi:
         _param = self._dataportal_api_experimental_drug_endpoints_get_drug_mic_by_drug_serialize(
             drug_name=drug_name,
             species_acronym=species_acronym,
+            page=page,
+            per_page=per_page,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -518,7 +575,7 @@ class DrugsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SuccessResponseSchema",
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -531,6 +588,8 @@ class DrugsApi:
         self,
         drug_name,
         species_acronym,
+        page,
+        per_page,
         _request_auth,
         _content_type,
         _headers,
@@ -558,6 +617,14 @@ class DrugsApi:
         if species_acronym is not None:
             
             _query_params.append(('species_acronym', species_acronym))
+            
+        if page is not None:
+            
+            _query_params.append(('page', page))
+            
+        if per_page is not None:
+            
+            _query_params.append(('per_page', per_page))
             
         # process the header parameters
         # process the form parameters

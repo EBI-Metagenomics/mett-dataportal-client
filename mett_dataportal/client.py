@@ -6,7 +6,20 @@ import csv
 import io
 import re
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, Generic, List, Optional, Type, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+)
 
 import requests  # type: ignore[import]
 from mett_dataportal_sdk import (
@@ -270,6 +283,61 @@ class DataPortalClient:
             params=params,
         )
         return response.model_dump()
+
+    def raw_request(
+        self,
+        method: str,
+        path: str,
+        *,
+        params: Optional[Union[Dict[str, Any], Sequence[Tuple[str, Any]]]] = None,
+        headers: Optional[Mapping[str, str]] = None,
+        data: Optional[Union[str, bytes]] = None,
+        json_body: Optional[Any] = None,
+        format: Optional[str] = None,
+    ) -> requests.Response:
+        """Low-level helper for issuing arbitrary API requests.
+
+        Used by the CLI `mett api request` command to provide coverage for endpoints
+        that do not have first-class helpers yet.
+        """
+
+        if json_body is not None and data is not None:
+            raise ValueError("Provide only one of json_body or data")
+
+        if path.startswith("http://") or path.startswith("https://"):
+            url = path
+        else:
+            normalized = path if path.startswith("/") else f"/{path}"
+            url = f"{self.config.base_url.rstrip('/')}{normalized}"
+
+        request_headers = dict(headers or {})
+        if format == "tsv":
+            request_headers.setdefault("Accept", "text/tab-separated-values")
+        elif format == "json" or format is None:
+            request_headers.setdefault("Accept", "application/json")
+
+        try:
+            response = self._http.request(
+                method=method.upper(),
+                url=url,
+                params=params,
+                data=None if json_body is not None else data,
+                json=json_body,
+                headers=request_headers or None,
+                timeout=self.config.timeout,
+                verify=self.config.verify_ssl,
+            )
+        except requests.RequestException as exc:
+            raise APIError(str(exc)) from exc
+
+        try:
+            response.raise_for_status()
+        except requests.HTTPError as exc:
+            message = response.text or str(exc)
+            status = response.status_code if response is not None else None
+            raise APIError(message, status_code=status) from exc
+
+        return response
 
     # ------------------------------------------------------------------
     # Internal helpers

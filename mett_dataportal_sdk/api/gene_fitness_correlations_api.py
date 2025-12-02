@@ -19,6 +19,7 @@ from typing_extensions import Annotated
 from pydantic import Field, StrictStr
 from typing import Optional
 from typing_extensions import Annotated
+from mett_dataportal_sdk.models.paginated_response_schema import PaginatedResponseSchema
 
 from mett_dataportal_sdk.api_client import ApiClient, RequestSerialized
 from mett_dataportal_sdk.api_response import ApiResponse
@@ -347,7 +348,7 @@ class GeneFitnessCorrelationsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> None:
+    ) -> PaginatedResponseSchema:
         """Search correlations
 
         Search correlations by gene name or product description
@@ -394,7 +395,7 @@ class GeneFitnessCorrelationsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': None,
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -426,7 +427,7 @@ class GeneFitnessCorrelationsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[None]:
+    ) -> ApiResponse[PaginatedResponseSchema]:
         """Search correlations
 
         Search correlations by gene name or product description
@@ -473,7 +474,7 @@ class GeneFitnessCorrelationsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': None,
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -552,7 +553,7 @@ class GeneFitnessCorrelationsApi:
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': None,
+            '200': "PaginatedResponseSchema",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -610,6 +611,13 @@ class GeneFitnessCorrelationsApi:
         # process the body parameter
 
 
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
 
 
         # authentication setting
