@@ -54,17 +54,6 @@ OAuth2AuthSetting = TypedDict(
 )
 
 
-APIKeyAuthSetting = TypedDict(
-    "APIKeyAuthSetting",
-    {
-        "type": Literal["api_key"],
-        "in": str,
-        "key": str,
-        "value": Optional[str],
-    },
-)
-
-
 BasicAuthSetting = TypedDict(
     "BasicAuthSetting",
     {
@@ -138,10 +127,6 @@ class Configuration:
     :param ignore_operation_servers
       Boolean to ignore operation servers for the API client.
       Config will use `host` as the base url regardless of the operation servers.
-    :param api_key: Dict to store API key(s).
-      Each entry in the dict specifies an API key.
-      The dict key is the name of the security scheme in the OAS specification.
-      The dict value is the API key secret.
     :param api_key_prefix: Dict to store API prefix (e.g. Bearer).
       The dict key is the name of the security scheme in the OAS specification.
       The dict value is an API key prefix when generating the auth data.
@@ -174,7 +159,6 @@ class Configuration:
     def __init__(
         self,
         host: Optional[str]=None,
-        api_key: Optional[Dict[str, str]]=None,
         api_key_prefix: Optional[Dict[str, str]]=None,
         username: Optional[str]=None,
         password: Optional[str]=None,
@@ -212,11 +196,6 @@ class Configuration:
         """Temp file folder for downloading files
         """
         # Authentication Settings
-        self.api_key = {}
-        if api_key:
-            self.api_key = api_key
-        """dict to store API key(s)
-        """
         self.api_key_prefix = {}
         if api_key_prefix:
             self.api_key_prefix = api_key_prefix
@@ -455,25 +434,6 @@ class Configuration:
         """
         self.__logger_format = value
         self.logger_formatter = logging.Formatter(self.__logger_format)
-
-    def get_api_key_with_prefix(self, identifier: str, alias: Optional[str]=None) -> Optional[str]:
-        """Gets API key (with prefix if set).
-
-        :param identifier: The identifier of apiKey.
-        :param alias: The alternative identifier of apiKey.
-        :return: The token for api key authentication.
-        """
-        if self.refresh_api_key_hook is not None:
-            self.refresh_api_key_hook(self)
-        key = self.api_key.get(identifier, self.api_key.get(alias) if alias is not None else None)
-        if key:
-            prefix = self.api_key_prefix.get(identifier)
-            if prefix:
-                return "%s %s" % (prefix, key)
-            else:
-                return key
-
-        return None
 
     def get_basic_auth_token(self) -> Optional[str]:
         """Gets HTTP basic authentication header (string).

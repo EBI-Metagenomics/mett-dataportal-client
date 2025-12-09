@@ -50,7 +50,6 @@ app.add_typer(api_app, name="api")
 def main(
     ctx: typer.Context,
     base_url: Optional[str] = typer.Option(None, help="Override the API base URL"),
-    api_key: Optional[str] = typer.Option(None, help="API key for RoleBased auth"),
     jwt: Optional[str] = typer.Option(None, help="JWT token for experimental endpoints"),
     timeout: Optional[int] = typer.Option(None, help="HTTP timeout (seconds)"),
     verify_ssl: Optional[bool] = typer.Option(None, help="Set false to skip TLS verification"),
@@ -59,7 +58,6 @@ def main(
 
     ctx.obj = _build_client(
         base_url=base_url,
-        api_key=api_key,
         jwt=jwt,
         timeout=timeout,
         verify_ssl=verify_ssl,

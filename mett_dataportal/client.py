@@ -69,7 +69,6 @@ class DataPortalClient:
         *,
         config: Config | None = None,
         base_url: str | None = None,
-        api_key: str | None = None,
         jwt_token: str | None = None,
         timeout: int | None = None,
         verify_ssl: bool | None = None,
@@ -79,8 +78,6 @@ class DataPortalClient:
         self.config = config or get_config()
         if base_url:
             self.config.base_url = base_url.rstrip("/")
-        if api_key:
-            self.config.api_key = api_key
         if jwt_token:
             self.config.jwt_token = jwt_token
         if timeout is not None:
@@ -358,7 +355,7 @@ class DataPortalClient:
     def _build_sdk_configuration(self) -> SDKConfiguration:
         configuration = SDKConfiguration(host=self.config.base_url.rstrip("/"))
         configuration.verify_ssl = self.config.verify_ssl
-        token = self.config.jwt_token or self.config.api_key
+        token = self.config.jwt_token
         if token:
             configuration.access_token = token
         return configuration
@@ -371,7 +368,7 @@ class DataPortalClient:
                 "User-Agent": self.config.user_agent,
             }
         )
-        token = self.config.jwt_token or self.config.api_key
+        token = self.config.jwt_token
         if token:
             session.headers["Authorization"] = f"Bearer {token}"
         return session
@@ -420,7 +417,7 @@ class DataPortalClient:
         # Make direct HTTP request for TSV
         url = f"{self.config.base_url.rstrip('/')}{endpoint}"
         headers = {"Accept": "text/tab-separated-values"}
-        token = self.config.jwt_token or self.config.api_key
+        token = self.config.jwt_token
         if token:
             headers["Authorization"] = f"Bearer {token}"
         

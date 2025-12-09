@@ -14,7 +14,6 @@ from .output import print_full_table, print_json, print_tsv
 def _build_client(
     *,
     base_url: Optional[str],
-    api_key: Optional[str],
     jwt: Optional[str],
     timeout: Optional[int],
     verify_ssl: Optional[bool],
@@ -23,8 +22,6 @@ def _build_client(
     config = get_config()
     if base_url:
         config.base_url = base_url.rstrip("/")
-    if api_key:
-        config.api_key = api_key
     if jwt:
         config.jwt_token = jwt
     if timeout is not None:

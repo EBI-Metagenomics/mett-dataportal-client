@@ -25,7 +25,6 @@ class Config:
     """Runtime configuration for the DataPortal client."""
 
     base_url: str = DEFAULT_BASE_URL
-    api_key: str | None = None
     jwt_token: str | None = None
     timeout: int = DEFAULT_TIMEOUT
     verify_ssl: bool = True
@@ -33,7 +32,7 @@ class Config:
 
     @property
     def authorization_header(self) -> str | None:
-        token = self.jwt_token or self.api_key
+        token = self.jwt_token
         return f"Bearer {token}" if token else None
 
 
@@ -71,7 +70,6 @@ def get_config(*, config_path: Path | None = None, env: Dict[str, str] | None = 
     cfg = Config()
 
     cfg.base_url = env.get("METT_BASE_URL") or file_data.get("base_url", cfg.base_url)
-    cfg.api_key = env.get("METT_API_KEY") or file_data.get("api_key")
     cfg.jwt_token = env.get("METT_JWT") or file_data.get("jwt_token")
 
     timeout_val = env.get("METT_TIMEOUT") or file_data.get("timeout")

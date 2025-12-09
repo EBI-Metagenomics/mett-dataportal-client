@@ -24,8 +24,6 @@ class SpeciesDict(TypedDict, total=False):
 
     species_acronym: str
     species_scientific_name: str
-    genome_count: int
-    type_strain_count: int
     description: str
     taxonomy_id: int
 
