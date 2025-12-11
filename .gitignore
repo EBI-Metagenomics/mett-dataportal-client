@@ -175,6 +175,15 @@ test_*.py
 .junie/
 
 # ===========================
+# Package Build
+# ===========================
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+
+# ===========================
 # Documentation Build
 # ===========================
 docs/_build/

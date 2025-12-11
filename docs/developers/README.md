@@ -23,6 +23,11 @@ This directory contains documentation for developers contributing to the METT Da
   - Automatic version detection
   - Updating versions
 
+- **[Release Guide](RELEASE.md)** - Complete PyPI publishing guide
+  - Building and publishing process
+  - GitHub Actions automation
+  - Manual publishing steps
+  - Troubleshooting
 
 ## Quick Links
 

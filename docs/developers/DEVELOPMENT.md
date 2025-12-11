@@ -231,85 +231,39 @@ make docs-preview
 
 ## Release Process
 
-### Preparing a Release
+For detailed release instructions, see the **[Release Guide](RELEASE.md)**.
 
-1. **Update Version**
-   ```bash
-   # Edit pyproject.toml
-   version = "0.1.1"  # Bump version
-   ```
+### Quick Release Steps
 
-2. **Update Changelog** (if maintained)
-   - Document new features
-   - List bug fixes
-   - Note breaking changes
+1. **Update version** in `pyproject.toml`
+2. **Regenerate SDK** (if API changed): `./scripts/generate-sdk.sh`
+3. **Run tests**: `make test && make lint`
+4. **Commit and push**: `git commit -m "Release v0.1.1" && git push`
+5. **Create and push tag**: `git tag v0.1.1 && git push origin v0.1.1`
+6. **GitHub Actions** will automatically build and publish to PyPI
 
-3. **Regenerate SDK** (if API changed)
-   ```bash
-   ./scripts/export-openapi-schema.sh
-   ./scripts/generate-sdk.sh
-   ```
+### Manual Publishing
 
-4. **Run Tests**
-   ```bash
-   make test
-   make lint
-   ```
-
-5. **Update Documentation**
-   ```bash
-   make docs-generate
-   make docs-render
-   ```
-
-### Building the Package
+If you prefer to publish manually:
 
 ```bash
-# Install build tools
-pip install build twine
-
 # Build package
+pip install build twine
 python -m build
 
 # Verify build
 twine check dist/*
-```
 
-### Publishing
-
-#### TestPyPI (Recommended First)
-
-```bash
-# Upload to TestPyPI
-twine upload --repository testpypi dist/*
-
-# Test installation
-pip install --index-url https://test.pypi.org/simple/ mett-dataportal
-```
-
-#### PyPI
-
-```bash
-# Upload to PyPI
+# Publish to PyPI
 twine upload dist/*
 ```
 
-### Automated Publishing
-
-The repository includes GitHub Actions workflows:
-
-- `.github/workflows/ci.yml` - Runs on PRs/pushes
-- `.github/workflows/publish.yml` - Publishes on release tags
-
-To trigger a release:
-
-```bash
-# Create and push tag
-git tag v0.1.1
-git push origin v0.1.1
-```
-
-Or manually trigger from GitHub Actions tab.
+See **[Release Guide](RELEASE.md)** for complete instructions, including:
+- PyPI account setup
+- GitHub Secrets configuration
+- Automated vs manual publishing
+- Troubleshooting
+- Best practices
 
 ## Common Tasks
 
