@@ -9,6 +9,7 @@ from typing import Any, Dict
 
 from .constants import DEFAULT_BASE_URL
 from .exceptions import ConfigurationError
+from .version import __version__
 
 try:  # Python 3.11+
     import tomllib as tomli  # type: ignore[attr-defined]
@@ -28,7 +29,7 @@ class Config:
     jwt_token: str | None = None
     timeout: int = DEFAULT_TIMEOUT
     verify_ssl: bool = True
-    user_agent: str = field(default_factory=lambda: "mett-dataportal-client/0.1.0")
+    user_agent: str = field(default_factory=lambda: f"mett-dataportal-client/{__version__}")
 
     @property
     def authorization_header(self) -> str | None:

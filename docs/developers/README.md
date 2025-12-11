@@ -18,6 +18,12 @@ This directory contains documentation for developers contributing to the METT Da
   - Implementation patterns
   - PyPI publishing strategies
 
+- **[Version Management](VERSION.md)** - How version numbers are managed
+  - Single source of truth (`pyproject.toml`)
+  - Automatic version detection
+  - Updating versions
+
+
 ## Quick Links
 
 - [Main Documentation](../README.md)

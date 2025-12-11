@@ -114,7 +114,7 @@ openapi-generator generate \
   -g python \
   -o ./mett-dataportal-client \
   --package-name mett_dataportal \
-  --additional-properties=packageVersion=0.1.0
+  --additional-properties=packageVersion={version} 
 
 # 4. Customize for CLI and add features
 ```
@@ -186,7 +186,7 @@ class DataPortalClient:
 ```toml
 [project]
 name = "mett-dataportal"
-version = "0.1.0"
+version = "0.1.0"  # Update this value - it's the single source of truth
 description = "Python client and CLI for METT Data Portal API"
 requires-python = ">=3.10"
 
@@ -521,7 +521,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mett-dataportal"
-version = "0.1.0"
+version = "0.1.0"  # Update this value - it's the single source of truth
 description = "Python client and CLI for METT Data Portal API"
 readme = "README.md"
 requires-python = ">=3.10"
