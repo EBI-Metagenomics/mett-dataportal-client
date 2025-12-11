@@ -1,0 +1,4 @@
+# Ignore generated HTML files (they're in .gitignore)
+api-reference.html
+api-reference_files/
+

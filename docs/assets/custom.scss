@@ -1,0 +1,29 @@
+/* Quarto SCSS customizations */
+
+$primary: #2563eb;
+$secondary: #7c3aed;
+$success: #10b981;
+$warning: #f59e0b;
+$danger: #ef4444;
+
+/* Link colors */
+a {
+  color: $primary;
+  
+  &:hover {
+    color: darken($primary, 10%);
+  }
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* Code blocks */
+pre {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+

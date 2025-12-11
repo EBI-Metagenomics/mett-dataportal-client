@@ -1,0 +1,1191 @@
+---
+title: "METT Data Portal API Reference"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: show
+    code-tools: true
+    code-copy: true
+    theme: cosmo
+    css: styles.css
+---
+
+# Introduction
+
+This document provides comprehensive API reference documentation for the METT Data Portal, including examples in three formats:
+
+- **Friendly CLI**: High-level `mett` commands with intuitive syntax
+- **Generic CLI**: Lower-level `mett api request` commands for direct API access
+- **cURL**: Raw HTTP requests for integration with any HTTP client
+
+All examples assume the following environment variables:
+
+- `METT_BASE_URL` (defaults to `https://www.gut-microbes.org` if unset)
+- `METT_JWT` for endpoints that require experimental access
+
+::: {.callout-note}
+## Authentication
+
+- **Public endpoints** (species, genomes search, etc.) work without credentials
+- **Experimental endpoints** (drugs, proteomics, fitness, etc.) require a JWT token set via `METT_JWT` environment variable or `~/.mett/config.toml`
+:::
+
+# Core APIs
+
+## System & Health
+
+### Get TTP metadata
+
+Get metadata about the TTP dataset including counts, available compounds, and score ranges.
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett ttp metadata --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/ttp/metadata \
+  --format json
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/ttp/metadata"
+```
+
+:::
+
+## Species
+
+### Get all species
+
+Get all available species
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett species list --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/species/ \
+  --format json
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/species/"
+```
+
+:::
+
+### Get genomes by species
+
+Retrieves genomes under a given species with pagination and sorting.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/species/{species_acronym}/genomes"
+```
+
+:::
+
+### Search genomes by species and query string
+
+Performs a search for genomes within a specific species with pagination and sorting.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/species/{species_acronym}/genomes/search"
+```
+
+:::
+
+## Genomes
+
+### Get all genomes
+
+Retrieves a paginated list of all genomes available in the system. Supports optional sorting by 'isolate_name' or 'species'. 
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett genomes list --page 1 --per-page 5 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/genomes/ \
+  --format json \
+  --query page=1 \
+  --query per_page=5
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genomes/?page=1&per_page=5"
+```
+
+:::
+
+### Get genomes by isolate names
+
+Retrieves genome records for one or more isolate names. Accepts a comma-separated list of isolate names as input. Useful for batch lookups when isolate identifiers are known.
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett genomes by-isolates --isolate BU_909,BU_61 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/genomes/by-isolate-names \
+  --format json \
+  --query isolates=BU_909,BU_61
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genomes/by-isolate-names?isolates=BU_909"
+```
+
+:::
+
+### Search genomes by query
+
+Searches genomes using a free-text query string. Returns a paginated list of matching genome records. Supports optional sorting by 'isolate_name' or 'species'.
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett genomes search --query PV_H4 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/genomes/search \
+  --format json \
+  --query query=PV_H4
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genomes/search?query=&sortField=species&sortOrder=asc"
+```
+
+:::
+
+### Get all type strains
+
+Returns a list of genomes that are designated as type strains. Type strains represent reference genomes for a given species and are essential for comparative analysis and classification.
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett genomes type-strains --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/genomes/type-strains \
+  --format json
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genomes/type-strains"
+```
+
+:::
+
+### Get all drug data for a strain
+
+Retrieves both drug MIC and metabolism data for a specific strain. Returns comprehensive drug response information including resistance and metabolism patterns. No pagination is applied as this endpoint returns complete datasets for both MIC and metabolism data.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genomes/{isolate_name}/drug-data"
+```
+
+:::
+
+### Get drug metabolism data for a strain
+
+Retrieves drug metabolism data for a specific strain. Returns paginated degradation percentages, statistical significance, and metabolizer classifications.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genomes/{isolate_name}/drug-metabolism"
+```
+
+:::
+
+### Get drug MIC data for a strain
+
+Retrieves drug MIC (Minimum Inhibitory Concentration) data for a specific strain. Returns paginated MIC measurements including drug names, values, units, and experimental conditions.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genomes/{isolate_name}/drug-mic"
+```
+
+:::
+
+### Get essentiality data by genome and contig
+
+Retrieves cached essentiality data for a given genome isolate and reference name (e.g. contig_1). Returns gene essentiality information grouped by contig. This data is typically precomputed and used to visualize gene essentiality in genome browsers or analysis tools.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genomes/{isolate_name}/essentiality/{ref_name}"
+```
+
+:::
+
+### Get genes by genome isolate
+
+Retrieves a paginated list of genes associated with a specific genome isolate. Supports optional sorting by 'isolate_name', 'gene_name', 'alias', 'seq_id', 'locus_tag' and 'product'. Useful for viewing all genes within a selected genome.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genomes/{isolate_name}/genes"
+```
+
+:::
+
+## Genes
+
+### Get all genes
+
+Retrieves a paginated list of all genes across all available genomes. Supports optional sorting by 'isolate_name', 'gene_name', 'alias', 'seq_id', 'locus_tag' and 'product'. Useful for browsing the full gene catalog without applying filters.
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett genes list --page 1 --per-page 10 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/genes/ \
+  --format json \
+  --query page=1 \
+  --query per_page=10
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/?page=1&per_page=10"
+```
+
+:::
+
+### Search genes by query string
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett genes search --query dnaA --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/genes/search \
+  --format json \
+  --query query=dnaA
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/search?query=dnaA"
+```
+
+:::
+
+### Advanced gene search across genomes and species
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett genes search-advanced --per-page 10 --sort-field seq_id --sort-order asc --isolate BU_909 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/genes/search/advanced \
+  --format json \
+  --query query= \
+  --query per_page=10 \
+  --query sort_field=seq_id \
+  --query sort_order=asc \
+  --query isolates=BU_909
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/search/advanced?query=&per_page=10&sort_field=seq_id&sort_order=asc&isolates=BU_909"
+```
+
+:::
+
+### Get gene by locus tag
+
+Retrieves detailed information for a specific gene using its unique locus tag. Returns metadata and functional annotation associated with the gene. This endpoint is useful for direct lookups when the locus tag is already known.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/{locus_tag}"
+```
+
+:::
+
+### Get correlations for a gene
+
+Get all genes correlated with a specific gene, ordered by correlation strength
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/{locus_tag}/correlations"
+```
+
+:::
+
+### Get essentiality data for a gene
+
+Retrieves essentiality data for a specific gene using its locus tag or UniProt ID. Returns basic gene information along with essentiality data including TnSeq metrics, essentiality calls, and experimental conditions.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/{locus_tag}/essentiality"
+```
+
+:::
+
+### Get fitness data for a gene
+
+Retrieves fitness data for a specific gene using its locus tag or UniProt ID. Returns basic gene information along with fitness data including log fold change, FDR, and experimental conditions.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/{locus_tag}/fitness"
+```
+
+:::
+
+### Get mutant growth data for a gene
+
+Retrieves mutant growth data for a specific gene using its locus tag or UniProt ID. Returns basic gene information along with mutant growth data including doubling times, biological replicates, and experimental conditions.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/{locus_tag}/mutant-growth"
+```
+
+:::
+
+### Get operons containing a gene
+
+Get all operons that contain a specific gene
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/{locus_tag}/operons"
+```
+
+:::
+
+### Get orthologs for a gene
+
+Get all orthologous genes for a specific gene across species
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/{locus_tag}/orthologs"
+```
+
+:::
+
+### Get proteomics evidence for a gene
+
+Retrieves proteomics evidence data for a specific gene using its locus tag or UniProt ID. Returns basic gene information along with all proteomics evidence entries including coverage, unique peptides, unique intensity, and evidence flag.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/{locus_tag}/proteomics"
+```
+
+:::
+
+### Get reactions data for a gene
+
+Retrieves metabolic reactions data for a specific gene using its locus tag or UniProt ID. Returns basic gene information along with reaction identifiers, GPR rules, and metabolites.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/genes/{locus_tag}/reactions"
+```
+
+:::
+
+
+# Experimental APIs
+
+## Drugs
+
+### Get metabolism data by drug name
+
+Retrieves metabolism data for a specific drug across all strains. Supports pagination and optional species filtering.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/drugs/metabolism/by-drug/{drug_name}"
+```
+
+:::
+
+### Search drug metabolism data
+
+Search drug metabolism data across all strains. Supports filtering by drug name, class, species, statistical significance, degradation percentages, and experimental conditions. Returns paginated results with detailed metabolism measurements. Note: Sorting is limited to top-level fields (isolate_name, species_acronym, species_scientific_name).
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett drugs metabolism-search --drug-class beta_lactam --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/drugs/metabolism/search \
+  --format json \
+  --query drug_class=beta_lactam
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/drugs/metabolism/search"
+```
+
+:::
+
+### Get MIC data by drug name
+
+Retrieves MIC data for a specific drug across all strains. Supports pagination and optional species filtering.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/drugs/mic/by-drug/{drug_name}"
+```
+
+:::
+
+### Search drug MIC data
+
+Search drug MIC (Minimum Inhibitory Concentration) data across all strains. Supports filtering by drug name, class, species, MIC values, and experimental conditions. Returns paginated results with detailed MIC measurements. Note: Sorting is limited to top-level fields (isolate_name, species_acronym, species_scientific_name).
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett drugs mic --drug-name amoxicillin --species BU --page 1 --per-page 10 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/drugs/mic/search \
+  --format json \
+  --query drug_name=amoxicillin \
+  --query species_acronym=BU \
+  --query page=1 \
+  --query per_page=10
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/drugs/mic/search"
+```
+
+:::
+
+## Proteomics
+
+### Search proteomics evidence by locus tags and/or UniProt IDs
+
+Search for proteomics evidence data across multiple genes using locus tags and/or UniProt IDs. Supports filtering by minimum coverage, minimum unique peptides, and evidence flag. Returns an array of genes with their proteomics evidence data.
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett proteomics search --locus-tag BU_ATCC8492_00002 --uniprot A7V2F0 --uniprot A6L272 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/proteomics/search \
+  --format json \
+  --query locus_tags=BU_ATCC8492_00002 \
+  --query uniprot_ids=A7V2F0,A6L272
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/proteomics/search?locus_tags=BU_ATCC8492_00002&uniprot_ids=A7V2F0,A6L272"
+```
+
+:::
+
+## Essentiality
+
+### Search essentiality data with filters
+
+Search for essentiality data across genes with optional filters. Supports identifier-based search and discovery mode (filter-only queries).
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett essentiality search --essentiality-call essential --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/essentiality/search \
+  --format json \
+  --query essentiality_call=essential
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/essentiality/search?locus_tags=BU_ATCC8492_00002&uniprot_ids=A7V2F0,A6L272"
+```
+
+:::
+
+## Fitness
+
+### Get correlation between two genes
+
+Get the correlation value between two specific genes
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett fitness-correlations correlation --locus-tag-a BU_ATCC8492_02530 --locus-tag-b BU_ATCC8492_02762 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/fitness-correlations/correlation \
+  --format json \
+  --query locus_tag_a=BU_ATCC8492_02530 \
+  --query locus_tag_b=BU_ATCC8492_02762
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/fitness-correlations/correlation?locus_tag_a=BU_ATCC8492_02530&locus_tag_b=BU_ATCC8492_02762"
+```
+
+:::
+
+### Search correlations
+
+Search correlations by gene name or product description
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett fitness-correlations search --query "Vitamin B12" --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/fitness-correlations/search \
+  --format json \
+  --query query=Vitamin B12
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/fitness-correlations/search?query=Vitamin B12"
+```
+
+:::
+
+### Search fitness data with filters
+
+Search for fitness data across genes with optional filters. Supports identifier-based search and discovery mode (filter-only queries).
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett fitness search --contrast comm20_day7 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/fitness/search \
+  --format json \
+  --query contrast=comm20_day7
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/fitness/search?locus_tags=BU_ATCC8492_00002"
+```
+
+:::
+
+## Mutant Growth
+
+### Search mutant growth data with filters
+
+Search for mutant growth data across genes with optional filters. Supports identifier-based search and discovery mode (filter-only queries).
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett mutant-growth search --max-doubling-time 2.0 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/mutant-growth/search \
+  --format json \
+  --query max_doubling_time=2.0
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/mutant-growth/search?exclude_double_picked=true&media=caecal"
+```
+
+:::
+
+## Reactions
+
+### Search reactions data with filters
+
+Search for reactions data across genes with optional filters. Supports identifier-based search and discovery mode (filter-only queries).
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett reactions search --reaction-id ASPTA --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/reactions/search \
+  --format json \
+  --query reaction_id=ASPTA
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/reactions/search?locus_tags=BU_ATCC8492_02615,BU_ATCC8492_02516"
+```
+
+:::
+
+## Operons
+
+### Search operons with filters
+
+Search for operons with various filters and pagination
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett operons search --min-gene-count 2 --has-tss true --has-terminator true --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/operons/search \
+  --format json \
+  --query min_gene_count=2 \
+  --query has_tss=true \
+  --query has_terminator=true
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/operons/search?min_gene_count=2&has_tss=true&has_terminator=true"
+```
+
+:::
+
+### Get operon by ID
+
+Get detailed information about a specific operon
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/operons/{operon_id}"
+```
+
+:::
+
+## Orthologs
+
+### Get ortholog relationship between two genes
+
+Check if two genes are orthologs and get their relationship details
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett orthologs pair --locus-tag-a BU_ATCC8492_00001 --locus-tag-b PV_ATCC8482_00001 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/orthologs/pair \
+  --format json \
+  --query locus_tag_a=BU_ATCC8492_00001 \
+  --query locus_tag_b=PV_ATCC8482_00001
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/orthologs/pair?locus_tag_a=BU_ATCC8492_00001&locus_tag_b=PV_ATCC8482_00001"
+```
+
+:::
+
+### Search orthologs with filters
+
+Search for ortholog pairs with various filters and pagination
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/orthologs/search"
+```
+
+:::
+
+
+# Interactions APIs
+
+## PPI
+
+### Search protein-protein interactions
+
+Search for protein-protein interactions with various filtering options. Can search by protein_id (UniProt ID) or locus_tag.
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett ppi interactions --species PV --page 1 --per-page 10 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/ppi/interactions \
+  --format json \
+  --query species_acronym=PV \
+  --query page=1 \
+  --query per_page=10
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/ppi/interactions?locus_tag=BU_ATCC8492_01788&species_acronym=BU&per_page=5"
+```
+
+:::
+
+### Get all protein neighbors (raw data)
+
+Get all neighbors for a specific protein without algorithm processing. Returns raw interaction data for custom analysis in Jupyter notebooks. Can search by protein_id (UniProt ID) or locus_tag.
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett ppi neighbors --protein-id A6KXK8 --n 5 --species PV --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/ppi/neighbors \
+  --format json \
+  --query protein_id=A6KXK8 \
+  --query n=5 \
+  --query species_acronym=PV
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/ppi/neighbors?protein_id=A6KXK8&n=5&species_acronym=PV"
+```
+
+:::
+
+### Get PPI network properties
+
+Get network properties (nodes, edges, density, clustering) for a specific score type and threshold
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett ppi network-properties --score-type abundance_score --score-threshold 0.95 --species PV --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/ppi/network-properties \
+  --format json \
+  --query score_type=abundance_score \
+  --query score_threshold=0.95 \
+  --query species_acronym=PV
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/ppi/network-properties?score_type=abundance_score&score_threshold=0.95&species_acronym=PV"
+```
+
+:::
+
+### Get PPI network data
+
+Get network data for a specific score type and threshold
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/ppi/network/{score_type}"
+```
+
+:::
+
+### Get available score types
+
+Get list of available score types for PPI filtering
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett ppi scores-available --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/ppi/scores/available \
+  --format json
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/ppi/scores/available"
+```
+
+:::
+
+## TTP
+
+### Get compound interactions
+
+Get all protein-compound interactions for a specific compound.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/ttp/compound/{compound}/interactions"
+```
+
+:::
+
+### Get gene interactions
+
+Get all protein-compound interactions for a specific gene.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/ttp/gene/{locus_tag}/interactions"
+```
+
+:::
+
+### Search TTP interactions
+
+Search for protein-compound interactions with basic filtering and pagination.
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett ttp search --query BU_ATCC8492 --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request GET /api/ttp/search \
+  --format json \
+  --query query=BU_ATCC8492
+```
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/ttp/search?query=myo-inositol"
+```
+
+:::
+
+
+# PyHMMER
+
+### Get Result
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/pyhmmer/result/{id}"
+```
+
+:::
+
+### Get Domains By Target
+
+Get domain information for a specific target.
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/pyhmmer/result/{id}/domains"
+```
+
+:::
+
+### Download Results
+
+Download search results in various formats (tab, fasta, aligned_fasta)
+
+::: {.panel-tabset}
+
+#### cURL
+
+```bash
+curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/pyhmmer/result/{id}/download"
+```
+
+:::
+
+### Search
+
+::: {.panel-tabset}
+
+#### Friendly CLI
+
+```bash
+mett pyhmmer search --format json
+```
+
+#### Generic CLI
+
+```bash
+mett api request POST /api/pyhmmer/search \
+  --format json \
+  --header content-type:application/json
+```
+
+#### cURL
+
+```bash
+curl -X POST "${METT_BASE_URL:-https://www.gut-microbes.org}/api/pyhmmer/search" \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "database": "bu_type_strains",
+    "threshold": "evalue",
+    "threshold_value": 0.01,
+    "input": ">test_dna\nATGAGTGAAATAGATCATGTCGGGCTGTGGAACCGCTGTCTTGAAATCATCAG",
+    "popen": 0.02,
+    "pextend": 0.4
+}'
+```
+
+:::
+
+---
+
+::: {.callout-tip}
+## Additional Resources
+
+- For more examples, see `docs/reference/cli-examples.md` and `docs/reference/curl-examples.md`
+- API schema: `openapi.json`
+- Python client documentation: `README.md`
+- PyPI package: [mett-dataportal](https://pypi.org/project/mett-dataportal)
+:::

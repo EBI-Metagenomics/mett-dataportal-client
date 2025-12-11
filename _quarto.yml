@@ -1,0 +1,45 @@
+project:
+  type: default
+  output-dir: docs/_site
+
+website:
+  title: "METT Data Portal API Documentation"
+  navbar:
+    left:
+      - href: reference/api-reference.qmd
+        text: API Reference
+      - href: ../README.md
+        text: Client Guide
+    right:
+      - icon: github
+        href: https://github.com/your-org/mett-dataportal-client
+      - icon: python
+        href: https://pypi.org/project/mett-dataportal
+
+format:
+  html:
+    theme:
+      - cosmo
+      - assets/custom.scss
+    css: assets/styles.css
+    toc: true
+    toc-depth: 3
+    code-fold: show
+    code-tools: true
+    code-copy: true
+    code-line-numbers: false
+    anchor-sections: true
+    smooth-scroll: true
+    fig-responsive: true
+    link-external-newwindow: true
+    citation-location: document
+    footnotes-location: document
+    mainfont: "Inter"
+    fontfamily: "Inter, sans-serif"
+    highlight-style: github
+
+execute:
+  echo: false
+  warning: false
+  message: false
+

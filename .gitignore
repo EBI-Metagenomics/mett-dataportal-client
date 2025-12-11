@@ -180,6 +180,14 @@ test_*.py
 docs/_build/
 docs/_static/
 docs/_templates/
+docs/_site/
+docs/reference/api-reference.html
+docs/reference/api-reference_files/
+docs/api-reference.html
+docs/api-reference_files/
 site/
+
+# Quarto
+.quarto/
 
 /.vscode/

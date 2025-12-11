@@ -1,0 +1,116 @@
+# Documentation
+
+This directory contains all documentation for the METT Data Portal client library, organized into logical subdirectories.
+
+## Directory Structure
+
+```
+docs/
+├── README.md              # This file - documentation overview
+├── INDEX.md               # Documentation index
+├── QUICK_START.md         # Quick reference for documentation commands
+├── requirements.txt       # Documentation dependencies
+├── guides/                # User-facing guides
+│   ├── USAGE.md          # Comprehensive usage examples
+│   └── CONFIGURATION.md  # Configuration and authentication
+├── developers/            # Developer documentation
+│   └── DEVELOPMENT.md    # Development setup and workflows
+├── reference/             # API reference and examples
+│   ├── api-reference.qmd # Main API reference (Quarto, auto-generated)
+│   ├── cli-examples.md   # CLI command examples (friendly and generic)
+│   └── curl-examples.md  # cURL/HTTP request examples
+└── assets/                # Static assets
+    ├── styles.css        # Custom CSS styling
+    └── custom.scss        # SCSS customizations
+```
+
+## Quick Navigation
+
+### For Users
+
+- **[Usage Guide](guides/USAGE.md)** - Learn how to use the CLI and Python API
+- **[Configuration Guide](guides/CONFIGURATION.md)** - Set up authentication and configuration
+- **[API Reference](reference/api-reference.qmd)** - Complete API documentation with examples
+
+### For Developers
+
+- **[Development Guide](developers/DEVELOPMENT.md)** - Development setup, testing, and workflows
+- **[Contributing Guide](../CONTRIBUTING.md)** - How to contribute to the project
+- **[Architecture Guide](developers/ARCHITECTURE.md)** - Package architecture and design decisions
+
+### Reference
+
+- **[CLI Examples](reference/cli-examples.md)** - Comprehensive CLI command examples (friendly and generic)
+- **[cURL Examples](reference/curl-examples.md)** - Raw HTTP request examples
+
+## Viewing the API Reference
+
+The API reference is in Quarto format (`.qmd`). To view it:
+
+### Option 1: Render to HTML
+
+```bash
+# Generate from OpenAPI spec (if needed)
+make docs-generate
+
+# Render to HTML
+make docs-render
+
+# Open in browser
+open docs/reference/api-reference.html
+```
+
+### Option 2: Preview (Watch Mode)
+
+```bash
+# Start preview server (auto-reloads on changes)
+make docs-preview
+```
+
+This will start a local server (usually at http://localhost:4200) that auto-refreshes when you make changes.
+
+### Option 3: View Source
+
+The source file `reference/api-reference.qmd` is human-readable Markdown with Quarto extensions. You can view it directly, though the rendered HTML is recommended for the best experience.
+
+## Documentation Workflow
+
+### Updating API Reference
+
+1. Update `openapi.json` (via `scripts/export-openapi-schema.sh`)
+2. Regenerate: `make docs-generate`
+3. Review changes in `reference/api-reference.qmd`
+4. Render: `make docs-render`
+
+### Updating Usage Examples
+
+1. Edit `guides/USAGE.md` directly
+2. Add examples for new features
+3. Update existing examples if API changes
+
+### Updating Configuration Guide
+
+1. Edit `guides/CONFIGURATION.md` directly
+2. Document new configuration options
+3. Update examples as needed
+
+### Updating Development Guide
+
+1. Edit `developers/DEVELOPMENT.md` directly
+2. Document new development workflows
+3. Update setup instructions as needed
+
+## Documentation Standards
+
+- **Markdown**: All documentation uses Markdown
+- **Quarto**: API reference uses Quarto for rich formatting
+- **Examples**: All examples are tested and working
+- **Links**: All internal links use relative paths
+- **Formatting**: Consistent code block formatting
+- **Organization**: Files organized by audience and purpose
+
+## See Also
+
+- [Main README](../README.md) - Project overview
+- [Contributing Guide](../CONTRIBUTING.md) - Contribution guidelines
+- [Architecture Guide](developers/ARCHITECTURE.md) - Architecture guide
