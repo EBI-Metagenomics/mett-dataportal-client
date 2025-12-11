@@ -12,7 +12,7 @@ This script:
 import json
 import re
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List
 from collections import defaultdict
 
 # API category mapping based on tags and paths
@@ -150,8 +150,6 @@ def map_examples_to_endpoints(
 
 def categorize_endpoint(path: str, tags: List[str]) -> str:
     """Categorize endpoint based on path and tags."""
-    path_lower = path.lower()
-    
     # Check tags first
     for category, tag_list in CATEGORY_MAP.items():
         if any(tag in tags for tag in tag_list):
@@ -197,7 +195,7 @@ def generate_curl_from_generic(generic_cli: str) -> str:
     # Extract method and path
     method_match = re.search(r'(GET|POST|PUT|DELETE|PATCH)\s+(/api/[^\s\']+)', generic_cli)
     if not method_match:
-        return f'curl -X GET "${{METT_BASE_URL:-https://www.gut-microbes.org}}/api/..."'
+        return 'curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}}/api/..."'
     
     method = method_match.group(1)
     path = method_match.group(2).split()[0]
@@ -444,5 +442,5 @@ if __name__ == '__main__':
     
     print("\n" + "=" * 50)
     print("✅ Documentation generation complete!")
-    print(f"\nTo render the documentation, run:")
+    print("\nTo render the documentation, run:")
     print(f"  quarto render {output_path}")

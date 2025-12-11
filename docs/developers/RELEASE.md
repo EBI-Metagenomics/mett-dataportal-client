@@ -149,18 +149,32 @@ git commit -m "Release v0.1.1"
 git push origin main
 ```
 
-### Step 3: Create and Push Git Tag
+### Step 3: Manually Trigger GitHub Actions
 
-The git tag triggers the automated publishing workflow.
+Since workflows are set to manual-only, you need to trigger them manually:
 
+1. **Go to GitHub Actions**
+   - Navigate to your repository on GitHub
+   - Click the **Actions** tab
+
+2. **Run CI Workflow** (optional, to verify before publishing)
+   - Select **CI** workflow from the left sidebar
+   - Click **Run workflow** button
+   - Select branch (usually `main`)
+   - Click **Run workflow**
+
+3. **Run Publish Workflow**
+   - Select **Publish to PyPI** workflow from the left sidebar
+   - Click **Run workflow** button
+   - Select branch (usually `main`)
+   - Click **Run workflow**
+
+**Alternative:** You can also create and push a git tag, then manually trigger the publish workflow:
 ```bash
 # Create annotated tag (recommended)
 git tag -a v0.1.1 -m "Release v0.1.1"
 
-# Or create lightweight tag
-git tag v0.1.1
-
-# Push tag to trigger GitHub Actions
+# Push tag
 git push origin v0.1.1
 ```
 
@@ -174,8 +188,8 @@ git push origin v0.1.1
 1. Go to your repository on GitHub
 2. Click **Actions** tab
 3. Watch the workflow run:
-   - **CI workflow** runs on push
-   - **Publish workflow** runs when tag is pushed
+   - **CI workflow** runs manually (optional)
+   - **Publish workflow** runs manually
 
 ### Step 5: Verify Publication
 

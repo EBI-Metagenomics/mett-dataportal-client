@@ -6,8 +6,6 @@ from typing import Optional
 
 import typer  # type: ignore[import]
 
-from ..client import DataPortalClient
-from ..config import get_config
 from .core import genes_app, genomes_app, species_app, system_app
 from .experimental import (
     drugs_app,

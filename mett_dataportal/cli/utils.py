@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Sequence
 import typer  # type: ignore[import]
 
 from ..client import DataPortalClient
-from ..config import Config, get_config
+from ..config import get_config
 from .output import print_full_table, print_json, print_tsv
 
 

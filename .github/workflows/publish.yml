@@ -1,11 +1,11 @@
 name: Publish to PyPI
 
 on:
-  release:
-    types: [published]
-  push:
-    tags:
-      - 'v*'  # Triggers on tags like v0.1.0, v1.0.0, etc.
+  workflow_dispatch:  # Manual trigger only
+  # Uncomment below to enable automatic publishing on tag push:
+  # push:
+  #   tags:
+  #     - 'v*'  # Triggers on tags like v0.1.0, v1.0.0, etc.
 
 jobs:
   publish:
