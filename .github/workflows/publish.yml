@@ -32,6 +32,22 @@ jobs:
       with:
         python-version: "3.11"
 
+    - name: Determine publish destination
+      id: publish_dest
+      run: |
+        # Check if input is available (workflow_dispatch with branch)
+        if [ -n "${{ github.event.inputs.publish_to }}" ]; then
+          PUBLISH_TO="${{ github.event.inputs.publish_to }}"
+          echo "Using input selection: $PUBLISH_TO"
+        else
+          # Fallback: default to testpypi for safety when input not available (tag selection)
+          PUBLISH_TO="testpypi"
+          echo "⚠️  Input not available (tag selected?), defaulting to: $PUBLISH_TO"
+          echo "To publish to PyPI, select a branch instead of a tag, or set PUBLISH_TO environment variable"
+        fi
+        echo "publish_to=$PUBLISH_TO" >> $GITHUB_OUTPUT
+        echo "Selected destination: $PUBLISH_TO"
+
     - name: Extract version from tag
       id: version
       run: |
@@ -71,7 +87,7 @@ jobs:
         twine check dist/*
 
     - name: Publish to TestPyPI
-      if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.publish_to == 'testpypi' }}
+      if: steps.publish_dest.outputs.publish_to == 'testpypi'
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
@@ -81,7 +97,7 @@ jobs:
         echo "✅ Published to TestPyPI: https://test.pypi.org/project/mett-dataportal/${{ steps.version.outputs.version }}/"
 
     - name: Publish to PyPI
-      if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.publish_to == 'pypi' }}
+      if: steps.publish_dest.outputs.publish_to == 'pypi'
       env:
         TWINE_USERNAME: __token__
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
@@ -93,7 +109,8 @@ jobs:
     - name: Verify publication
       if: always()
       run: |
-        if [ "${{ github.event.inputs.publish_to }}" == "testpypi" ]; then
+        PUBLISH_TO="${{ steps.publish_dest.outputs.publish_to }}"
+        if [ "$PUBLISH_TO" == "testpypi" ]; then
           echo "✅ Package published successfully to TestPyPI!"
           echo "Version: ${{ steps.version.outputs.version }}"
           echo "View at: https://test.pypi.org/project/mett-dataportal/${{ steps.version.outputs.version }}/"

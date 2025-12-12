@@ -166,13 +166,23 @@ git push origin main
 3. **Run Publish Workflow**
    - Select **Publish to PyPI** workflow from the left sidebar
    - Click **Run workflow** button
-   - Select branch (usually `main`)
-   - **IMPORTANT: Choose where to publish:**
-     - `testpypi` - For testing (default, recommended first)
-     - `pypi` - For production release
+   - **IMPORTANT: Select a branch (not a tag) to see the dropdown**
+     - Select branch: `main` (or your release branch)
+     - **Choose where to publish:**
+       - `testpypi` - For testing (default, recommended first)
+       - `pypi` - For production release
    - Click **Run workflow**
 
-**Note:** Even if you create a git tag, you must still manually trigger the workflow to get the choice of where to publish. Tag pushes do NOT automatically trigger publishing.
+**⚠️ Important Note about Tags:**
+- If you select a **tag** instead of a branch, the dropdown will not appear in the UI
+- When a tag is selected, the workflow will **default to TestPyPI** for safety
+- **Recommendation:** Always select a **branch** (like `main`) to see and use the dropdown
+- The workflow will still work with tags, but you won't be able to choose the destination in the UI
+
+**Alternative:** If you need to publish from a tag, you can:
+1. Select the branch that contains the tag
+2. Use the dropdown to choose your destination
+3. The workflow will use the version from `pyproject.toml`
 
 ### Step 4: Monitor GitHub Actions
 
