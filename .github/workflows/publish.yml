@@ -35,18 +35,36 @@ jobs:
     - name: Determine publish destination
       id: publish_dest
       run: |
+        # GitHub UI limitation: inputs don't show when tag is selected
+        # Check if we're on a tag and input is missing
+        if [[ "${{ github.ref }}" == refs/tags/* ]] && [ -z "${{ github.event.inputs.publish_to }}" ]; then
+          echo "❌ ERROR: Cannot determine publish destination!"
+          echo ""
+          echo "GitHub Actions UI limitation: The 'Where to publish' dropdown does not appear"
+          echo "when you select a tag instead of a branch."
+          echo ""
+          echo "SOLUTION:"
+          echo "1. Click 'Run workflow' button"
+          echo "2. In the 'Use workflow from' dropdown, select a BRANCH (e.g., 'main')"
+          echo "3. The 'Where to publish' dropdown will now appear"
+          echo "4. Choose 'testpypi' or 'pypi'"
+          echo "5. Click 'Run workflow'"
+          echo ""
+          echo "The workflow will use the version from pyproject.toml regardless of branch/tag selection."
+          exit 1
+        fi
+        
         # Check if input is available (workflow_dispatch with branch)
         if [ -n "${{ github.event.inputs.publish_to }}" ]; then
           PUBLISH_TO="${{ github.event.inputs.publish_to }}"
-          echo "Using input selection: $PUBLISH_TO"
+          echo "✅ Using your selection: $PUBLISH_TO"
         else
-          # Fallback: default to testpypi for safety when input not available (tag selection)
+          # This shouldn't happen if above check works, but just in case
           PUBLISH_TO="testpypi"
-          echo "⚠️  Input not available (tag selected?), defaulting to: $PUBLISH_TO"
-          echo "To publish to PyPI, select a branch instead of a tag, or set PUBLISH_TO environment variable"
+          echo "⚠️  Input not available, defaulting to: $PUBLISH_TO"
         fi
         echo "publish_to=$PUBLISH_TO" >> $GITHUB_OUTPUT
-        echo "Selected destination: $PUBLISH_TO"
+        echo "Destination: $PUBLISH_TO"
 
     - name: Extract version from tag
       id: version

@@ -166,23 +166,24 @@ git push origin main
 3. **Run Publish Workflow**
    - Select **Publish to PyPI** workflow from the left sidebar
    - Click **Run workflow** button
-   - **IMPORTANT: Select a branch (not a tag) to see the dropdown**
-     - Select branch: `main` (or your release branch)
+   - **⚠️ CRITICAL: Select a BRANCH (not a tag) to see the dropdown**
+     - In the "Use workflow from" dropdown, select: `main` (or your release branch)
+     - **DO NOT select a tag** - the dropdown will disappear if you do
+     - After selecting a branch, you'll see **"Where to publish"** dropdown
      - **Choose where to publish:**
        - `testpypi` - For testing (default, recommended first)
        - `pypi` - For production release
    - Click **Run workflow**
 
-**⚠️ Important Note about Tags:**
-- If you select a **tag** instead of a branch, the dropdown will not appear in the UI
-- When a tag is selected, the workflow will **default to TestPyPI** for safety
-- **Recommendation:** Always select a **branch** (like `main`) to see and use the dropdown
-- The workflow will still work with tags, but you won't be able to choose the destination in the UI
+**⚠️ GitHub UI Limitation:**
+- **If you select a TAG:** The "Where to publish" dropdown will NOT appear (GitHub limitation)
+- **If you select a BRANCH:** The dropdown WILL appear and you can choose
+- **The workflow will FAIL with a helpful error** if you select a tag, guiding you to select a branch instead
 
-**Alternative:** If you need to publish from a tag, you can:
-1. Select the branch that contains the tag
-2. Use the dropdown to choose your destination
-3. The workflow will use the version from `pyproject.toml`
+**Why this matters:**
+- The workflow uses the version from `pyproject.toml`, not from the branch/tag you select
+- Selecting a branch vs tag doesn't affect which version gets published
+- You MUST select a branch to see and use the dropdown
 
 ### Step 4: Monitor GitHub Actions
 
