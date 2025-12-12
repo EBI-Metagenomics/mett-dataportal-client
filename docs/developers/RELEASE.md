@@ -167,6 +167,9 @@ Since workflows are set to manual-only, you need to trigger them manually:
    - Select **Publish to PyPI** workflow from the left sidebar
    - Click **Run workflow** button
    - Select branch (usually `main`)
+   - **Choose where to publish:**
+     - `testpypi` - For testing (recommended first)
+     - `pypi` - For production release
    - Click **Run workflow**
 
 **Alternative:** You can also create and push a git tag, then manually trigger the publish workflow:
