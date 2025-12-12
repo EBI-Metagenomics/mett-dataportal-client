@@ -151,7 +151,7 @@ git push origin main
 
 ### Step 3: Manually Trigger GitHub Actions
 
-Since workflows are set to manual-only, you need to trigger them manually:
+**Important:** The publish workflow is manual-only to ensure you always choose where to publish.
 
 1. **Go to GitHub Actions**
    - Navigate to your repository on GitHub
@@ -167,24 +167,12 @@ Since workflows are set to manual-only, you need to trigger them manually:
    - Select **Publish to PyPI** workflow from the left sidebar
    - Click **Run workflow** button
    - Select branch (usually `main`)
-   - **Choose where to publish:**
-     - `testpypi` - For testing (recommended first)
+   - **IMPORTANT: Choose where to publish:**
+     - `testpypi` - For testing (default, recommended first)
      - `pypi` - For production release
    - Click **Run workflow**
 
-**Alternative:** You can also create and push a git tag, then manually trigger the publish workflow:
-```bash
-# Create annotated tag (recommended)
-git tag -a v0.1.1 -m "Release v0.1.1"
-
-# Push tag
-git push origin v0.1.1
-```
-
-**Tag Format:**
-- Use semantic versioning: `v0.1.1`, `v0.2.0`, `v1.0.0`
-- Always prefix with `v`
-- Must match version in `pyproject.toml` (without the `v`)
+**Note:** Even if you create a git tag, you must still manually trigger the workflow to get the choice of where to publish. Tag pushes do NOT automatically trigger publishing.
 
 ### Step 4: Monitor GitHub Actions
 
@@ -272,17 +260,18 @@ twine upload dist/*
 ### Publish Workflow (`.github/workflows/publish.yml`)
 
 **Triggers:**
-- When a tag matching `v*` is pushed (e.g., `v0.1.1`)
+- **Manual only** - Must be triggered via "Run workflow" button in GitHub Actions
+- **No automatic triggers** - Tag pushes do NOT trigger publishing
 
 **Actions:**
 - Builds the package
 - Validates the build
-- Publishes to PyPI
-- Optionally publishes to TestPyPI first
+- Publishes to your chosen destination (TestPyPI or PyPI)
+- You choose the destination via dropdown when triggering
 
 **Secrets required:**
 - `PYPI_API_TOKEN`
-- `TEST_PYPI_API_TOKEN` (optional)
+- `TEST_PYPI_API_TOKEN` (optional, but recommended for testing)
 
 ## Troubleshooting
 
