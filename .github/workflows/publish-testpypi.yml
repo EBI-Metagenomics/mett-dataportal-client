@@ -57,7 +57,26 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
       run: |
         echo "📦 Publishing to TestPyPI..."
-        twine upload --repository testpypi dist/*
+        echo "Package: mett-dataportal"
+        echo "Version: ${{ steps.version.outputs.version }}"
+        echo ""
+        echo "Checking if version already exists..."
+        if twine upload --repository testpypi --skip-existing dist/* 2>&1 | grep -q "already exists"; then
+          echo "⚠️  Version ${{ steps.version.outputs.version }} already exists on TestPyPI"
+          echo "   This is normal if you're re-publishing. The upload was skipped."
+          echo "   If you need to publish a new version, update the version in pyproject.toml"
+        else
+          twine upload --repository testpypi --verbose dist/* || {
+            echo "❌ Upload failed. Common causes:"
+            echo "   1. Version already exists (use --skip-existing or bump version)"
+            echo "   2. Invalid metadata (check email format, required fields)"
+            echo "   3. Package name conflict"
+            echo ""
+            echo "Trying with verbose output..."
+            twine upload --repository testpypi --verbose dist/*
+            exit 1
+          }
+        fi
         echo "✅ Published to TestPyPI: https://test.pypi.org/project/mett-dataportal/${{ steps.version.outputs.version }}/"
 
     - name: Verify publication

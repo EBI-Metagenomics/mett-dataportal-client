@@ -57,7 +57,21 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run: |
         echo "📦 Publishing to PyPI..."
-        twine upload dist/*
+        echo "Package: mett-dataportal"
+        echo "Version: ${{ steps.version.outputs.version }}"
+        echo ""
+        echo "⚠️  Note: PyPI does not allow re-uploading existing versions"
+        echo "   If this version already exists, the upload will fail"
+        echo ""
+        twine upload --verbose dist/* || {
+          echo "❌ Upload failed. Common causes:"
+          echo "   1. Version already exists (bump version in pyproject.toml)"
+          echo "   2. Invalid metadata (check email format, required fields)"
+          echo "   3. Package name conflict"
+          echo ""
+          echo "Check the verbose output above for details."
+          exit 1
+        }
         echo "✅ Published to PyPI: https://pypi.org/project/mett-dataportal/${{ steps.version.outputs.version }}/"
 
     - name: Verify publication
