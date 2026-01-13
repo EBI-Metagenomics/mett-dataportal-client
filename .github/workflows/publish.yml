@@ -4,8 +4,8 @@ on:
   workflow_dispatch:  # Manual trigger only
     inputs:
       publish_to:
-        description: 'Where to publish'
-        required: true
+        description: 'Where to publish (NOTE: Select a BRANCH, not a tag, to see this dropdown)'
+        required: false  # Made optional to handle tag selection
         type: choice
         options:
           - testpypi
@@ -25,7 +25,7 @@ jobs:
       id-token: write  # Required for trusted publishing (recommended)
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4 
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -36,60 +36,50 @@ jobs:
       id: publish_dest
       run: |
         # GitHub UI limitation: inputs don't show when tag is selected
-        # Check if we're on a tag and input is missing
-        if [[ "${{ github.ref }}" == refs/tags/* ]] && [ -z "${{ github.event.inputs.publish_to }}" ]; then
-          echo "❌ ERROR: Cannot determine publish destination!"
-          echo ""
-          echo "GitHub Actions UI limitation: The 'Where to publish' dropdown does not appear"
-          echo "when you select a tag instead of a branch."
-          echo ""
-          echo "SOLUTION:"
-          echo "1. Click 'Run workflow' button"
-          echo "2. In the 'Use workflow from' dropdown, select a BRANCH (e.g., 'main')"
-          echo "3. The 'Where to publish' dropdown will now appear"
-          echo "4. Choose 'testpypi' or 'pypi'"
-          echo "5. Click 'Run workflow'"
-          echo ""
-          echo "The workflow will use the version from pyproject.toml regardless of branch/tag selection."
-          exit 1
-        fi
-        
-        # Check if input is available (workflow_dispatch with branch)
+        # If input is provided (branch selected), use it
         if [ -n "${{ github.event.inputs.publish_to }}" ]; then
           PUBLISH_TO="${{ github.event.inputs.publish_to }}"
           echo "✅ Using your selection: $PUBLISH_TO"
         else
-          # This shouldn't happen if above check works, but just in case
+          # Input not available (tag selected or not provided)
+          # Default to testpypi for safety
           PUBLISH_TO="testpypi"
-          echo "⚠️  Input not available, defaulting to: $PUBLISH_TO"
+          if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            echo "⚠️  Tag selected: GitHub UI doesn't show the dropdown for tags"
+            echo "   Defaulting to 'testpypi' for safety"
+            echo ""
+            echo "💡 To choose the destination:"
+            echo "   1. Select a BRANCH (e.g., 'main') instead of a tag"
+            echo "   2. The 'Where to publish' dropdown will appear"
+            echo "   3. Choose 'testpypi' or 'pypi'"
+            echo ""
+            echo "   The version comes from pyproject.toml, not the branch/tag you select."
+          else
+            echo "⚠️  No destination specified, defaulting to: $PUBLISH_TO"
+          fi
         fi
         echo "publish_to=$PUBLISH_TO" >> $GITHUB_OUTPUT
-        echo "Destination: $PUBLISH_TO"
+        echo "📦 Publishing to: $PUBLISH_TO"
 
-    - name: Extract version from tag
+    - name: Extract version from pyproject.toml
       id: version
       run: |
-        if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-        else
-          # Extract from pyproject.toml if triggered by release
-          VERSION=$(python3 -c "import tomllib; f=open('pyproject.toml','rb'); d=tomllib.load(f); print(d['project']['version'])")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-        fi
+        # Always extract from pyproject.toml (single source of truth)
+        # Python 3.11+ has tomllib built-in, and this workflow uses Python 3.11
+        VERSION=$(python3 -c "import tomllib; f=open('pyproject.toml','rb'); d=tomllib.load(f); print(d['project']['version'])")
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "Extracted version: $VERSION"
-
-    - name: Verify version matches pyproject.toml
-      run: |
-        PYPROJECT_VERSION=$(python3 -c "import tomllib; f=open('pyproject.toml','rb'); d=tomllib.load(f); print(d['project']['version'])")
-        TAG_VERSION="${{ steps.version.outputs.version }}"
-        if [ "$PYPROJECT_VERSION" != "$TAG_VERSION" ]; then
-          echo "Error: Version mismatch!"
-          echo "  Tag version: $TAG_VERSION"
-          echo "  pyproject.toml version: $PYPROJECT_VERSION"
-          exit 1
+        
+        # If triggered from a tag, verify it matches (optional check)
+        if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          if [ "$VERSION" != "$TAG_VERSION" ]; then
+            echo "⚠️  Warning: Tag version ($TAG_VERSION) doesn't match pyproject.toml ($VERSION)"
+            echo "The version from pyproject.toml will be used for publishing."
+          else
+            echo "✅ Tag version matches pyproject.toml"
+          fi
         fi
-        echo "✅ Version match: $PYPROJECT_VERSION"
 
     - name: Install build dependencies
       run: |
