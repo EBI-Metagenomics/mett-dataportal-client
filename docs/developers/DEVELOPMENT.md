@@ -240,7 +240,9 @@ For detailed release instructions, see the **[Release Guide](RELEASE.md)**.
 3. **Run tests**: `make test && make lint`
 4. **Commit and push**: `git commit -m "Release v0.1.1" && git push`
 5. **Create and push tag**: `git tag v0.1.1 && git push origin v0.1.1`
-6. **GitHub Actions** will automatically build and publish to PyPI
+6. **GitHub Actions** - Manually trigger publish workflows:
+   - **Publish to TestPyPI** - For testing
+   - **Publish to PyPI** - For production
 
 ### Manual Publishing
 
