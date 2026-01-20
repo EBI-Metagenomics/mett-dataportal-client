@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mett-dataportal
-Version: 0.1.0a2
+Version: 0.1.0a3
 Summary: Python client and CLI for the METT Data Portal API
 Author-email: METT Data Portal <vikasg@ebi.ac.uk>
 License: MIT
@@ -103,10 +103,10 @@ The API reference is in Quarto format (`.qmd`). To view it:
 
 ```bash
 # Generate from OpenAPI spec (if needed)
-make docs-generate
+python3 scripts/generate-api-docs.py
 
 # Render to HTML
-make docs-render
+quarto render docs/reference/api-reference.qmd
 
 # Open in browser
 open docs/reference/api-reference.html
@@ -115,7 +115,7 @@ open docs/reference/api-reference.html
 Or use preview mode (auto-reloads on changes):
 
 ```bash
-make docs-preview
+quarto preview docs/reference/api-reference.qmd
 ```
 
 The rendered HTML includes interactive tabs showing examples in three formats:
