@@ -101,16 +101,32 @@ pip install mett-dataportal
 
 ### From Source
 
+#### Recommended (with `uv`)
+
 ```bash
 git clone https://github.com/your-org/mett-dataportal-client.git
 cd mett-dataportal-client
-pip install -e .
+
+# Create a virtual environment and install all dependencies from pyproject.toml
+uv sync --all-extras --dev
+
+# Run the CLI via uv (no manual activation needed)
+uv run mett --help
 ```
 
-### Development Installation
+#### Alternative (classic `pip` workflow)
+
+If you prefer not to use `uv`, you can still work with a standard virtual environment:
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate
+
+pip install --upgrade pip
 pip install -e ".[dev]"
+
+# CLI is now on PATH inside the venv
+mett --help
 ```
 
 ## Requirements
@@ -165,7 +181,7 @@ MIT License - see LICENSE file for details.
 
 - **Issues**: [GitHub Issues](https://github.com/your-org/mett-dataportal-client/issues)
 - **Documentation**: See [docs/](docs/) directory
-- **Email**: data-portal@example.com
+- **Email**: vikasg@ebi.ac.uk
 
 ## Acknowledgments
 

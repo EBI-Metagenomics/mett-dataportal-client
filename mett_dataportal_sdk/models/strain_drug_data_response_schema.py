@@ -21,7 +21,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from mett_dataportal_sdk.models.drug_metabolism_data_schema import DrugMetabolismDataSchema
 from mett_dataportal_sdk.models.drug_mic_data_schema import DrugMICDataSchema
-from typing import Optional, Set
+from typing import Set
 from typing_extensions import Self
 
 class StrainDrugDataResponseSchema(BaseModel):

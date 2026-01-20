@@ -20,7 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from mett_dataportal_sdk.models.contig_schema import ContigSchema
-from typing import Optional, Set
+from typing import Set
 from typing_extensions import Self
 
 class GenomeResponseSchema(BaseModel):

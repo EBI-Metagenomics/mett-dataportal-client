@@ -22,7 +22,7 @@ from typing import Any, ClassVar, Dict, List, Optional
 from mett_dataportal_sdk.models.pagination_metadata_schema import PaginationMetadataSchema
 from mett_dataportal_sdk.models.ppi_interaction_schema import PPIInteractionSchema
 from mett_dataportal_sdk.models.response_status import ResponseStatus
-from typing import Optional, Set
+from typing import Set
 from typing_extensions import Self
 
 class PPISearchResponseSchema(BaseModel):

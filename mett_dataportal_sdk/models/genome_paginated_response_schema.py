@@ -22,7 +22,7 @@ from typing import Any, ClassVar, Dict, List, Optional
 from mett_dataportal_sdk.models.genome_response_schema import GenomeResponseSchema
 from mett_dataportal_sdk.models.pagination_metadata_schema import PaginationMetadataSchema
 from mett_dataportal_sdk.models.response_status import ResponseStatus
-from typing import Optional, Set
+from typing import Set
 from typing_extensions import Self
 
 class GenomePaginatedResponseSchema(BaseModel):

@@ -20,7 +20,7 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
-from typing import Optional, Set
+from typing import Set
 from typing_extensions import Self
 
 class SearchRequestSchema(BaseModel):

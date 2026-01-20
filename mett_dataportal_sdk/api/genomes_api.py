@@ -11,14 +11,10 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-import warnings
 from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictInt, StrictStr
-from typing import List, Optional
-from typing_extensions import Annotated
 from mett_dataportal_sdk.models.gene_paginated_response_schema import GenePaginatedResponseSchema
 from mett_dataportal_sdk.models.genome_paginated_response_schema import GenomePaginatedResponseSchema
 from mett_dataportal_sdk.models.paginated_strain_drug_mic_response_schema import PaginatedStrainDrugMICResponseSchema

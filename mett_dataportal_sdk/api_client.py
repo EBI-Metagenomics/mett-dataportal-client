@@ -33,12 +33,7 @@ import mett_dataportal_sdk.models
 from mett_dataportal_sdk import rest
 from mett_dataportal_sdk.exceptions import (
     ApiValueError,
-    ApiException,
-    BadRequestException,
-    UnauthorizedException,
-    ForbiddenException,
-    NotFoundException,
-    ServiceException
+    ApiException
 )
 
 RequestSerialized = Tuple[str, str, Dict[str, str], Optional[str], List[str]]

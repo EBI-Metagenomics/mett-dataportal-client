@@ -21,7 +21,7 @@ from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from mett_dataportal_sdk.models.amr_schema import AMRSchema
 from mett_dataportal_sdk.models.dbx_ref_schema import DBXRefSchema
-from typing import Optional, Set
+from typing import Set
 from typing_extensions import Self
 
 class GeneResponseSchema(BaseModel):
