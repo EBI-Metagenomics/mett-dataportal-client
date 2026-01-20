@@ -169,9 +169,6 @@ temp/
 # Development/Debug Files
 # ===========================
 debug_*.py
-test_*.py
-!dataportal_api/dataportal/tests/test_*.py
-!dataportal_api/pyhmmer_search/tests/test_*.py
 .junie/
 
 # ===========================
