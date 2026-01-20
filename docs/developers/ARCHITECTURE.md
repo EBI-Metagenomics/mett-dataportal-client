@@ -186,7 +186,7 @@ class DataPortalClient:
 ```toml
 [project]
 name = "mett-dataportal"
-version = "0.1.0"  # Update this value - it's the single source of truth
+version = "0.1.1"  # Update this value - it's the single source of truth
 description = "Python client and CLI for METT Data Portal API"
 requires-python = ">=3.10"
 
@@ -521,7 +521,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mett-dataportal"
-version = "0.1.0"  # Update this value - it's the single source of truth
+version = "0.1.1"  # Update this value - it's the single source of truth
 description = "Python client and CLI for METT Data Portal API"
 readme = "README.md"
 requires-python = ">=3.10"

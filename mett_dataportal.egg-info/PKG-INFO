@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mett-dataportal
-Version: 0.1.0a3
+Version: 0.1.1
 Summary: Python client and CLI for the METT Data Portal API
 Author-email: METT Data Portal <vikasg@ebi.ac.uk>
 License: MIT

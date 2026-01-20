@@ -21,6 +21,7 @@ from .experimental import (
 from .interactions import ppi_app, ttp_app
 from .other import api_app, pyhmmer_app
 from .utils import _build_client
+from .version import __version__
 
 app = typer.Typer(help="METT Data Portal CLI")
 
@@ -44,7 +45,7 @@ app.add_typer(pyhmmer_app, name="pyhmmer")
 app.add_typer(api_app, name="api")
 
 
-@app.callback()
+@app.callback(invoke_without_command=True)
 def main(
     ctx: typer.Context,
     base_url: Optional[str] = typer.Option(None, help="Override the API base URL"),
@@ -55,8 +56,15 @@ def main(
     verify_ssl: Optional[bool] = typer.Option(
         None, help="Set false to skip TLS verification"
     ),
+    version: bool = typer.Option(
+        False, "--version", "-v", help="Show version and exit"
+    ),
 ) -> None:
     """Initialize shared client and stash in Typer context."""
+
+    if version:
+        typer.echo(f"mett-dataportal {__version__}")
+        raise typer.Exit()
 
     ctx.obj = _build_client(
         base_url=base_url,
