@@ -21,7 +21,7 @@ from .experimental import (
 from .interactions import ppi_app, ttp_app
 from .other import api_app, pyhmmer_app
 from .utils import _build_client
-from .version import __version__
+from ..version import __version__
 
 app = typer.Typer(help="METT Data Portal CLI")
 
