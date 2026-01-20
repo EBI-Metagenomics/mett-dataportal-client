@@ -33,7 +33,9 @@ def orthologs_search(
             "per_page": per_page,
         }
     )
-    response = client.raw_request("GET", "/api/orthologs/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/orthologs/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Ortholog search")
 
 
@@ -49,6 +51,7 @@ def orthologs_pair(
         "locus_tag_a": locus_tag_a,
         "locus_tag_b": locus_tag_b,
     }
-    response = client.raw_request("GET", "/api/orthologs/pair", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/orthologs/pair", params=params, format=format
+    )
     handle_raw_response(response, format, title="Ortholog pair")
-

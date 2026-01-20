@@ -15,7 +15,9 @@ console = Console()
 Column = Tuple[str, callable]
 
 
-def print_table(rows: Iterable[object], columns: Sequence[Column], *, title: str) -> None:
+def print_table(
+    rows: Iterable[object], columns: Sequence[Column], *, title: str
+) -> None:
     rows = list(rows)
     if not rows:
         console.print("No results found", style="yellow")
@@ -56,11 +58,11 @@ def print_tsv(rows: Iterable[object]) -> None:
         return
 
     headers: List[str] = sorted({key for row in normalized for key in row.keys()})
-    
+
     # Use csv.writer with tab delimiter for proper TSV formatting
     writer = csv.writer(sys.stdout, delimiter="\t", lineterminator="\n")
     writer.writerow(headers)
-    
+
     for row in normalized:
         values = [_tsv_value(row.get(header)) for header in headers]
         writer.writerow(values)

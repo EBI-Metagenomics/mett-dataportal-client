@@ -41,7 +41,9 @@ def ttp_search(
             "sort_order": sort_order,
         }
     )
-    response = client.raw_request("GET", "/api/ttp/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/ttp/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="TTP search")
 
 
@@ -133,6 +135,7 @@ def ttp_pools_analysis(
 ) -> None:
     client = ensure_client(ctx)
     params = {"poolA": pool_a, "poolB": pool_b}
-    response = client.raw_request("GET", "/api/ttp/pools/analysis", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/ttp/pools/analysis", params=params, format=format
+    )
     handle_raw_response(response, format, title="TTP pools analysis")
-

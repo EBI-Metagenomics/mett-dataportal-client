@@ -39,7 +39,9 @@ def operons_search(
             "per_page": per_page,
         }
     )
-    response = client.raw_request("GET", "/api/operons/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/operons/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Operon search")
 
 
@@ -62,6 +64,7 @@ def operons_statistics(
 ) -> None:
     client = ensure_client(ctx)
     params = merge_params({"species_acronym": species_acronym})
-    response = client.raw_request("GET", "/api/operons/statistics", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/operons/statistics", params=params, format=format
+    )
     handle_raw_response(response, format, title="Operon statistics")
-

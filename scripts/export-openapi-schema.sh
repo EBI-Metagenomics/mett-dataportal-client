@@ -14,7 +14,7 @@ curl -s "${BASE_URL}/api/openapi.json" -o "${OUTPUT_FILE}"
 if [ $? -eq 0 ]; then
     echo "✅ Successfully exported OpenAPI schema to ${OUTPUT_FILE}"
     echo "📄 File size: $(wc -c < ${OUTPUT_FILE}) bytes"
-    
+
     # Validate JSON
     if command -v jq &> /dev/null; then
         echo "✅ JSON is valid"
@@ -30,4 +30,3 @@ else
     echo "❌ Failed to export OpenAPI schema"
     exit 1
 fi
-

@@ -307,4 +307,3 @@ print(client.list_species())
 - [Configuration Guide](../guides/CONFIGURATION.md) - Configuration options
 - [API Reference](../reference/api-reference.qmd) - Complete API documentation
 - [Contributing Guide](../CONTRIBUTING.md) - Contribution guidelines
-

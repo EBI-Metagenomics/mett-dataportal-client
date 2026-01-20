@@ -45,11 +45,12 @@ def normalize_species_entry(entry: Any) -> Species:
 
     return {
         "species_acronym": _first("species_acronym", "acronym", "short_name"),
-        "species_scientific_name": _first("species_scientific_name", "scientific_name", "name"),
+        "species_scientific_name": _first(
+            "species_scientific_name", "scientific_name", "name"
+        ),
         "description": _first("description", "common_name"),
         "taxonomy_id": _first("taxonomy_id", "tax_id"),
     }
 
 
 __all__ = ["normalize_params", "normalize_species_entry"]
-

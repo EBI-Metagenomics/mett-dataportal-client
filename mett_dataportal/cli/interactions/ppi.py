@@ -55,7 +55,9 @@ def ppi_interactions(
             "per_page": per_page,
         }
     )
-    response = client.raw_request("GET", "/api/ppi/interactions", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/ppi/interactions", params=params, format=format
+    )
     handle_raw_response(response, format, title="PPI interactions")
 
 
@@ -75,7 +77,9 @@ def ppi_neighbors(
             "species_acronym": species_acronym,
         }
     )
-    response = client.raw_request("GET", "/api/ppi/neighbors", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/ppi/neighbors", params=params, format=format
+    )
     handle_raw_response(response, format, title="PPI neighbors")
 
 
@@ -97,7 +101,9 @@ def ppi_neighborhood(
             "n": n,
         }
     )
-    response = client.raw_request("GET", "/api/ppi/neighborhood", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/ppi/neighborhood", params=params, format=format
+    )
     handle_raw_response(response, format, title="PPI neighborhood")
 
 
@@ -143,5 +149,7 @@ def ppi_network_properties(
             "species_acronym": species_acronym,
         }
     )
-    response = client.raw_request("GET", "/api/ppi/network-properties", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/ppi/network-properties", params=params, format=format
+    )
     handle_raw_response(response, format, title="PPI network properties")

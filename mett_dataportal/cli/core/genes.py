@@ -53,7 +53,9 @@ def genes_search(
             "sort_order": sort_order,
         }
     )
-    response = client.raw_request("GET", "/api/genes/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/genes/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Gene search")
 
 
@@ -93,7 +95,9 @@ def genes_search_advanced(
             "sort_order": sort_order,
         }
     )
-    response = client.raw_request("GET", "/api/genes/search/advanced", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/genes/search/advanced", params=params, format=format
+    )
     handle_raw_response(response, format, title="Advanced gene search")
 
 
@@ -115,7 +119,9 @@ def genes_proteomics(
     format: Optional[str] = typer.Option(None, "--format", "-f"),
 ) -> None:
     client = ensure_client(ctx)
-    response = client.raw_request("GET", f"/api/genes/{locus_tag}/proteomics", format=format)
+    response = client.raw_request(
+        "GET", f"/api/genes/{locus_tag}/proteomics", format=format
+    )
     handle_raw_response(response, format, title=f"Proteomics ({locus_tag})")
 
 
@@ -126,7 +132,9 @@ def genes_essentiality(
     format: Optional[str] = typer.Option(None, "--format", "-f"),
 ) -> None:
     client = ensure_client(ctx)
-    response = client.raw_request("GET", f"/api/genes/{locus_tag}/essentiality", format=format)
+    response = client.raw_request(
+        "GET", f"/api/genes/{locus_tag}/essentiality", format=format
+    )
     handle_raw_response(response, format, title=f"Essentiality ({locus_tag})")
 
 
@@ -137,7 +145,9 @@ def genes_fitness(
     format: Optional[str] = typer.Option(None, "--format", "-f"),
 ) -> None:
     client = ensure_client(ctx)
-    response = client.raw_request("GET", f"/api/genes/{locus_tag}/fitness", format=format)
+    response = client.raw_request(
+        "GET", f"/api/genes/{locus_tag}/fitness", format=format
+    )
     handle_raw_response(response, format, title=f"Fitness ({locus_tag})")
 
 
@@ -148,7 +158,9 @@ def genes_mutant_growth(
     format: Optional[str] = typer.Option(None, "--format", "-f"),
 ) -> None:
     client = ensure_client(ctx)
-    response = client.raw_request("GET", f"/api/genes/{locus_tag}/mutant-growth", format=format)
+    response = client.raw_request(
+        "GET", f"/api/genes/{locus_tag}/mutant-growth", format=format
+    )
     handle_raw_response(response, format, title=f"Mutant growth ({locus_tag})")
 
 
@@ -159,7 +171,9 @@ def genes_reactions(
     format: Optional[str] = typer.Option(None, "--format", "-f"),
 ) -> None:
     client = ensure_client(ctx)
-    response = client.raw_request("GET", f"/api/genes/{locus_tag}/reactions", format=format)
+    response = client.raw_request(
+        "GET", f"/api/genes/{locus_tag}/reactions", format=format
+    )
     handle_raw_response(response, format, title=f"Reactions ({locus_tag})")
 
 
@@ -243,7 +257,9 @@ def genes_autocomplete(
     query: str = typer.Option(..., "--query", "-q"),
     species_acronym: Optional[str] = typer.Option(None, "--species", "-s"),
     isolates: Optional[List[str]] = typer.Option(None, "--isolates", "-i"),
-    filter: Optional[str] = typer.Option(None, "--filter", help="Filter expression (e.g., 'essentiality:essential')"),
+    filter: Optional[str] = typer.Option(
+        None, "--filter", help="Filter expression (e.g., 'essentiality:essential')"
+    ),
     page: Optional[int] = typer.Option(None, "--page", "-p"),
     per_page: Optional[int] = typer.Option(None, "--per-page"),
     format: Optional[str] = typer.Option(None, "--format", "-f"),
@@ -259,7 +275,9 @@ def genes_autocomplete(
             "per_page": per_page,
         }
     )
-    response = client.raw_request("GET", "/api/genes/autocomplete", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/genes/autocomplete", params=params, format=format
+    )
     handle_raw_response(response, format, title="Gene autocomplete")
 
 
@@ -281,7 +299,9 @@ def genes_faceted_search(
             "interpro": interpro,
         }
     )
-    response = client.raw_request("GET", "/api/genes/faceted-search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/genes/faceted-search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Gene facets")
 
 
@@ -292,6 +312,7 @@ def genes_protein(
     format: Optional[str] = typer.Option(None, "--format", "-f"),
 ) -> None:
     client = ensure_client(ctx)
-    response = client.raw_request("GET", f"/api/genes/protein/{protein_id}", format=format)
+    response = client.raw_request(
+        "GET", f"/api/genes/protein/{protein_id}", format=format
+    )
     handle_raw_response(response, format, title=f"Protein {protein_id}")
-

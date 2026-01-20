@@ -37,4 +37,3 @@ lint: ## Run linters
 format: ## Format code
 	ruff format mett_dataportal/
 	ruff format scripts/
-

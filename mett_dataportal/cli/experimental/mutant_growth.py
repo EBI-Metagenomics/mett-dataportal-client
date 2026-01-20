@@ -20,7 +20,9 @@ def mutant_growth_search(
     experimental_condition: Optional[str] = typer.Option(None, "--condition"),
     min_doubling_time: Optional[float] = typer.Option(None, "--min-doubling-time"),
     max_doubling_time: Optional[float] = typer.Option(None, "--max-doubling-time"),
-    exclude_double_picked: Optional[bool] = typer.Option(None, "--exclude-double-picked"),
+    exclude_double_picked: Optional[bool] = typer.Option(
+        None, "--exclude-double-picked"
+    ),
     format: Optional[str] = typer.Option(None, "--format", "-f"),
 ) -> None:
     client = ensure_client(ctx)
@@ -35,6 +37,7 @@ def mutant_growth_search(
             "exclude_double_picked": exclude_double_picked,
         }
     )
-    response = client.raw_request("GET", "/api/mutant-growth/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/mutant-growth/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Mutant growth search")
-

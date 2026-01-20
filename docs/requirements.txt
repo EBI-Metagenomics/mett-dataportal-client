@@ -7,4 +7,3 @@
 # Python dependencies for documentation generation script
 # (Already in main project requirements, listed here for reference)
 # No additional dependencies needed - uses standard library
-

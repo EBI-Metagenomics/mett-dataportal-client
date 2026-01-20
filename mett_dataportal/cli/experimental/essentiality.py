@@ -35,6 +35,7 @@ def essentiality_search(
             "element": element,
         }
     )
-    response = client.raw_request("GET", "/api/essentiality/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/essentiality/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Essentiality search")
-

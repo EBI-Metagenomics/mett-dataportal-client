@@ -34,7 +34,9 @@ def fitness_search(
             "min_barcodes": min_barcodes,
         }
     )
-    response = client.raw_request("GET", "/api/fitness/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/fitness/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Fitness search")
 
 
@@ -56,7 +58,9 @@ def fitness_correlations_search(
             "per_page": per_page,
         }
     )
-    response = client.raw_request("GET", "/api/fitness-correlations/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/fitness-correlations/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Fitness correlations search")
 
 
@@ -76,6 +80,7 @@ def fitness_correlations_pair(
             "species_acronym": species_acronym,
         }
     )
-    response = client.raw_request("GET", "/api/fitness-correlations/correlation", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/fitness-correlations/correlation", params=params, format=format
+    )
     handle_raw_response(response, format, title="Gene fitness correlation")
-

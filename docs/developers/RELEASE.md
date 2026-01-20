@@ -396,4 +396,3 @@ python -c "from mett_dataportal import __version__; print(__version__)"
 - [Version Management](VERSION.md) - Version management details
 - [Architecture Guide](ARCHITECTURE.md) - Package architecture
 - [PyPI Documentation](https://packaging.python.org/en/latest/) - Official packaging guide
-

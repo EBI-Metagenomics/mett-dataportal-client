@@ -8,7 +8,13 @@ from typing import List, Optional
 import typer  # type: ignore[import]
 
 from ..output import print_full_table, print_json, print_tsv
-from ..utils import comma_join, ensure_client, handle_raw_response, merge_params, print_paginated_result
+from ..utils import (
+    comma_join,
+    ensure_client,
+    handle_raw_response,
+    merge_params,
+    print_paginated_result,
+)
 
 genomes_app = typer.Typer(help="Genome endpoints")
 
@@ -42,7 +48,9 @@ def search_genomes(
     per_page: int = typer.Option(10, "--per-page"),
     sort_field: Optional[str] = typer.Option(None, "--sort-field"),
     sort_order: Optional[str] = typer.Option(None, "--sort-order"),
-    format: Optional[str] = typer.Option(None, "--format", "-f", help="Output format: json|tsv (default: table)"),
+    format: Optional[str] = typer.Option(
+        None, "--format", "-f", help="Output format: json|tsv (default: table)"
+    ),
 ) -> None:
     client = ensure_client(ctx)
     api_format = format or "json"  # Default to JSON for API request
@@ -55,7 +63,7 @@ def search_genomes(
         sort_order=sort_order,
         species_acronym=species_acronym,
     )
-    
+
     if format == "tsv":
         print_tsv(result.items)
     elif format == "json":
@@ -91,14 +99,18 @@ def genomes_autocomplete(
             "species_acronym": species_acronym,
         }
     )
-    response = client.raw_request("GET", "/api/genomes/autocomplete", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/genomes/autocomplete", params=params, format=format
+    )
     handle_raw_response(response, format, title="Genome Autocomplete")
 
 
 @genomes_app.command("download")
 def genomes_download_tsv(
     ctx: typer.Context,
-    output: Optional[Path] = typer.Option(None, "--output", "-o", help="Destination file (defaults to stdout)"),
+    output: Optional[Path] = typer.Option(
+        None, "--output", "-o", help="Destination file (defaults to stdout)"
+    ),
 ) -> None:
     client = ensure_client(ctx)
     response = client.raw_request("GET", "/api/genomes/download/tsv", format="tsv")
@@ -118,7 +130,9 @@ def genomes_by_isolates(
 ) -> None:
     client = ensure_client(ctx)
     params = {"isolates": comma_join(isolate)}
-    response = client.raw_request("GET", "/api/genomes/by-isolate-names", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/genomes/by-isolate-names", params=params, format=format
+    )
     handle_raw_response(response, format, title="Genomes by isolate")
 
 
@@ -167,7 +181,9 @@ def genomes_essentiality(
         f"/api/genomes/{isolate_name}/essentiality/{ref_name}",
         format=format,
     )
-    handle_raw_response(response, format, title=f"Essentiality {isolate_name}:{ref_name}")
+    handle_raw_response(
+        response, format, title=f"Essentiality {isolate_name}:{ref_name}"
+    )
 
 
 @genomes_app.command("drug-mic")
@@ -221,4 +237,3 @@ def genomes_drug_data(
         format=format,
     )
     handle_raw_response(response, format, title=f"Drug data ({isolate_name})")
-

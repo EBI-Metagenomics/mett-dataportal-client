@@ -26,4 +26,3 @@ make docs-preview
 2. Add examples to `cli-examples.md` or `curl-examples.md`
 3. Regenerate: `make docs-generate`
 4. Review and commit
-

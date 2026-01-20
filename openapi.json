@@ -7106,7 +7106,7 @@
             "data": {
               "description": "List of response items",
               "items": {
-  
+
               },
               "title": "Data",
               "type": "array"

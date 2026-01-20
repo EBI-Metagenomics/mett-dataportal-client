@@ -33,6 +33,7 @@ def reactions_search(
             "product": product,
         }
     )
-    response = client.raw_request("GET", "/api/reactions/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/reactions/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Reaction search")
-

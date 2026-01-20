@@ -39,4 +39,3 @@ def system_cog_categories(
     client = ensure_client(ctx)
     response = client.raw_request("GET", "/api/metadata/cog-categories", format=format)
     handle_raw_response(response, format, title="COG Categories")
-

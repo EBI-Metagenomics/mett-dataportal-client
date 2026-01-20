@@ -31,6 +31,7 @@ def proteomics_search(
             "has_evidence": has_evidence,
         }
     )
-    response = client.raw_request("GET", "/api/proteomics/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/proteomics/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Proteomics search")
-

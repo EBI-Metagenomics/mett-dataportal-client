@@ -400,13 +400,13 @@ client = DataPortalClient()
 page = 1
 while True:
     result = client.search_genomes(query="Bacteroides", page=page, per_page=20)
-    
+
     for genome in result.items:
         print(genome.isolate_name)
-    
+
     if not result.pagination or not result.pagination.has_next:
         break
-    
+
     page += 1
 ```
 
@@ -447,4 +447,3 @@ client = DataPortalClient(config=config)
 - [API Reference](../reference/api-reference.qmd) - Complete API documentation
 - [Configuration Guide](CONFIGURATION.md) - Authentication and configuration
 - [Development Guide](../developers/DEVELOPMENT.md) - Development setup
-

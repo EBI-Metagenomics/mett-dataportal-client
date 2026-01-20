@@ -27,6 +27,7 @@ Provides-Extra: dev
 Requires-Dist: pytest>=7.4; extra == "dev"
 Requires-Dist: pytest-mock>=3.11; extra == "dev"
 Requires-Dist: ruff>=0.5; extra == "dev"
+Requires-Dist: pre-commit>=3.5; extra == "dev"
 Requires-Dist: build>=1; extra == "dev"
 Requires-Dist: twine>=5; extra == "dev"
 

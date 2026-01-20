@@ -48,9 +48,13 @@ app.add_typer(api_app, name="api")
 def main(
     ctx: typer.Context,
     base_url: Optional[str] = typer.Option(None, help="Override the API base URL"),
-    jwt: Optional[str] = typer.Option(None, help="JWT token for experimental endpoints"),
+    jwt: Optional[str] = typer.Option(
+        None, help="JWT token for experimental endpoints"
+    ),
     timeout: Optional[int] = typer.Option(None, help="HTTP timeout (seconds)"),
-    verify_ssl: Optional[bool] = typer.Option(None, help="Set false to skip TLS verification"),
+    verify_ssl: Optional[bool] = typer.Option(
+        None, help="Set false to skip TLS verification"
+    ),
 ) -> None:
     """Initialize shared client and stash in Typer context."""
 

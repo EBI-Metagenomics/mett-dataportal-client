@@ -15,12 +15,14 @@ species_app = typer.Typer(help="Species endpoints")
 @species_app.command("list")
 def list_species(
     ctx: typer.Context,
-    format: Optional[str] = typer.Option(None, "--format", "-f", help="Output format: json|tsv (default: table)"),
+    format: Optional[str] = typer.Option(
+        None, "--format", "-f", help="Output format: json|tsv (default: table)"
+    ),
 ) -> None:
     client = ensure_client(ctx)
     api_format = format or "json"  # Default to JSON for API request
     species = client.list_species(format=api_format)
-    
+
     if format == "tsv":
         print_tsv(species)
     elif format == "json":
@@ -34,8 +36,12 @@ def list_species(
 def species_genomes_list(
     ctx: typer.Context,
     species_acronym: str = typer.Argument(..., help="Species acronym, e.g. BU"),
-    query: Optional[str] = typer.Option(None, "--query", "-q", help="Optional search term"),
-    isolates: Optional[List[str]] = typer.Option(None, "--isolate", "-i", help="Filter by isolate(s)"),
+    query: Optional[str] = typer.Option(
+        None, "--query", "-q", help="Optional search term"
+    ),
+    isolates: Optional[List[str]] = typer.Option(
+        None, "--isolate", "-i", help="Filter by isolate(s)"
+    ),
     page: Optional[int] = typer.Option(None, "--page", "-p"),
     per_page: Optional[int] = typer.Option(None, "--per-page"),
     sort_field: Optional[str] = typer.Option(None, "--sort-field"),
@@ -92,4 +98,3 @@ def species_search_genomes(
         format=format,
     )
     handle_raw_response(response, format, title=f"Genomes search ({species_acronym})")
-

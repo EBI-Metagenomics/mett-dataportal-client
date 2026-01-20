@@ -29,7 +29,9 @@ class Config:
     jwt_token: str | None = None
     timeout: int = DEFAULT_TIMEOUT
     verify_ssl: bool = True
-    user_agent: str = field(default_factory=lambda: f"mett-dataportal-client/{__version__}")
+    user_agent: str = field(
+        default_factory=lambda: f"mett-dataportal-client/{__version__}"
+    )
 
     @property
     def authorization_header(self) -> str | None:
@@ -61,7 +63,9 @@ def _coerce_bool(value: Any | None) -> bool | None:
     raise ConfigurationError(f"Cannot coerce value '{value}' to bool")
 
 
-def get_config(*, config_path: Path | None = None, env: Dict[str, str] | None = None) -> Config:
+def get_config(
+    *, config_path: Path | None = None, env: Dict[str, str] | None = None
+) -> Config:
     """Load configuration from environment variables and optional TOML file."""
 
     env = env or os.environ
@@ -85,7 +89,9 @@ def get_config(*, config_path: Path | None = None, env: Dict[str, str] | None = 
     if coerced is not None:
         cfg.verify_ssl = coerced
 
-    cfg.user_agent = env.get("METT_USER_AGENT") or file_data.get("user_agent", cfg.user_agent)
+    cfg.user_agent = env.get("METT_USER_AGENT") or file_data.get(
+        "user_agent", cfg.user_agent
+    )
 
     return cfg
 

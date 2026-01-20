@@ -114,7 +114,7 @@ openapi-generator generate \
   -g python \
   -o ./mett-dataportal-client \
   --package-name mett_dataportal \
-  --additional-properties=packageVersion={version} 
+  --additional-properties=packageVersion={version}
 
 # 4. Customize for CLI and add features
 ```
@@ -156,12 +156,12 @@ class DataPortalClient:
         self.session = requests.Session()
         if api_key:
             self.session.headers.update({'Authorization': f'Bearer {api_key}'})
-    
+
     def get_genomes(self, **params) -> List[Genome]:
         response = self.session.get(f'{self.base_url}/api/genomes/', params=params)
         response.raise_for_status()
         return [Genome(**item) for item in response.json()['results']]
-    
+
     # ... more methods
 ```
 
@@ -213,11 +213,11 @@ dev = [
 1. **Click** (Traditional, widely used)
    ```python
    import click
-   
+
    @click.group()
    def cli():
        pass
-   
+
    @cli.command()
    @click.option('--genome-id', required=True)
    def get_genome(genome_id):
@@ -229,9 +229,9 @@ dev = [
 2. **Typer** (Modern, type-safe, recommended)
    ```python
    import typer
-   
+
    app = typer.Typer()
-   
+
    @app.command()
    def get_genome(genome_id: str):
        client = DataPortalClient()
@@ -243,7 +243,7 @@ dev = [
    ```python
    from rich.console import Console
    from rich.table import Table
-   
+
    console = Console()
    table = Table()
    # Add columns and rows
@@ -315,7 +315,7 @@ from mett_dataportal.exceptions import APIError, AuthenticationError
 
 class DataPortalClient:
     """Main client for METT Data Portal API."""
-    
+
     def __init__(
         self,
         base_url: str = "http://www.gut-microbes.org",
@@ -325,7 +325,7 @@ class DataPortalClient:
         self.base_url = base_url.rstrip('/')
         self.api_key = api_key
         self.timeout = timeout
-        
+
         # Setup session with retry strategy
         self.session = requests.Session()
         retry_strategy = Retry(
@@ -336,18 +336,18 @@ class DataPortalClient:
         adapter = HTTPAdapter(max_retries=retry_strategy)
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
-        
+
         # Set headers
         self.session.headers.update({
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         })
-        
+
         if api_key:
             self.session.headers.update({
                 'Authorization': f'Bearer {api_key}'
             })
-    
+
     def _request(
         self,
         method: str,
@@ -357,7 +357,7 @@ class DataPortalClient:
     ) -> Dict[str, Any]:
         """Make HTTP request with error handling."""
         url = f"{self.base_url}{endpoint}"
-        
+
         try:
             response = self.session.request(
                 method=method,
@@ -374,7 +374,7 @@ class DataPortalClient:
             raise APIError(f"API request failed: {e}")
         except requests.exceptions.RequestException as e:
             raise APIError(f"Request failed: {e}")
-    
+
     def get_genomes(
         self,
         query: Optional[str] = None,
@@ -390,17 +390,17 @@ class DataPortalClient:
             **kwargs
         }
         params = {k: v for k, v in params.items() if v is not None}
-        
+
         response = self._request('GET', '/api/genomes/', params=params)
         return [Genome(**item) for item in response.get('results', [])]
-    
+
     def get_genome(self, isolate_name: str) -> Genome:
         """Get a specific genome by isolate name."""
         genomes = self.get_genomes(query=isolate_name, per_page=1)
         if not genomes:
             raise APIError(f"Genome not found: {isolate_name}")
         return genomes[0]
-    
+
     # ... more methods
 ```
 
@@ -432,9 +432,9 @@ def genomes(
         base_url=config.base_url,
         api_key=config.api_key,
     )
-    
+
     genomes = client.get_genomes(query=query, page=page, per_page=per_page)
-    
+
     if output == "json":
         import json
         console.print(json.dumps([g.dict() for g in genomes], indent=2))
@@ -447,7 +447,7 @@ def genomes(
         table.add_column("Isolate Name")
         table.add_column("Species")
         table.add_column("Type Strain")
-        
+
         for genome in genomes:
             table.add_row(
                 genome.isolate_name,
@@ -466,7 +466,7 @@ def genome(
         base_url=config.base_url,
         api_key=config.api_key,
     )
-    
+
     genome = client.get_genome(isolate_name)
     console.print(genome)
 
@@ -493,7 +493,7 @@ def get_config() -> Config:
     # Check environment variables
     api_key = os.getenv("METT_API_KEY")
     base_url = os.getenv("METT_BASE_URL", "http://www.gut-microbes.org")
-    
+
     # Check config file (~/.mett/config.toml)
     config_path = Path.home() / ".mett" / "config.toml"
     if config_path.exists():
@@ -503,7 +503,7 @@ def get_config() -> Config:
             config_data = tomli.load(f)
             api_key = api_key or config_data.get("api_key")
             base_url = config_data.get("base_url", base_url)
-    
+
     return Config(base_url=base_url, api_key=api_key)
 ```
 
@@ -771,4 +771,3 @@ mett genomes --query "PV" --output csv > genomes.csv
 - [Rich Documentation](https://rich.readthedocs.io/)
 - [Python Packaging Guide](https://packaging.python.org/)
 - [PyPI Publishing Guide](https://packaging.python.org/guides/distributing-packages-using-setuptools/)
-

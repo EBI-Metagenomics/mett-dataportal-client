@@ -31,7 +31,7 @@ except Exception as e:
     print('0.1.0', file=sys.stderr)
     sys.exit(1)
 " 2>&1)
-  
+
   # Check if extraction failed
   if [[ $? -ne 0 ]] || [[ -z "${PACKAGE_VERSION}" ]]; then
     echo "Warning: Could not parse version from pyproject.toml, using default 0.1.0" >&2

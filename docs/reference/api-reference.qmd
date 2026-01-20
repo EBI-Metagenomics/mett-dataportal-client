@@ -123,7 +123,7 @@ curl -X GET "${METT_BASE_URL:-https://www.gut-microbes.org}/api/species/{species
 
 ### Get all genomes
 
-Retrieves a paginated list of all genomes available in the system. Supports optional sorting by 'isolate_name' or 'species'. 
+Retrieves a paginated list of all genomes available in the system. Supports optional sorting by 'isolate_name' or 'species'.
 
 ::: {.panel-tabset}
 

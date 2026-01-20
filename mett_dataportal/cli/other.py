@@ -8,7 +8,13 @@ from typing import Any, List, Optional
 
 import typer  # type: ignore[import]
 
-from .utils import comma_join, ensure_client, handle_raw_response, merge_params, parse_key_value_pairs
+from .utils import (
+    comma_join,
+    ensure_client,
+    handle_raw_response,
+    merge_params,
+    parse_key_value_pairs,
+)
 
 api_app = typer.Typer(help="Low-level raw API access")
 pyhmmer_app = typer.Typer(help="PyHMMER endpoints")
@@ -32,11 +38,21 @@ def api_request(
     ctx: typer.Context,
     method: str = typer.Argument(..., help="HTTP method (GET, POST, etc.)"),
     path: str = typer.Argument(..., help="API path, e.g. /api/species/"),
-    format: Optional[str] = typer.Option(None, "--format", "-f", help="Response format: json|tsv"),
-    query: Optional[List[str]] = typer.Option(None, "--query", "-q", help="Query parameter KEY=VALUE"),
-    header: Optional[List[str]] = typer.Option(None, "--header", "-H", help="Extra header KEY:VALUE"),
-    data: Optional[str] = typer.Option(None, "--data", "-d", help="Raw request payload"),
-    json_body: Optional[str] = typer.Option(None, "--json", help="JSON request payload"),
+    format: Optional[str] = typer.Option(
+        None, "--format", "-f", help="Response format: json|tsv"
+    ),
+    query: Optional[List[str]] = typer.Option(
+        None, "--query", "-q", help="Query parameter KEY=VALUE"
+    ),
+    header: Optional[List[str]] = typer.Option(
+        None, "--header", "-H", help="Extra header KEY:VALUE"
+    ),
+    data: Optional[str] = typer.Option(
+        None, "--data", "-d", help="Raw request payload"
+    ),
+    json_body: Optional[str] = typer.Option(
+        None, "--json", help="JSON request payload"
+    ),
 ) -> None:
     """Invoke any METT API endpoint while reusing client configuration."""
 
@@ -88,15 +104,21 @@ def pyhmmer_mx_choices(
     format: Optional[str] = typer.Option(None, "--format", "-f"),
 ) -> None:
     client = ensure_client(ctx)
-    response = client.raw_request("GET", "/api/pyhmmer/search/mx-choices", format=format)
+    response = client.raw_request(
+        "GET", "/api/pyhmmer/search/mx-choices", format=format
+    )
     handle_raw_response(response, format, title="PyHMMER mx choices")
 
 
 @pyhmmer_app.command("search")
 def pyhmmer_search(
     ctx: typer.Context,
-    body_json: Optional[str] = typer.Option(None, "--body-json", help="Inline JSON payload"),
-    body_file: Optional[Path] = typer.Option(None, "--body-file", exists=True, readable=True, help="Path to JSON body"),
+    body_json: Optional[str] = typer.Option(
+        None, "--body-json", help="Inline JSON payload"
+    ),
+    body_file: Optional[Path] = typer.Option(
+        None, "--body-file", exists=True, readable=True, help="Path to JSON body"
+    ),
     format: Optional[str] = typer.Option("json", "--format", "-f", help="json|tsv"),
 ) -> None:
     client = ensure_client(ctx)
@@ -164,7 +186,9 @@ def pyhmmer_domains(
 def pyhmmer_download(
     ctx: typer.Context,
     job_id: str = typer.Argument(...),
-    download_format: str = typer.Option(..., "--download-format", help="aligned_fasta|fasta|csv|tab"),
+    download_format: str = typer.Option(
+        ..., "--download-format", help="aligned_fasta|fasta|csv|tab"
+    ),
     output: Optional[Path] = typer.Option(None, "--output", "-o"),
 ) -> None:
     client = ensure_client(ctx)
@@ -220,7 +244,9 @@ def pyhmmer_debug_task(
     format: Optional[str] = typer.Option(None, "--format", "-f"),
 ) -> None:
     client = ensure_client(ctx)
-    response = client.raw_request("GET", f"/api/pyhmmer/debug/task/{task_id}", format=format)
+    response = client.raw_request(
+        "GET", f"/api/pyhmmer/debug/task/{task_id}", format=format
+    )
     handle_raw_response(response, format, title=f"PyHMMER task ({task_id})")
 
 
@@ -228,11 +254,14 @@ def pyhmmer_debug_task(
 def pyhmmer_testtask(
     ctx: typer.Context,
     body_json: Optional[str] = typer.Option(None, "--body-json"),
-    body_file: Optional[Path] = typer.Option(None, "--body-file", exists=True, readable=True),
+    body_file: Optional[Path] = typer.Option(
+        None, "--body-file", exists=True, readable=True
+    ),
     format: Optional[str] = typer.Option(None, "--format", "-f"),
 ) -> None:
     client = ensure_client(ctx)
     payload = _load_body_json(body_json, body_file)
-    response = client.raw_request("POST", "/api/pyhmmer/testtask", json_body=payload, format=format)
+    response = client.raw_request(
+        "POST", "/api/pyhmmer/testtask", json_body=payload, format=format
+    )
     handle_raw_response(response, format, title="PyHMMER test task")
-

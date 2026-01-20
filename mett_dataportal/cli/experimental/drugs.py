@@ -27,7 +27,9 @@ def drug_mic_search(
     per_page: int = typer.Option(20, "--per-page"),
     sort_by: Optional[str] = typer.Option(None, "--sort-by"),
     sort_order: Optional[str] = typer.Option(None, "--sort-order"),
-    format: Optional[str] = typer.Option(None, "--format", "-f", help="Output format: json|tsv (default: table)"),
+    format: Optional[str] = typer.Option(
+        None, "--format", "-f", help="Output format: json|tsv (default: table)"
+    ),
 ) -> None:
     client = ensure_client(ctx)
     api_format = format or "json"  # Default to JSON for API request
@@ -46,7 +48,7 @@ def drug_mic_search(
         sort_by=sort_by,
         sort_order=sort_order,
     )
-    
+
     if format == "tsv":
         print_tsv(result.items)
     elif format == "json":
@@ -110,7 +112,9 @@ def drug_metabolism_search(
             "sort_order": sort_order,
         }
     )
-    response = client.raw_request("GET", "/api/drugs/metabolism/search", params=params, format=format)
+    response = client.raw_request(
+        "GET", "/api/drugs/metabolism/search", params=params, format=format
+    )
     handle_raw_response(response, format, title="Drug metabolism search")
 
 
@@ -182,4 +186,3 @@ def drug_metabolism_by_class(
         format=format,
     )
     handle_raw_response(response, format, title=f"Drug metabolism class ({drug_class})")
-

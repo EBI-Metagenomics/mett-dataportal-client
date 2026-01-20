@@ -13,7 +13,7 @@ try:
 except PackageNotFoundError:
     # Package is not installed, read from pyproject.toml
     from pathlib import Path
-    
+
     try:
         # Try tomllib (Python 3.11+)
         try:
@@ -21,7 +21,7 @@ except PackageNotFoundError:
         except ImportError:
             # Fall back to tomli for Python < 3.11
             import tomli as tomllib  # type: ignore[no-redef]
-        
+
         pyproject_path = Path(__file__).parent.parent.parent / "pyproject.toml"
         with open(pyproject_path, "rb") as f:
             pyproject = tomllib.load(f)
@@ -31,4 +31,3 @@ except PackageNotFoundError:
         __version__ = "0.1.0"
 
 __all__ = ["__version__"]
-

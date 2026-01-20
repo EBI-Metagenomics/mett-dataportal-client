@@ -330,7 +330,7 @@ mett api request GET /api/genes/faceted-search \
 
 #### ME TT - API Integration Tests/Core APIs/genes/Gene-Autocomplete-01
 
-Friendly CLI: 
+Friendly CLI:
 ```bash
 mett genes autocomplete --species BU --query dnaA --format json
 ```

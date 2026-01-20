@@ -20,4 +20,3 @@ __all__ = [
     "operons_app",
     "orthologs_app",
 ]
-

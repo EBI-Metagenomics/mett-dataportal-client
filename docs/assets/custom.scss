@@ -9,7 +9,7 @@ $danger: #ef4444;
 /* Link colors */
 a {
   color: $primary;
-  
+
   &:hover {
     color: darken($primary, 10%);
   }
@@ -26,4 +26,3 @@ pre {
   background-color: #f8fafc;
   border: 1px solid #e2e8f0;
 }
-

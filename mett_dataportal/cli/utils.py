@@ -138,4 +138,3 @@ def print_paginated_result(result: Any, format: Optional[str], *, title: str) ->
         print_json(result.raw)
         return
     print_full_table(result.items, title=title)
-

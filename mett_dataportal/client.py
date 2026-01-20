@@ -31,7 +31,9 @@ from mett_dataportal_sdk.api.genes_api import GenesApi
 from mett_dataportal_sdk.api.genomes_api import GenomesApi
 from mett_dataportal_sdk.api.mutant_growth_api import MutantGrowthApi
 from mett_dataportal_sdk.api.pooled_ttp_interactions_api import PooledTTPInteractionsApi
-from mett_dataportal_sdk.api.protein_protein_interactions_api import ProteinProteinInteractionsApi
+from mett_dataportal_sdk.api.protein_protein_interactions_api import (
+    ProteinProteinInteractionsApi,
+)
 from mett_dataportal_sdk.api.proteomics_api import ProteomicsApi
 from mett_dataportal_sdk.api.reactions_api import ReactionsApi
 from mett_dataportal_sdk.api.species_api import SpeciesApi
@@ -99,7 +101,9 @@ class DataPortalClient:
     # ------------------------------------------------------------------
     def list_species(self, *, format: str = "json") -> List[Species]:
         """List all species. Supports format='json' (default) or format='tsv'."""
-        payload = request_json(self._http, self.config, "/api/species/", params={"format": format})
+        payload = request_json(
+            self._http, self.config, "/api/species/", params={"format": format}
+        )
         if isinstance(payload, dict):
             raw_items = payload.get("data") or []
         elif isinstance(payload, list):
@@ -109,37 +113,55 @@ class DataPortalClient:
 
         return [normalize_species_entry(item) for item in raw_items]
 
-    def list_genomes(self, *, format: str = "json", **params: Any) -> PaginatedResult[Genome]:
+    def list_genomes(
+        self, *, format: str = "json", **params: Any
+    ) -> PaginatedResult[Genome]:
         """List all genomes. Supports format='json' (default) or format='tsv'."""
         if format == "tsv":
-            return self._request_tsv_paginated("/api/genomes/", params=params, model=Genome)
+            return self._request_tsv_paginated(
+                "/api/genomes/", params=params, model=Genome
+            )
         response = self._call_api(
             self._api(GenomesApi).dataportal_api_core_genome_endpoints_get_all_genomes,
             params=params,
         )
         return self._to_paginated(response)
 
-    def species_genomes(self, species_acronym: str, **params: Any) -> PaginatedResult[Genome]:
+    def species_genomes(
+        self, species_acronym: str, **params: Any
+    ) -> PaginatedResult[Genome]:
         response = self._call_api(
-            self._api(SpeciesApi).dataportal_api_core_species_endpoints_get_genomes_by_species,
+            self._api(
+                SpeciesApi
+            ).dataportal_api_core_species_endpoints_get_genomes_by_species,
             params=params,
             species_acronym=species_acronym,
         )
         return self._to_paginated(response)
 
-    def search_genomes(self, *, format: str = "json", **params: Any) -> PaginatedResult[Genome]:
+    def search_genomes(
+        self, *, format: str = "json", **params: Any
+    ) -> PaginatedResult[Genome]:
         """Search genomes. Supports format='json' (default) or format='tsv'."""
         if format == "tsv":
-            return self._request_tsv_paginated("/api/genomes/search", params=params, model=Genome)
+            return self._request_tsv_paginated(
+                "/api/genomes/search", params=params, model=Genome
+            )
         response = self._call_api(
-            self._api(GenomesApi).dataportal_api_core_genome_endpoints_search_genomes_by_string,
+            self._api(
+                GenomesApi
+            ).dataportal_api_core_genome_endpoints_search_genomes_by_string,
             params=params,
         )
         return self._to_paginated(response)
 
-    def get_genome_genes(self, isolate_name: str, **params: Any) -> PaginatedResult[Gene]:
+    def get_genome_genes(
+        self, isolate_name: str, **params: Any
+    ) -> PaginatedResult[Gene]:
         response = self._call_api(
-            self._api(GenomesApi).dataportal_api_core_genome_endpoints_get_genes_by_genome,
+            self._api(
+                GenomesApi
+            ).dataportal_api_core_genome_endpoints_get_genes_by_genome,
             params=params,
             isolate_name=isolate_name,
         )
@@ -147,21 +169,27 @@ class DataPortalClient:
 
     def search_genes(self, **params: Any) -> PaginatedResult[Gene]:
         response = self._call_api(
-            self._api(GenesApi).dataportal_api_core_gene_endpoints_search_genes_by_string,
+            self._api(
+                GenesApi
+            ).dataportal_api_core_gene_endpoints_search_genes_by_string,
             params=params,
         )
         return self._to_paginated(response)
 
     def search_genes_advanced(self, **params: Any) -> PaginatedResult[Gene]:
         response = self._call_api(
-            self._api(GenesApi).dataportal_api_core_gene_endpoints_search_genes_by_multiple_genomes_and_species_and_string,
+            self._api(
+                GenesApi
+            ).dataportal_api_core_gene_endpoints_search_genes_by_multiple_genomes_and_species_and_string,
             params=params,
         )
         return self._to_paginated(response)
 
     def get_gene(self, locus_tag: str) -> Gene:
         response = self._call_api(
-            self._api(GenesApi).dataportal_api_core_gene_endpoints_get_gene_by_locus_tag,
+            self._api(
+                GenesApi
+            ).dataportal_api_core_gene_endpoints_get_gene_by_locus_tag,
             locus_tag=locus_tag,
         )
         return response
@@ -169,26 +197,38 @@ class DataPortalClient:
     # ------------------------------------------------------------------
     # Experimental API Methods
     # ------------------------------------------------------------------
-    def search_drug_mic(self, *, format: str = "json", **params: Any) -> PaginatedResult[DrugMIC]:
+    def search_drug_mic(
+        self, *, format: str = "json", **params: Any
+    ) -> PaginatedResult[DrugMIC]:
         """Search drug MIC data. Supports format='json' (default) or format='tsv'."""
         if format == "tsv":
-            return self._request_tsv_paginated("/api/drugs/mic/search", params=params, model=DrugMIC)
+            return self._request_tsv_paginated(
+                "/api/drugs/mic/search", params=params, model=DrugMIC
+            )
         response = self._call_api(
-            self._api(DrugsApi).dataportal_api_experimental_drug_endpoints_search_drug_mic,
+            self._api(
+                DrugsApi
+            ).dataportal_api_experimental_drug_endpoints_search_drug_mic,
             params=params,
         )
         return self._to_paginated(response)
 
     def search_drug_metabolism(self, **params: Any) -> PaginatedResult[DrugMetabolism]:
         response = self._call_api(
-            self._api(DrugsApi).dataportal_api_experimental_drug_endpoints_search_drug_metabolism,
+            self._api(
+                DrugsApi
+            ).dataportal_api_experimental_drug_endpoints_search_drug_metabolism,
             params=params,
         )
         return self._to_paginated(response)
 
-    def get_strain_drug_mic(self, isolate_name: str, **params: Any) -> PaginatedResult[DrugMIC]:
+    def get_strain_drug_mic(
+        self, isolate_name: str, **params: Any
+    ) -> PaginatedResult[DrugMIC]:
         response = self._call_api(
-            self._api(GenomesApi).dataportal_api_experimental_drug_endpoints_get_strain_drug_mic,
+            self._api(
+                GenomesApi
+            ).dataportal_api_experimental_drug_endpoints_get_strain_drug_mic,
             params=params,
             isolate_name=isolate_name,
         )
@@ -198,7 +238,9 @@ class DataPortalClient:
         self, isolate_name: str, **params: Any
     ) -> PaginatedResult[DrugMetabolism]:
         response = self._call_api(
-            self._api(GenomesApi).dataportal_api_experimental_drug_endpoints_get_strain_drug_metabolism,
+            self._api(
+                GenomesApi
+            ).dataportal_api_experimental_drug_endpoints_get_strain_drug_metabolism,
             params=params,
             isolate_name=isolate_name,
         )
@@ -206,42 +248,54 @@ class DataPortalClient:
 
     def get_strain_drug_data(self, isolate_name: str) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(GenomesApi).dataportal_api_experimental_drug_endpoints_get_strain_drug_data,
+            self._api(
+                GenomesApi
+            ).dataportal_api_experimental_drug_endpoints_get_strain_drug_data,
             isolate_name=isolate_name,
         )
         return response.model_dump()
 
     def search_proteomics(self, **params: Any) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(ProteomicsApi).dataportal_api_experimental_proteomics_endpoints_search_proteomics,
+            self._api(
+                ProteomicsApi
+            ).dataportal_api_experimental_proteomics_endpoints_search_proteomics,
             params=params,
         )
         return response.model_dump()
 
     def search_essentiality(self, **params: Any) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(EssentialityApi).dataportal_api_experimental_essentiality_endpoints_search_essentiality,
+            self._api(
+                EssentialityApi
+            ).dataportal_api_experimental_essentiality_endpoints_search_essentiality,
             params=params,
         )
         return response.model_dump()
 
     def search_fitness(self, **params: Any) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(FitnessApi).dataportal_api_experimental_fitness_endpoints_search_fitness,
+            self._api(
+                FitnessApi
+            ).dataportal_api_experimental_fitness_endpoints_search_fitness,
             params=params,
         )
         return response.model_dump()
 
     def search_mutant_growth(self, **params: Any) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(MutantGrowthApi).dataportal_api_experimental_mutant_growth_endpoints_search_mutant_growth,
+            self._api(
+                MutantGrowthApi
+            ).dataportal_api_experimental_mutant_growth_endpoints_search_mutant_growth,
             params=params,
         )
         return response.model_dump()
 
     def search_reactions(self, **params: Any) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(ReactionsApi).dataportal_api_experimental_reactions_endpoints_search_reactions,
+            self._api(
+                ReactionsApi
+            ).dataportal_api_experimental_reactions_endpoints_search_reactions,
             params=params,
         )
         return response.model_dump()
@@ -251,22 +305,32 @@ class DataPortalClient:
     # ------------------------------------------------------------------
     def search_ttp(self, **params: Any) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(PooledTTPInteractionsApi).dataportal_api_interactions_ttp_endpoints_search_interactions,
+            self._api(
+                PooledTTPInteractionsApi
+            ).dataportal_api_interactions_ttp_endpoints_search_interactions,
             params=params,
         )
         return response.model_dump()
 
-    def get_ttp_gene_interactions(self, locus_tag: str, **params: Any) -> Dict[str, Any]:
+    def get_ttp_gene_interactions(
+        self, locus_tag: str, **params: Any
+    ) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(PooledTTPInteractionsApi).dataportal_api_interactions_ttp_endpoints_get_gene_interactions,
+            self._api(
+                PooledTTPInteractionsApi
+            ).dataportal_api_interactions_ttp_endpoints_get_gene_interactions,
             params=params,
             locus_tag=locus_tag,
         )
         return response.model_dump()
 
-    def get_ttp_compound_interactions(self, compound: str, **params: Any) -> Dict[str, Any]:
+    def get_ttp_compound_interactions(
+        self, compound: str, **params: Any
+    ) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(PooledTTPInteractionsApi).dataportal_api_interactions_ttp_endpoints_get_compound_interactions,
+            self._api(
+                PooledTTPInteractionsApi
+            ).dataportal_api_interactions_ttp_endpoints_get_compound_interactions,
             params=params,
             compound=compound,
         )
@@ -274,14 +338,18 @@ class DataPortalClient:
 
     def search_ppi(self, **params: Any) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(ProteinProteinInteractionsApi).dataportal_api_interactions_ppi_endpoints_search_ppi_interactions,
+            self._api(
+                ProteinProteinInteractionsApi
+            ).dataportal_api_interactions_ppi_endpoints_search_ppi_interactions,
             params=params,
         )
         return response.model_dump()
 
     def get_ppi_neighbors(self, **params: Any) -> Dict[str, Any]:
         response = self._call_api(
-            self._api(ProteinProteinInteractionsApi).dataportal_api_interactions_ppi_endpoints_get_all_protein_neighbors,
+            self._api(
+                ProteinProteinInteractionsApi
+            ).dataportal_api_interactions_ppi_endpoints_get_all_protein_neighbors,
             params=params,
         )
         return response.model_dump()
@@ -394,11 +462,12 @@ class DataPortalClient:
             return func(**kwargs)
         except ApiException as exc:
             if exc.status in {401, 403}:
-                raise AuthenticationError(exc.body or "Authentication failed", status_code=exc.status) from exc
+                raise AuthenticationError(
+                    exc.body or "Authentication failed", status_code=exc.status
+                ) from exc
             message = exc.body or exc.reason or "API request failed"
             raise APIError(message, status_code=exc.status) from exc
 
-    
     def _request_tsv_paginated(
         self,
         endpoint: str,
@@ -407,20 +476,20 @@ class DataPortalClient:
         model: Type[T] | None = None,
     ) -> PaginatedResult[T]:
         """Make TSV request and parse into paginated result.
-        
+
         Note: TSV responses may not include pagination metadata.
         If pagination info is missing, pagination will be None.
         """
         tsv_params = (params or {}).copy()
         tsv_params["format"] = "tsv"
-        
+
         # Make direct HTTP request for TSV
         url = f"{self.config.base_url.rstrip('/')}{endpoint}"
         headers = {"Accept": "text/tab-separated-values"}
         token = self.config.jwt_token
         if token:
             headers["Authorization"] = f"Bearer {token}"
-        
+
         try:
             resp = self._http.get(
                 url,
@@ -430,33 +499,39 @@ class DataPortalClient:
                 verify=self.config.verify_ssl,
             )
             resp.raise_for_status()
-            
+
             # Parse TSV
             rows = parse_tsv_response(resp.text)
-            
+
             # Convert to model instances if model provided
             items: List[T]
             if model is None:
                 items = rows  # type: ignore[assignment]
             else:
                 items = [model(**row) for row in rows]
-            
+
             # TSV responses typically don't include pagination metadata
             # Check response headers or assume no pagination info
             pagination = None
-            raw = {"data": [dict(item) if hasattr(item, "model_dump") else item for item in items]}
-            
+            raw = {
+                "data": [
+                    dict(item) if hasattr(item, "model_dump") else item
+                    for item in items
+                ]
+            }
+
             return PaginatedResult(items=items, pagination=pagination, raw=raw)
         except requests.exceptions.HTTPError as exc:
             if exc.response is not None and exc.response.status_code in {401, 403}:
-                raise AuthenticationError("Authentication failed", status_code=exc.response.status_code) from exc
+                raise AuthenticationError(
+                    "Authentication failed", status_code=exc.response.status_code
+                ) from exc
             status = exc.response.status_code if exc.response is not None else None
             raise APIError(f"Request failed: {exc}", status_code=status) from exc
         except requests.exceptions.RequestException as exc:
             raise APIError(f"Request failed: {exc}") from exc
         except (ValueError, csv.Error) as exc:
             raise APIError(f"Failed to parse TSV response: {exc}") from exc
-    
 
     @staticmethod
     def _to_paginated(schema: Any) -> PaginatedResult[Any]:

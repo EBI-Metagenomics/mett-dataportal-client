@@ -65,4 +65,3 @@ print(client.config.user_agent)  # "mett-dataportal-client/0.1.0"
 ## Version in Documentation
 
 Documentation files may reference the version, but these are examples and don't need to be updated manually. The actual version used at runtime comes from `pyproject.toml`.
-

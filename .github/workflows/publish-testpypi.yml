@@ -26,7 +26,7 @@ jobs:
         VERSION=$(python3 -c "import tomllib; f=open('pyproject.toml','rb'); d=tomllib.load(f); print(d['project']['version'])")
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "Extracted version: $VERSION"
-        
+
         # If triggered from a tag, verify it matches (optional check)
         if [[ "${{ github.ref }}" == refs/tags/* ]]; then
           TAG_VERSION=${GITHUB_REF#refs/tags/v}
