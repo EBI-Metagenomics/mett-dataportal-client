@@ -114,6 +114,25 @@ uv sync --all-extras --dev
 uv run mett --help
 ```
 
+### Running tests and linting
+
+With `uv` (recommended):
+
+```bash
+# Install all dev dependencies (if not already done)
+uv sync --all-extras --dev
+
+# Run tests
+uv run pytest -v
+
+# Run Ruff lint and formatting checks
+uv run ruff check mett_dataportal/ scripts/ tests/
+uv run ruff format --check mett_dataportal/ scripts/ tests/
+
+# (Optional) Run pre-commit hooks on all files
+uv run pre-commit run --all-files
+```
+
 #### Alternative (classic `pip` workflow)
 
 If you prefer not to use `uv`, you can still work with a standard virtual environment:
@@ -168,7 +187,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
-4. Run tests and linting (`make test && make lint`)
+4. Run tests and linting (see **Running tests and linting** above)
 5. Commit your changes (`git commit -m 'Add amazing feature'`)
 6. Push to the branch (`git push origin feature/feature/amazing-feature`)
 7. Open a Pull Request

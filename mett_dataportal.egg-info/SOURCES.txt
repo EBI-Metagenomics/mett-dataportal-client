@@ -111,3 +111,8 @@ mett_dataportal_sdk/models/success_response_schema.py
 mett_dataportal_sdk/models/ttp_compound_interactions_query_schema.py
 mett_dataportal_sdk/models/ttp_gene_interactions_query_schema.py
 mett_dataportal_sdk/models/ttp_interaction_query_schema.py
+tests/test_cli.py
+tests/test_cli_experimental.py
+tests/test_cli_genes.py
+tests/test_cli_genomes.py
+tests/test_cli_species.py
