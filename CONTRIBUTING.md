@@ -26,11 +26,11 @@ Thank you for your interest in contributing to the METT Data Portal client libra
 We use `ruff` for linting and formatting:
 
 ```bash
-# Check code style
-make lint
+# Check code style (using uv)
+uv run ruff check mett_dataportal/ scripts/ tests/
 
-# Format code
-make format
+# Format code (using uv)
+uv run ruff format mett_dataportal/ scripts/ tests/
 ```
 
 ## Documentation
@@ -41,13 +41,13 @@ The API documentation is auto-generated from the OpenAPI specification:
 
 ```bash
 # Generate documentation
-make docs-generate
+python3 scripts/generate-api-docs.py
 
 # Render to HTML
-make docs-render
+quarto render docs/reference/api-reference.qmd
 
 # Preview in browser (watch mode)
-make docs-preview
+quarto preview docs/reference/api-reference.qmd
 ```
 
 ### Documentation Standards
@@ -62,8 +62,10 @@ make docs-preview
 Run tests with:
 
 ```bash
-make test
-# or
+# Using uv (recommended)
+uv run pytest -v
+
+# Or directly
 pytest tests/
 ```
 
@@ -71,9 +73,9 @@ pytest tests/
 
 1. Create a feature branch from `main`
 2. Make your changes
-3. Ensure tests pass: `make test`
-4. Ensure code is formatted: `make format`
-5. Update documentation if needed: `make docs-generate`
+3. Ensure tests pass: `uv run pytest -v`
+4. Ensure code is formatted: `uv run ruff format mett_dataportal/ scripts/ tests/`
+5. Update documentation if needed: `python3 scripts/generate-api-docs.py`
 6. Submit a pull request
 
 ## Project Structure

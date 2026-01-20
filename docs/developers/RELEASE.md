@@ -101,21 +101,21 @@ If the OpenAPI spec changed:
 
 ```bash
 # Regenerate API documentation
-make docs-generate
-make docs-render
+python3 scripts/generate-api-docs.py
+quarto render docs/reference/api-reference.qmd
 ```
 
 #### 1.4 Run Tests Locally
 
 ```bash
-# Run all tests
-make test
+# Run all tests (using uv)
+uv run pytest -v
 
-# Run linters
-make lint
+# Run linters (using uv)
+uv run ruff check mett_dataportal/ scripts/ tests/
 
-# Format code (if needed)
-make format
+# Format code (using uv)
+uv run ruff format mett_dataportal/ scripts/ tests/
 ```
 
 #### 1.5 Update Changelog (Recommended)
@@ -356,8 +356,8 @@ Always document what changed:
 - [ ] Update version in `pyproject.toml`
 - [ ] Regenerate SDK (if API changed)
 - [ ] Update documentation
-- [ ] Run tests locally (`make test`)
-- [ ] Run linters (`make lint`)
+- [ ] Run tests locally (`uv run pytest -v`)
+- [ ] Run linters (`uv run ruff check mett_dataportal/ scripts/ tests/`)
 - [ ] Update CHANGELOG.md
 - [ ] Commit changes
 - [ ] Push to main branch

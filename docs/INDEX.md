@@ -11,8 +11,8 @@ Welcome to the METT Data Portal Client documentation!
 ## API Documentation
 
 - **[API Reference](reference/api-reference.qmd)** - Complete API reference with examples
-  - View rendered: `make docs-render` then open `reference/api-reference.html`
-  - Or preview: `make docs-preview`
+  - View rendered: `quarto render docs/reference/api-reference.qmd` then open `reference/api-reference.html`
+  - Or preview: `quarto preview docs/reference/api-reference.qmd`
 
 ## Reference
 

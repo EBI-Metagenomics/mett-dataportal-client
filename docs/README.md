@@ -51,10 +51,10 @@ The API reference is in Quarto format (`.qmd`). To view it:
 
 ```bash
 # Generate from OpenAPI spec (if needed)
-make docs-generate
+python3 scripts/generate-api-docs.py
 
 # Render to HTML
-make docs-render
+quarto render docs/reference/api-reference.qmd
 
 # Open in browser
 open docs/reference/api-reference.html
@@ -64,7 +64,7 @@ open docs/reference/api-reference.html
 
 ```bash
 # Start preview server (auto-reloads on changes)
-make docs-preview
+quarto preview docs/reference/api-reference.qmd
 ```
 
 This will start a local server (usually at http://localhost:4200) that auto-refreshes when you make changes.
@@ -78,9 +78,9 @@ The source file `reference/api-reference.qmd` is human-readable Markdown with Qu
 ### Updating API Reference
 
 1. Update `openapi.json` (via `scripts/export-openapi-schema.sh`)
-2. Regenerate: `make docs-generate`
+2. Regenerate: `python3 scripts/generate-api-docs.py`
 3. Review changes in `reference/api-reference.qmd`
-4. Render: `make docs-render`
+4. Render: `quarto render docs/reference/api-reference.qmd`
 
 ### Updating Usage Examples
 
@@ -106,8 +106,8 @@ The source file `reference/api-reference.qmd` is human-readable Markdown with Qu
 - These files are already covered by `.gitignore` and will be recreated as needed by running:
 
 ```bash
-make docs-generate
-make docs-render
+python3 scripts/generate-api-docs.py
+quarto render docs/reference/api-reference.qmd
 ```
 
 Always edit the source files in `docs/reference/` (for example, `api-reference.qmd`, `cli-examples.md`, `curl-examples.md`) rather than the generated HTML.

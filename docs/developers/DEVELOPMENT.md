@@ -136,8 +136,10 @@ After SDK regeneration:
 ### Run All Tests
 
 ```bash
-make test
-# or
+# Using uv (recommended)
+uv run pytest -v
+
+# Or directly
 pytest tests/
 ```
 
@@ -169,10 +171,12 @@ pytest --cov=mett_dataportal tests/
 ### Linting
 
 ```bash
-# Check code style
-make lint
-# or
-ruff check mett_dataportal/
+# Check code style (using uv)
+uv run ruff check mett_dataportal/ scripts/ tests/
+
+# Or directly
+ruff check mett_dataportal/ scripts/ tests/
+```
 
 # Check specific files
 ruff check mett_dataportal/client.py
@@ -181,10 +185,12 @@ ruff check mett_dataportal/client.py
 ### Formatting
 
 ```bash
-# Format code
-make format
-# or
-ruff format mett_dataportal/
+# Format code (using uv)
+uv run ruff format mett_dataportal/ scripts/ tests/
+
+# Or directly
+ruff format mett_dataportal/ scripts/ tests/
+```
 
 # Check formatting without changes
 ruff format --check mett_dataportal/
@@ -206,13 +212,13 @@ mypy mett_dataportal/
 
 ```bash
 # Generate API reference from OpenAPI spec
-make docs-generate
+python3 scripts/generate-api-docs.py
 
 # Render to HTML
-make docs-render
+quarto render docs/reference/api-reference.qmd
 
 # Preview in browser (watch mode)
-make docs-preview
+quarto preview docs/reference/api-reference.qmd
 ```
 
 ### Documentation Structure
@@ -224,7 +230,7 @@ make docs-preview
 
 ### Updating Documentation
 
-1. **API Reference**: Regenerate with `make docs-generate`
+1. **API Reference**: Regenerate with `python3 scripts/generate-api-docs.py`
 2. **Usage Examples**: Edit `docs/guides/USAGE.md`
 3. **Configuration**: Edit `docs/guides/CONFIGURATION.md`
 4. **Development**: Edit `docs/developers/DEVELOPMENT.md`
@@ -237,7 +243,7 @@ For detailed release instructions, see the **[Release Guide](RELEASE.md)**.
 
 1. **Update version** in `pyproject.toml`
 2. **Regenerate SDK** (if API changed): `./scripts/generate-sdk.sh`
-3. **Run tests**: `make test && make lint`
+3. **Run tests**: `uv run pytest -v && uv run ruff check mett_dataportal/ scripts/ tests/`
 4. **Commit and push**: `git commit -m "Release v0.1.1" && git push`
 5. **Create and push tag**: `git tag v0.1.1 && git push origin v0.1.1`
 6. **GitHub Actions** - Manually trigger publish workflows:

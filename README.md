@@ -69,10 +69,10 @@ The API reference is in Quarto format (`.qmd`). To view it:
 
 ```bash
 # Generate from OpenAPI spec (if needed)
-make docs-generate
+python3 scripts/generate-api-docs.py
 
 # Render to HTML
-make docs-render
+quarto render docs/reference/api-reference.qmd
 
 # Open in browser
 open docs/reference/api-reference.html
@@ -81,7 +81,7 @@ open docs/reference/api-reference.html
 Or use preview mode (auto-reloads on changes):
 
 ```bash
-make docs-preview
+quarto preview docs/reference/api-reference.qmd
 ```
 
 The rendered HTML includes interactive tabs showing examples in three formats:

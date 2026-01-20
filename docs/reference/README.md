@@ -7,7 +7,7 @@ This directory contains the API reference documentation and example files.
 - **[API Reference](api-reference.qmd)** - Complete API reference (Quarto format)
   - Auto-generated from OpenAPI specification
   - Includes tabbed examples (Friendly CLI, Generic CLI, cURL)
-  - Render with: `make docs-render`
+  - Render with: `quarto render docs/reference/api-reference.qmd`
 
 - **[CLI Examples](cli-examples.md)** - Comprehensive CLI command examples (friendly and generic CLI)
 - **[cURL Examples](curl-examples.md)** - Raw HTTP request examples
@@ -18,10 +18,10 @@ The API reference is automatically generated:
 
 ```bash
 # Generate from OpenAPI spec and examples
-make docs-generate
+python3 scripts/generate-api-docs.py
 
 # Render to HTML
-make docs-render
+quarto render docs/reference/api-reference.qmd
 ```
 
 ## See Also
