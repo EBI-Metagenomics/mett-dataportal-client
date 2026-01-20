@@ -1,8 +1,8 @@
 Metadata-Version: 2.4
 Name: mett-dataportal
-Version: 0.1.0
+Version: 0.1.0a1
 Summary: Python client and CLI for the METT Data Portal API
-Author-email: METT Data Portal <data-portal@example.com>
+Author-email: METT Data Portal <vikasg@ebi.ac.uk>
 License: MIT
 Keywords: microbiome,genomics,api,cli
 Classifier: Development Status :: 3 - Alpha
@@ -28,174 +28,182 @@ Requires-Dist: pytest>=7.4; extra == "dev"
 Requires-Dist: pytest-mock>=3.11; extra == "dev"
 Requires-Dist: ruff>=0.5; extra == "dev"
 
-# mett-dataportal-client
+# METT Data Portal Client
 
-Python client/CLI scaffolding for the METT Data Portal API.
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyPI version](https://badge.fury.io/py/mett-dataportal.svg)](https://badge.fury.io/py/mett-dataportal)
 
-## Regenerating the SDK
+Python client library and command-line interface (CLI) for the METT Data Portal API. Access genomic data, experimental results, and protein interactions for gut microbiome research.
 
-1. Ensure `openapi.json` is present (see `scripts/export-openapi-schema.sh`).
-2. Run:
-   ```bash
-   ./scripts/generate-sdk.sh
-   ```
-   This refreshes the vendored `mett_dataportal_sdk/` package using `openapi-generator-cli`.
+## Features
 
-The high-level wrapper in `mett_dataportal/client.py` now delegates to the generated SDK, so the CLI and package stay in sync with the API schema.
+- 🚀 **High-level Python API** - Clean, intuitive interface for programmatic access
+- 💻 **Command-line Interface** - Powerful CLI with tab completion and rich output
+- 📊 **Multiple Output Formats** - JSON, TSV, and formatted tables
+- 🔒 **Flexible Authentication** - Environment variables or config file support
+- 📚 **Comprehensive Documentation** - Auto-generated API reference with examples
+- 🔄 **Auto-generated SDK** - Stays in sync with the API schema
 
----
+## Quick Start
 
-## Local Environment (Conda)
+### Installation
 
-If you prefer Conda, the following sets up a `mett-client` env driven by `pyproject.toml`:
-
-```bash
-# create env with Python 3.11 (matches workflows)
-conda create -n mett-client python=3.12 -y
-conda activate mett-client
-
-# install package + dev deps defined in pyproject.toml
-python -m pip install --upgrade pip
-pip install -e '.[dev]'
-```
-
-From here you can:
-
-- Run the CLI: `mett --help`
-- Execute scripts: `./scripts/generate-sdk.sh`
-- Build the package locally: `python -m build`
-
-When done, `conda deactivate`.
-
----
-
-## Set the environment variable once per shell (till the time we don't ahve the SSL certificate procured):
-   ```bash
-   export METT_VERIFY_SSL=false
-   ```
-
-## CLI Usage (With & Without Auth)
-
-1. **Install locally**
-   ```bash
-   pip install --upgrade pip
-   pip install -e .
-   ```
-
-2. **Authentication (optional)**
-   - Public endpoints (species, genomes search, etc.) work without credentials.
-   - For JWT-protected experimental data, set an env var or config file:
-     ```bash
-     export METT_JWT="eyJhbGciOi..."        # preferred
-     # optional: custom base URL
-    export METT_BASE_URL="https://www.gut-microbes.org"
-     ```
-     You can also create `~/.mett/config.toml`:
-     ```toml
-     base_url = "https://www.gut-microbes.org"
-     jwt_token = "eyJhbGciOi..."
-     timeout = 60
-     verify_ssl = true
-     ```
-     The canonical host lives in `mett_dataportal.constants.DEFAULT_BASE_URL`. Update that single constant if the default ever changes; the CLI and client pick up overrides via `METT_BASE_URL` or config files as shown above.
-
-3. **Examples**
-   - List species (no auth needed):
-     ```bash
-     mett species list
-     ```
-   - Search genomes (public):
-     ```bash
-     mett genomes search --query "Bacteroides" --per-page 5
-     ```
-   - Fetch experimental drug MIC data (requires JWT):
-     ```bash
-     METT_JWT=... mett drugs mic --drug-name "azithromycin" --species BU
-     ```
-   - JSON output for pipelines:
-     ```bash
-     mett genomes search --query PV --format json | jq '.'
-     ```
-   - TSV format (more efficient for large datasets):
-     ```bash
-     mett genomes search --query "Bacteroides" --format tsv
-     mett species list --format tsv
-     ```
-
-4. **Output Formats**
-   - **Table** (default, no `--format` specified): Requests JSON from API, displays results in a formatted table
-   - **JSON** (`--format json`): Requests JSON from API, displays raw JSON output
-   - **TSV** (`--format tsv`): Requests TSV from API, displays raw TSV output (ideal for bulk data export and spreadsheet tools)
-
-5. **Non-interactive pipelines**
-   - Combine with curl/jq/wget by using `--format json` or `--format tsv`.
-   - Use `METT_TIMEOUT` and `METT_VERIFY_SSL=false` when running against dev environments.
-
----
-
-## Publishing & Consuming the PyPI Package
-
-### Preparing a Release
-1. Regenerate the SDK (if the API changed):
-   ```bash
-   ./scripts/export-openapi-schema.sh      # fetch latest schema
-   ./scripts/generate-sdk.sh               # regenerate client
-   ```
-2. Bump the version in `pyproject.toml`.
-3. Run tests / lint if applicable.
-
-### Build & Publish
-```bash
-python -m build
-
-# TestPyPI dry run
-twine upload --repository testpypi dist/*
-
-# Verify
-pip install --index-url https://test.pypi.org/simple/ mett-dataportal
-
-# Publish to PyPI
-twine upload dist/*
-```
-
-### Automating with GitHub Actions
-Two workflows live in `.github/workflows/`:
-
-- `ci.yml` runs on pushes/PRs to `main`, installs `-e .[dev]`, and executes placeholder lint/test commands (replace with real checks as they’re added).
-- `publish.yml` runs when a release is published (or via manual dispatch). It:
-  1. Checks out the repo and sets up Python 3.11.
-  2. Installs `build`, `twine`, and `openapi-generator-cli`.
-  3. (Optionally) refreshes `openapi.json`, then runs `./scripts/generate-sdk.sh`.
-  4. Builds the package with `python -m build`.
-  5. Uploads artifacts with Twine using the `PYPI_API_TOKEN` repository secret.
-
-To activate:
-1. Store your PyPI API token as `PYPI_API_TOKEN` under **Settings → Secrets and variables → Actions**.
-2. Tag a release (`git tag v0.1.0 && git push origin v0.1.0`) or manually trigger the workflow from the Actions tab.
-
-TestPyPI support can be added by duplicating the publish step with another secret (e.g., `TEST_PYPI_API_TOKEN`) and pointing Twine’s `--repository` to `testpypi`.
-
-### Consumers
 ```bash
 pip install mett-dataportal
-
-python - <<'PY'
-from mett_dataportal import DataPortalClient
-client = DataPortalClient(jwt_token="...optional...")
-
-# JSON format (default)
-species = client.list_species(format="json")
-print(species[:3])
-
-# TSV format (more efficient for large datasets)
-genomes = client.search_genomes(format="tsv", query="Bacteroides")
-print(f"Found {len(genomes.items)} genomes")
-PY
-
-# CLI
-mett genomes search --query "PV"                # Table format (default)
-mett genomes search --query "PV" --format json   # JSON format
-mett genomes search --query "PV" --format tsv    # TSV format
 ```
 
-Document these steps (README or internal wiki) before sharing publicly.
+### CLI Usage
+
+```bash
+# List all species
+mett species list
+
+# Search genomes
+mett genomes search --query "Bacteroides" --per-page 5
+
+# Get gene information
+mett genes get BU_ATCC8492_00001
+```
+
+### Python API
+
+```python
+from mett_dataportal import DataPortalClient
+
+# Initialize client
+client = DataPortalClient()
+
+# List species
+species = client.list_species()
+print(f"Found {len(species)} species")
+
+# Search genomes
+result = client.search_genomes(query="Bacteroides", per_page=5)
+print(f"Found {len(result.items)} genomes")
+```
+
+## Documentation
+
+### Quick Links
+
+- 📖 **[API Reference](docs/reference/api-reference.qmd)** - Complete API documentation with tabbed examples (Quarto format)
+- 📘 **[Usage Guide](docs/guides/USAGE.md)** - Detailed usage examples for CLI and Python API
+- ⚙️ **[Configuration Guide](docs/guides/CONFIGURATION.md)** - Authentication and configuration options
+- 🔧 **[Development Guide](docs/developers/DEVELOPMENT.md)** - Setup, testing, and contributing
+- 📦 **[Architecture Guide](docs/developers/ARCHITECTURE.md)** - Package architecture and design decisions
+
+### Viewing API Documentation
+
+The API reference is in Quarto format (`.qmd`). To view it:
+
+```bash
+# Generate from OpenAPI spec (if needed)
+make docs-generate
+
+# Render to HTML
+make docs-render
+
+# Open in browser
+open docs/reference/api-reference.html
+```
+
+Or use preview mode (auto-reloads on changes):
+
+```bash
+make docs-preview
+```
+
+The rendered HTML includes interactive tabs showing examples in three formats:
+- **Friendly CLI** - High-level `mett` commands
+- **Generic CLI** - `mett api request` commands
+- **cURL** - Raw HTTP requests
+
+For more information, see the [Documentation README](docs/README.md).
+
+## Installation
+
+### From PyPI
+
+```bash
+pip install mett-dataportal
+```
+
+### From Source
+
+```bash
+git clone https://github.com/your-org/mett-dataportal-client.git
+cd mett-dataportal-client
+pip install -e .
+```
+
+### Development Installation
+
+```bash
+pip install -e ".[dev]"
+```
+
+## Requirements
+
+- Python 3.10+
+- See `pyproject.toml` for full dependency list
+
+## Project Structure
+
+```
+mett-dataportal-client/
+├── mett_dataportal/          # Main package
+│   ├── cli/                  # CLI commands (organized by API type)
+│   │   ├── core/             # Core APIs (system, species, genomes, genes)
+│   │   ├── experimental/    # Experimental APIs (drugs, proteomics, etc.)
+│   │   └── interactions/    # Interaction APIs (PPI, TTP)
+│   ├── client.py             # High-level API client
+│   ├── config.py             # Configuration management
+│   └── utils.py              # Utility functions
+├── mett_dataportal_sdk/      # Auto-generated SDK
+├── docs/                      # Documentation
+│   ├── guides/                # User guides
+│   │   ├── USAGE.md          # Usage examples
+│   │   └── CONFIGURATION.md  # Configuration guide
+│   ├── developers/            # Developer documentation
+│   │   └── DEVELOPMENT.md    # Development guide
+│   ├── reference/             # API reference
+│   │   ├── api-reference.qmd # Main API reference (Quarto)
+│   │   └── cli-examples*.md  # Example files
+│   └── assets/                # Static assets (CSS, etc.)
+├── scripts/                   # Utility scripts
+└── tests/                     # Test suite
+```
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests and linting (`make test && make lint`)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/feature/amazing-feature`)
+7. Open a Pull Request
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/your-org/mett-dataportal-client/issues)
+- **Documentation**: See [docs/](docs/) directory
+- **Email**: data-portal@example.com
+
+## Acknowledgments
+
+Built for the METT Data Portal project. Special thanks to all contributors.
+
+---
+
+**Note**: For development environments without SSL certificates, you may need to set:
+```bash
+export METT_VERIFY_SSL=false
+```
