@@ -14,7 +14,7 @@ website:
       - icon: github
         href: https://github.com/your-org/mett-dataportal-client
       - icon: python
-        href: https://pypi.org/project/mett-dataportal
+        href: https://pypi.org/project/mett
 
 format:
   html:

@@ -61,7 +61,7 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run: |
         echo "📦 Publishing to PyPI..."
-        echo "Package: mett-dataportal"
+        echo "Package: mett"
         echo "Version: ${{ steps.version.outputs.version }}"
         echo ""
         echo "⚠️  Note: PyPI does not allow re-uploading existing versions"
@@ -76,11 +76,11 @@ jobs:
           echo "Check the verbose output above for details."
           exit 1
         }
-        echo "✅ Published to PyPI: https://pypi.org/project/mett-dataportal/${{ steps.version.outputs.version }}/"
+        echo "✅ Published to PyPI: https://pypi.org/project/mett/${{ steps.version.outputs.version }}/"
 
     - name: Verify publication
       if: always()
       run: |
         echo "✅ Package published successfully to PyPI!"
         echo "Version: ${{ steps.version.outputs.version }}"
-        echo "View at: https://pypi.org/project/mett-dataportal/${{ steps.version.outputs.version }}/"
+        echo "View at: https://pypi.org/project/mett/${{ steps.version.outputs.version }}/"

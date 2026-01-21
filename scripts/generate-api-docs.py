@@ -425,7 +425,7 @@ All examples assume the following environment variables:
 - For more examples, see `docs/reference/cli-examples.md` and `docs/reference/curl-examples.md`
 - API schema: `openapi.json`
 - Python client documentation: `README.md`
-- PyPI package: [mett-dataportal](https://pypi.org/project/mett-dataportal)
+- PyPI package: [mett](https://pypi.org/project/mett)
 :::
 """
 

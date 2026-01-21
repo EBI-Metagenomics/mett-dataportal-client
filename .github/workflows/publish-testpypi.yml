@@ -61,7 +61,7 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
       run: |
         echo "📦 Publishing to TestPyPI..."
-        echo "Package: mett-dataportal"
+        echo "Package: mett"
         echo "Version: ${{ steps.version.outputs.version }}"
         echo ""
         echo "Checking if version already exists..."
@@ -81,11 +81,11 @@ jobs:
             exit 1
           }
         fi
-        echo "✅ Published to TestPyPI: https://test.pypi.org/project/mett-dataportal/${{ steps.version.outputs.version }}/"
+        echo "✅ Published to TestPyPI: https://test.pypi.org/project/mett/${{ steps.version.outputs.version }}/"
 
     - name: Verify publication
       if: always()
       run: |
         echo "✅ Package published successfully to TestPyPI!"
         echo "Version: ${{ steps.version.outputs.version }}"
-        echo "View at: https://test.pypi.org/project/mett-dataportal/${{ steps.version.outputs.version }}/"
+        echo "View at: https://test.pypi.org/project/mett/${{ steps.version.outputs.version }}/"

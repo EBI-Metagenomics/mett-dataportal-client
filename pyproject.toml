@@ -3,8 +3,8 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mett-dataportal"
-version = "0.1.1"
+name = "mett"
+version = "0.0.1a1"
 description = "Python client and CLI for the METT Data Portal API"
 readme = "README.md"
 requires-python = ">=3.10"

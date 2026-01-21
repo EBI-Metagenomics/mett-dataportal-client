@@ -9,7 +9,7 @@ except ImportError:
     from importlib_metadata import version, PackageNotFoundError  # type: ignore[no-redef]
 
 try:
-    __version__ = version("mett-dataportal")
+    __version__ = version("mett")
 except PackageNotFoundError:
     # Package is not installed, read from pyproject.toml
     from pathlib import Path
@@ -28,6 +28,6 @@ except PackageNotFoundError:
         __version__ = pyproject["project"]["version"]
     except (FileNotFoundError, KeyError, ImportError):
         # Fallback if pyproject.toml is not found or can't be parsed
-        __version__ = "0.1.1"
+        __version__ = "0.0.1a1"
 
 __all__ = ["__version__"]

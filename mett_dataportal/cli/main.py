@@ -63,7 +63,7 @@ def main(
     """Initialize shared client and stash in Typer context."""
 
     if version:
-        typer.echo(f"mett-dataportal {__version__}")
+        typer.echo(f"mett {__version__}")
         raise typer.Exit()
 
     ctx.obj = _build_client(

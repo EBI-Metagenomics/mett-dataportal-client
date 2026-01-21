@@ -39,7 +39,7 @@ This guide covers the complete process for building, tagging, releasing, and pub
    ```bash
    # Go to: https://pypi.org/manage/account/token/
    # Click "Add API token"
-   # Name: "mett-dataportal-pypi"
+   # Name: "mett-pypi"
    # Scope: "Entire account" (or specific project)
    # Copy the token (starts with pypi-)
    ```
@@ -48,7 +48,7 @@ This guide covers the complete process for building, tagging, releasing, and pub
    ```bash
    # Go to: https://test.pypi.org/manage/account/token/
    # Click "Add API token"
-   # Name: "mett-dataportal-testpypi"
+   # Name: "mett-testpypi"
    # Scope: "Entire account"
    # Copy the token (starts with pypi-)
    ```
@@ -197,7 +197,7 @@ git push origin main
 
 #### Check PyPI
 
-1. Visit: https://pypi.org/project/mett-dataportal/
+1. Visit: https://pypi.org/project/mett/
 2. Verify the new version appears
 3. Check the release date and files
 
@@ -205,10 +205,10 @@ git push origin main
 
 ```bash
 # Install from PyPI
-pip install mett-dataportal
+pip install mett
 
 # Verify version
-pip show mett-dataportal
+pip show mett
 
 # Test CLI
 mett --version
@@ -238,7 +238,7 @@ twine check dist/*
 twine upload --repository testpypi dist/*
 
 # Test installation from TestPyPI
-pip install --index-url https://test.pypi.org/simple/ mett-dataportal
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ mett
 ```
 
 ### Publish to PyPI

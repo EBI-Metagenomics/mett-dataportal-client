@@ -8,7 +8,7 @@ The version number is defined in **`pyproject.toml`** as the single source of tr
 
 ```toml
 [project]
-version = "0.1.1"
+version = "0.0.1a1"
 ```
 
 ## Automatic Version Detection

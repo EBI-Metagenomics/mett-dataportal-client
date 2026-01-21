@@ -29,9 +29,7 @@ class Config:
     jwt_token: str | None = None
     timeout: int = DEFAULT_TIMEOUT
     verify_ssl: bool = True
-    user_agent: str = field(
-        default_factory=lambda: f"mett-dataportal-client/{__version__}"
-    )
+    user_agent: str = field(default_factory=lambda: f"mett-client/{__version__}")
 
     @property
     def authorization_header(self) -> str | None:

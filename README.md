@@ -2,7 +2,7 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![PyPI version](https://badge.fury.io/py/mett-dataportal.svg)](https://badge.fury.io/py/mett-dataportal)
+[![PyPI version](https://badge.fury.io/py/mett.svg)](https://badge.fury.io/py/mett)
 
 Python client library and command-line interface (CLI) for the METT Data Portal API. Access genomic data, experimental results, and protein interactions for gut microbiome research.
 
@@ -20,7 +20,7 @@ Python client library and command-line interface (CLI) for the METT Data Portal 
 ### Installation
 
 ```bash
-pip install mett-dataportal
+pip install mett
 ```
 
 ### CLI Usage
@@ -96,7 +96,7 @@ For more information, see the [Documentation README](docs/README.md).
 ### From PyPI
 
 ```bash
-pip install mett-dataportal
+pip install mett
 ```
 
 ### From Source

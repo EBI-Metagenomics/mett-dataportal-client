@@ -93,7 +93,7 @@ timeout = 60
 verify_ssl = true
 
 # User agent
-user_agent = "mett-dataportal-client/{version}"  # Version is auto-detected from package
+user_agent = "mett-client/{version}"  # Version is auto-detected from package
 ```
 
 ### Config File Location
