@@ -10,9 +10,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-  {name = "METT Data Portal", email = "vikasg@ebi.ac.uk"}
+  {name = "microbiome-informatics", email = "vikasg@ebi.ac.uk"}
 ]
-keywords = ["microbiome", "genomics", "api", "cli"]
+keywords = ["microbiome", "mgnify", "genomics", "api", "cli"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",
