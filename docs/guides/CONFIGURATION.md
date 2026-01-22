@@ -260,4 +260,3 @@ export METT_TIMEOUT=120
 
 - [Usage Guide](USAGE.md) - Usage examples
 - [API Reference](../reference/api-reference.qmd) - Complete API documentation
-- [Development Guide](../developers/DEVELOPMENT.md) - Development setup

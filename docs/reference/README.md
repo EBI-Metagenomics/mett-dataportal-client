@@ -28,4 +28,3 @@ quarto render docs/reference/api-reference.qmd
 
 - [Usage Guide](../guides/USAGE.md) - How to use the client
 - [Configuration Guide](../guides/CONFIGURATION.md) - Setup and configuration
-- [Development Guide](../developers/DEVELOPMENT.md) - Development workflows

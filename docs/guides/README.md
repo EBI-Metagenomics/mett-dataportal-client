@@ -11,4 +11,3 @@ This directory contains user-facing documentation for the METT Data Portal clien
 
 - [Main Documentation](../README.md)
 - [API Reference](../reference/api-reference.qmd)
-- [Development Guide](../developers/DEVELOPMENT.md)

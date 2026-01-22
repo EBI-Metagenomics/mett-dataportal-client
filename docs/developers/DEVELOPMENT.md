@@ -24,7 +24,7 @@ This guide covers development setup, testing, and contribution workflows.
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/mett-dataportal-client.git
+git clone https://github.com/EBI-Metagenomics/mett-dataportal-client.git
 cd mett-dataportal-client
 
 # Create virtual environment

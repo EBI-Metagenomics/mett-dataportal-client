@@ -6,7 +6,7 @@ Thank you for your interest in contributing to the METT Data Portal client libra
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-org/mett-dataportal-client.git
+   git clone https://github.com/EBI-Metagenomics/mett-dataportal-client.git
    cd mett-dataportal-client
    ```
 

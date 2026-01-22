@@ -12,7 +12,7 @@ website:
         text: Client Guide
     right:
       - icon: github
-        href: https://github.com/your-org/mett-dataportal-client
+        href: https://github.com/EBI-Metagenomics/mett-dataportal-client
       - icon: python
         href: https://pypi.org/project/mett
 

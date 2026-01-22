@@ -19,12 +19,6 @@ Welcome to the METT Data Portal Client documentation!
 - **[CLI Examples](reference/cli-examples.md)** - Comprehensive CLI examples (friendly and generic)
 - **[cURL Examples](reference/curl-examples.md)** - Raw HTTP examples
 
-## Development
-
-- **[Development Guide](developers/DEVELOPMENT.md)** - Development setup and workflows
-- **[Contributing Guide](../CONTRIBUTING.md)** - How to contribute
-- **[Architecture Guide](developers/ARCHITECTURE.md)** - Package architecture and design
-
 ## Quick Reference
 
 - **[Quick Start](QUICK_START.md)** - Quick commands for documentation

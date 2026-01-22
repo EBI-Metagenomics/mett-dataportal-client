@@ -1,7 +1,7 @@
 # METT Data Portal Client
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![PyPI version](https://badge.fury.io/py/mett.svg)](https://badge.fury.io/py/mett)
 
 Python client library and command-line interface (CLI) for the METT Data Portal API. Access genomic data, experimental results, and protein interactions for gut microbiome research.
@@ -55,41 +55,7 @@ print(f"Found {len(result.items)} genomes")
 
 ## Documentation
 
-### Quick Links
-
-- 📖 **[API Reference](docs/reference/api-reference.qmd)** - Complete API documentation with tabbed examples (Quarto format)
-- 📘 **[Usage Guide](docs/guides/USAGE.md)** - Detailed usage examples for CLI and Python API
-- ⚙️ **[Configuration Guide](docs/guides/CONFIGURATION.md)** - Authentication and configuration options
-- 🔧 **[Development Guide](docs/developers/DEVELOPMENT.md)** - Setup, testing, and contributing
-- 📦 **[Architecture Guide](docs/developers/ARCHITECTURE.md)** - Package architecture and design decisions
-
-### Viewing API Documentation
-
-The API reference is in Quarto format (`.qmd`). To view it:
-
-```bash
-# Generate from OpenAPI spec (if needed)
-python3 scripts/generate-api-docs.py
-
-# Render to HTML
-quarto render docs/reference/api-reference.qmd
-
-# Open in browser
-open docs/reference/api-reference.html
-```
-
-Or use preview mode (auto-reloads on changes):
-
-```bash
-quarto preview docs/reference/api-reference.qmd
-```
-
-The rendered HTML includes interactive tabs showing examples in three formats:
-- **Friendly CLI** - High-level `mett` commands
-- **Generic CLI** - `mett api request` commands
-- **cURL** - Raw HTTP requests
-
-For more information, see the [Documentation README](docs/README.md).
+For complete documentation including usage guides, API reference, and configuration options, please visit the [GitHub repository](https://github.com/EBI-Metagenomics/mett-dataportal-client).
 
 ## Installation
 
@@ -104,7 +70,7 @@ pip install mett
 #### Recommended (with `uv`)
 
 ```bash
-git clone https://github.com/your-org/mett-dataportal-client.git
+git clone https://github.com/EBI-Metagenomics/mett-dataportal-client.git
 cd mett-dataportal-client
 
 # Create a virtual environment and install all dependencies from pyproject.toml
@@ -153,53 +119,15 @@ mett --help
 - Python 3.10+
 - See `pyproject.toml` for full dependency list
 
-## Project Structure
-
-```
-mett-dataportal-client/
-├── mett_dataportal/          # Main package
-│   ├── cli/                  # CLI commands (organized by API type)
-│   │   ├── core/             # Core APIs (system, species, genomes, genes)
-│   │   ├── experimental/    # Experimental APIs (drugs, proteomics, etc.)
-│   │   └── interactions/    # Interaction APIs (PPI, TTP)
-│   ├── client.py             # High-level API client
-│   ├── config.py             # Configuration management
-│   └── utils.py              # Utility functions
-├── mett_dataportal_sdk/      # Auto-generated SDK
-├── docs/                      # Documentation
-│   ├── guides/                # User guides
-│   │   ├── USAGE.md          # Usage examples
-│   │   └── CONFIGURATION.md  # Configuration guide
-│   ├── developers/            # Developer documentation
-│   │   └── DEVELOPMENT.md    # Development guide
-│   ├── reference/             # API reference
-│   │   ├── api-reference.qmd # Main API reference (Quarto)
-│   │   └── cli-examples*.md  # Example files
-│   └── assets/                # Static assets (CSS, etc.)
-├── scripts/                   # Utility scripts
-└── tests/                     # Test suite
-```
-
-## Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Run tests and linting (see **Running tests and linting** above)
-5. Commit your changes (`git commit -m 'Add amazing feature'`)
-6. Push to the branch (`git push origin feature/feature/amazing-feature`)
-7. Open a Pull Request
 
 ## License
 
-MIT License - see LICENSE file for details.
+Apache-2.0 License - see LICENSE file for details.
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/your-org/mett-dataportal-client/issues)
-- **Documentation**: See [docs/](docs/) directory
+- **Issues**: [GitHub Issues](https://github.com/EBI-Metagenomics/mett-dataportal-client/issues)
+- **Documentation**: [GitHub Repository](https://github.com/EBI-Metagenomics/mett-dataportal-client)
 - **Email**: vikasg@ebi.ac.uk
 
 ## Acknowledgments

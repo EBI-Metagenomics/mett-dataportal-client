@@ -12,6 +12,9 @@ license = {text = "Apache-2.0"}
 authors = [
   {name = "microbiome-informatics", email = "vikasg@ebi.ac.uk"}
 ]
+maintainers = [
+  {name = "Vikas Gupta", email = "vikasg11@gmail.com"}
+]
 keywords = ["microbiome", "mgnify", "metagenomics", "api", "cli"]
 classifiers = [
   "Development Status :: 3 - Alpha",

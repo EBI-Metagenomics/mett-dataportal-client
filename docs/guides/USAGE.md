@@ -446,4 +446,3 @@ client = DataPortalClient(config=config)
 
 - [API Reference](../reference/api-reference.qmd) - Complete API documentation
 - [Configuration Guide](CONFIGURATION.md) - Authentication and configuration
-- [Development Guide](../developers/DEVELOPMENT.md) - Development setup
