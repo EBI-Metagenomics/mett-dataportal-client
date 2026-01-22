@@ -4,15 +4,19 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![PyPI version](https://badge.fury.io/py/mett.svg)](https://badge.fury.io/py/mett)
 
-Python client library and command-line interface (CLI) for the METT Data Portal API. Access genomic data, experimental results, and protein interactions for gut microbiome research.
+Python client library and command-line interface (CLI) for the **Microbial Ecosystems Transversal Themes (METT) Data Portal**.
+
+- Portal: http://www.gut-microbes.org/
+- Install from PyPI: `pip install mett`
+- Python import package: `mett_client`
 
 ## Features
 
 - 🚀 **High-level Python API** - Clean, intuitive interface for programmatic access
-- 💻 **Command-line Interface** - Powerful CLI with tab completion and rich output
+- 💻 **Command-line Interface** - CLI with rich output and shell completion
 - 📊 **Multiple Output Formats** - JSON, TSV, and formatted tables
-- 🔒 **Flexible Authentication** - Environment variables or config file support
-- 📚 **Comprehensive Documentation** - Auto-generated API reference with examples
+- 🔒 **Flexible Configuration** - Environment variables and config file support
+- 📚 **Documentation** - Usage examples and API details
 - 🔄 **Auto-generated SDK** - Stays in sync with the API schema
 
 ## Quick Start
@@ -65,21 +69,30 @@ if result.items:
     print(f"First genome: {result.items[0].isolate_name}")
 ```
 
-## Documentation
+## Configuration
 
-For complete documentation including usage guides, API reference, and configuration options, please visit the [GitHub repository](https://github.com/EBI-Metagenomics/mett-dataportal-client).
+The client/CLI can be configured using **environment variables** (recommended for CI and local dev) or a config file (if supported by your implementation).
 
-## Installation
-
-### From PyPI
-
+### Common environment variables
 ```bash
-pip install mett
+# Base URL for the METT Data Portal API (if your client supports overriding it)
+export METT_BASE_URL="http://www.gut-microbes.org/"
+
+# If the API requires authentication (token / key), set it here (adjust name to match your implementation)
+# export METT_API_TOKEN="..."
+
+# SSL verification (useful for dev environments without certificates)
+export METT_VERIFY_SSL=false
 ```
 
-### From Source
+## Documentation & Source
+* Source repository: https://github.com/EBI-Metagenomics/mett-dataportal-client
+* Issues / feature requests: https://github.com/EBI-Metagenomics/mett-dataportal-client/issues
 
-#### Recommended (with `uv`)
+
+### Development
+
+#### From Source (with `uv`) — recommended
 
 ```bash
 git clone https://github.com/EBI-Metagenomics/mett-dataportal-client.git
@@ -92,9 +105,7 @@ uv sync --all-extras --dev
 uv run mett --help
 ```
 
-### Running tests and linting
-
-With `uv` (recommended):
+### Running tests and linting (with `uv`)
 
 ```bash
 # Install all dev dependencies (if not already done)

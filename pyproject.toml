@@ -4,23 +4,29 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mett"
-version = "0.0.1a3"
+version = "0.0.1a4"
 description = "Python client and CLI for the METT Data Portal API"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "Apache-2.0"}
+
 authors = [
-  {name = "microbiome-informatics", email = "vikasg@ebi.ac.uk"}
+  { name = "microbiome-informatics", email = "vikasg@ebi.ac.uk" }
 ]
 maintainers = [
-  {name = "Vikas Gupta", email = "vikasg11@gmail.com"}
+  { name = "Vikas Gupta", email = "vikasg11@gmail.com" }
 ]
-keywords = ["microbiome", "mgnify", "metagenomics", "api", "cli"]
+
+keywords = ["microbiome", "mgnify", "metagenomics", "gut microbiome", "api", "cli", "METT"]
+
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: Apache Software License",
+  "Environment :: Console",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -49,12 +55,24 @@ dev = [
   "twine>=5",
 ]
 
+[project.urls]
+Homepage = "http://www.gut-microbes.org/"
+Source = "https://github.com/EBI-Metagenomics/mett-dataportal-client"
+Issues = "https://github.com/EBI-Metagenomics/mett-dataportal-client/issues"
+Documentation = "https://github.com/EBI-Metagenomics/mett-dataportal-client#readme"
+Changelog = "https://github.com/EBI-Metagenomics/mett-dataportal-client/releases"
+
 [project.scripts]
 mett = "mett_client.cli.main:app"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["mett_client", "mett_client.*", "mett_dataportal_sdk", "mett_dataportal_sdk.*"]
+include = [
+  "mett_client",
+  "mett_client.*",
+  "mett_dataportal_sdk",
+  "mett_dataportal_sdk.*"
+]
 
 [tool.setuptools.package-data]
 "mett_dataportal_sdk" = ["py.typed"]
