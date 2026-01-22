@@ -87,13 +87,13 @@ export METT_VERIFY_SSL=false
 
 ## Documentation
 
-Complete documentation is available in the [docs/](docs/) directory:
+Complete documentation is available in the [docs/](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/) directory:
 
-- **[Getting Started](docs/index.md)** - Overview and quick start
-- **[CLI Guide](docs/cli/overview.md)** - Command-line interface
-- **[Python API](docs/python/quickstart.md)** - Python client library
-- **[Configuration](docs/config/configuration.md)** - Setup and authentication
-- **[Troubleshooting](docs/troubleshooting.md)** - Common issues and solutions
+- **[Getting Started](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/index.md)** - Overview and quick start
+- **[CLI Guide](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/cli/overview.md)** - Command-line interface
+- **[Python API](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/python/quickstart.md)** - Python client library
+- **[Configuration](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/config/configuration.md)** - Setup and authentication
+- **[Troubleshooting](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/troubleshooting.md)** - Common issues and solutions
 
 ## Source & Support
 
