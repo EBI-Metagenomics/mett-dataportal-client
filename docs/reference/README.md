@@ -26,5 +26,6 @@ quarto render docs/reference/api-reference.qmd
 
 ## See Also
 
-- [Usage Guide](../guides/USAGE.md) - How to use the client
-- [Configuration Guide](../guides/CONFIGURATION.md) - Setup and configuration
+- [CLI Guide](../cli/overview.md) - How to use the CLI
+- [Python API Guide](../python/quickstart.md) - How to use the Python client
+- [Configuration Guide](../config/configuration.md) - Setup and configuration

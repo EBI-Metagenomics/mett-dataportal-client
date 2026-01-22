@@ -1,25 +1,70 @@
-# Documentation Index
+# METT Data Portal Client Documentation
 
-Welcome to the METT Data Portal Client documentation!
+Welcome to the METT Data Portal Client documentation! This client provides both a command-line interface (CLI) and a Python API for accessing the **Microbial Ecosystems Transversal Themes (METT) Data Portal**.
 
-## Getting Started
+## What is METT?
 
-1. **[Main README](../README.md)** - Start here for installation and quick start
-2. **[Usage Guide](guides/USAGE.md)** - Learn how to use the CLI and Python API
-3. **[Configuration Guide](guides/CONFIGURATION.md)** - Set up authentication and configuration
+The METT Data Portal provides access to genomic data, experimental results, and protein interactions for gut microbiome research. This client library makes it easy to:
 
-## API Documentation
+- Search and retrieve species, genomes, and genes
+- Access experimental data (drugs, proteomics, fitness, etc.)
+- Query protein-protein interactions
+- Download results in multiple formats
 
-- **[API Reference](reference/api-reference.qmd)** - Complete API reference with examples
-  - View rendered: `quarto render docs/reference/api-reference.qmd` then open `reference/api-reference.html`
-  - Or preview: `quarto preview docs/reference/api-reference.qmd`
+## Quick Start
 
-## Reference
+### Installation
 
-- **[CLI Examples](reference/cli-examples.md)** - Comprehensive CLI examples (friendly and generic)
-- **[cURL Examples](reference/curl-examples.md)** - Raw HTTP examples
+```bash
+pip install mett
+```
 
-## Quick Reference
+### First Command
 
-- **[Quick Start](QUICK_START.md)** - Quick commands for documentation
-- **[Documentation README](README.md)** - Documentation structure and workflow
+```bash
+# List all species
+mett species list
+```
+
+### First Python Snippet
+
+```python
+from mett_client import DataPortalClient
+
+client = DataPortalClient()
+species = client.list_species()
+print(f"Found {len(species)} species")
+```
+
+### Default Configuration
+
+The client connects to **http://www.gut-microbes.org** by default. You can override this using environment variables or configuration files.
+
+## Documentation Sections
+
+### For End Users
+
+- **[CLI Guide](cli/overview.md)** - Learn how to use the command-line interface
+- **[Python API Guide](python/quickstart.md)** - Get started with the Python client
+- **[Configuration](config/configuration.md)** - Set up authentication and configuration
+- **[Troubleshooting](troubleshooting.md)** - Common issues and solutions
+
+### Reference
+
+- **[CLI Commands](cli/commands.md)** - Complete command reference
+- **[CLI Recipes](cli/recipes.md)** - Common workflows and examples
+- **[Python API Reference](python/quickstart.md)** - Core objects and methods
+- **[Changelog](changelog.md)** - Release notes and breaking changes
+
+## Getting Help
+
+- **GitHub Issues**: [Report bugs or request features](https://github.com/EBI-Metagenomics/mett-dataportal-client/issues)
+- **Source Code**: [View on GitHub](https://github.com/EBI-Metagenomics/mett-dataportal-client)
+- **Portal**: [Visit the METT Data Portal](http://www.gut-microbes.org/)
+
+## Next Steps
+
+1. **[Install the client](../README.md#installation)** if you haven't already
+2. **[Configure authentication](config/authentication.md)** for experimental endpoints
+3. **[Try the CLI](cli/overview.md)** with some example commands
+4. **[Explore the Python API](python/quickstart.md)** for programmatic access

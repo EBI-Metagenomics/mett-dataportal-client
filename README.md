@@ -85,9 +85,20 @@ export METT_BASE_URL="http://www.gut-microbes.org/"
 export METT_VERIFY_SSL=false
 ```
 
-## Documentation & Source
-* Source repository: https://github.com/EBI-Metagenomics/mett-dataportal-client
-* Issues / feature requests: https://github.com/EBI-Metagenomics/mett-dataportal-client/issues
+## Documentation
+
+Complete documentation is available in the [docs/](docs/) directory:
+
+- **[Getting Started](docs/index.md)** - Overview and quick start
+- **[CLI Guide](docs/cli/overview.md)** - Command-line interface
+- **[Python API](docs/python/quickstart.md)** - Python client library
+- **[Configuration](docs/config/configuration.md)** - Setup and authentication
+- **[Troubleshooting](docs/troubleshooting.md)** - Common issues and solutions
+
+## Source & Support
+
+* **Source repository**: https://github.com/EBI-Metagenomics/mett-dataportal-client
+* **Issues / feature requests**: https://github.com/EBI-Metagenomics/mett-dataportal-client/issues
 
 
 ### Development

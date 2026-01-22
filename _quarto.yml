@@ -3,18 +3,48 @@ project:
   output-dir: docs/_site
 
 website:
-  title: "METT Data Portal API Documentation"
+  title: "METT Data Portal Client Documentation"
   navbar:
     left:
-      - href: reference/api-reference.qmd
-        text: API Reference
-      - href: ../README.md
-        text: Client Guide
+      - href: index.md
+        text: Home
+      - href: cli/overview.md
+        text: CLI
+      - href: python/quickstart.md
+        text: Python API
+      - href: config/configuration.md
+        text: Configuration
+      - href: troubleshooting.md
+        text: Troubleshooting
+      - href: changelog.md
+        text: Changelog
     right:
       - icon: github
         href: https://github.com/EBI-Metagenomics/mett-dataportal-client
       - icon: python
         href: https://pypi.org/project/mett
+  sidebar:
+    - section: "For Users"
+      contents:
+        - cli/overview.md
+        - cli/commands.md
+        - cli/recipes.md
+        - python/quickstart.md
+        - python/pagination.md
+        - config/configuration.md
+        - config/authentication.md
+        - troubleshooting.md
+        - changelog.md
+    - section: "Reference"
+      contents:
+        - reference/api-reference.qmd
+        - reference/cli-examples.md
+    - section: "For Maintainers"
+      contents:
+        - dev/codegen.md
+        - dev/docs-site.md
+        - dev/architecture.md
+        - dev/releasing.md
 
 format:
   html:
