@@ -20,7 +20,7 @@ from typing import Any, Callable
 from click.testing import CliRunner
 from typer.main import get_command
 
-from mett_dataportal.cli.main import app as cli_app
+from mett_client.cli.main import app as cli_app
 
 
 class DummyResponse:
@@ -72,9 +72,9 @@ cli_cmd = get_command(cli_app)
 def _patch_dummy_client(monkeypatch) -> None:
     """Patch CLI to always use DummyClient instead of real HTTP client."""
 
-    from mett_dataportal import cli as cli_pkg
-    from mett_dataportal.cli import main as main_module
-    from mett_dataportal.cli import utils as cli_utils
+    from mett_client import cli as cli_pkg
+    from mett_client.cli import main as main_module
+    from mett_client.cli import utils as cli_utils
 
     dummy = DummyClient()
 

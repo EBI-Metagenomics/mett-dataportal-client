@@ -3,7 +3,7 @@ from __future__ import annotations
 from click.testing import CliRunner
 from typer.main import get_command
 
-from mett_dataportal.cli.main import app as cli_app
+from mett_client.cli.main import app as cli_app
 from .test_cli import _patch_dummy_client
 
 

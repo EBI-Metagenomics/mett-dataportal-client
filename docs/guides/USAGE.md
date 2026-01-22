@@ -47,7 +47,7 @@ mett genomes search --query "PV" --format tsv > genomes.tsv
 ### Basic Usage
 
 ```python
-from mett_dataportal import DataPortalClient
+from mett_client import DataPortalClient
 
 # Initialize client
 client = DataPortalClient()
@@ -66,7 +66,7 @@ client = DataPortalClient(
 ### Working with Results
 
 ```python
-from mett_dataportal import DataPortalClient
+from mett_client import DataPortalClient
 
 client = DataPortalClient()
 
@@ -392,7 +392,7 @@ mett api request POST /api/pyhmmer/search \
 ### Pagination
 
 ```python
-from mett_dataportal import DataPortalClient
+from mett_client import DataPortalClient
 
 client = DataPortalClient()
 
@@ -413,8 +413,8 @@ while True:
 ### Error Handling
 
 ```python
-from mett_dataportal import DataPortalClient
-from mett_dataportal.exceptions import APIError, AuthenticationError
+from mett_client import DataPortalClient
+from mett_client.exceptions import APIError, AuthenticationError
 
 client = DataPortalClient()
 
@@ -429,7 +429,7 @@ except APIError as e:
 ### Custom Configuration
 
 ```python
-from mett_dataportal import DataPortalClient, Config
+from mett_client import DataPortalClient, Config
 
 # Create custom config
 config = Config(

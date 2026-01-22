@@ -39,7 +39,7 @@ mett genes get BU_ATCC8492_00001
 ### Python API
 
 ```python
-from mett_dataportal import DataPortalClient
+from mett_client import DataPortalClient
 
 # Initialize client
 client = DataPortalClient()
@@ -48,9 +48,21 @@ client = DataPortalClient()
 species = client.list_species()
 print(f"Found {len(species)} species")
 
-# Search genomes
-result = client.search_genomes(query="Bacteroides", per_page=5)
+# List genomes (paginated)
+result = client.list_genomes(per_page=5)
 print(f"Found {len(result.items)} genomes")
+
+# Search genomes by species
+result = client.species_genomes("BU", per_page=5)
+print(f"Found {len(result.items)} BU genomes")
+
+# Search genomes with query
+result = client.search_genomes(query="ATCC", per_page=5)
+print(f"Found {len(result.items)} genomes matching 'ATCC'")
+
+# Search genomes - check first genome
+if result.items:
+    print(f"First genome: {result.items[0].isolate_name}")
 ```
 
 ## Documentation
@@ -92,8 +104,8 @@ uv sync --all-extras --dev
 uv run pytest -v
 
 # Run Ruff lint and formatting checks
-uv run ruff check mett_dataportal/ scripts/ tests/
-uv run ruff format --check mett_dataportal/ scripts/ tests/
+uv run ruff check mett_client/ scripts/ tests/
+uv run ruff format --check mett_client/ scripts/ tests/
 
 # (Optional) Run pre-commit hooks on all files
 uv run pre-commit run --all-files
@@ -123,16 +135,6 @@ mett --help
 ## License
 
 Apache-2.0 License - see LICENSE file for details.
-
-## Support
-
-- **Issues**: [GitHub Issues](https://github.com/EBI-Metagenomics/mett-dataportal-client/issues)
-- **Documentation**: [GitHub Repository](https://github.com/EBI-Metagenomics/mett-dataportal-client)
-- **Email**: vikasg@ebi.ac.uk
-
-## Acknowledgments
-
-Built for the METT Data Portal project. Special thanks to all contributors.
 
 ---
 

@@ -53,14 +53,14 @@ pip install -e ".[dev]"
 mett --help
 
 # Test Python import
-python -c "from mett_dataportal import DataPortalClient; print('OK')"
+python -c "from mett_client import DataPortalClient; print('OK')"
 ```
 
 ## Project Structure
 
 ```
 mett-dataportal-client/
-├── mett_dataportal/          # Main package
+├── mett_client/          # Main package
 │   ├── cli/                   # CLI commands
 │   │   ├── core/              # Core APIs
 │   │   │   ├── system.py
@@ -127,7 +127,7 @@ This will:
 
 After SDK regeneration:
 1. Review changes in `mett_dataportal_sdk/`
-2. Update `mett_dataportal/client.py` if needed
+2. Update `mett_client/client.py` if needed
 3. Update CLI commands if API signatures changed
 4. Run tests to verify compatibility
 
@@ -163,7 +163,7 @@ pytest tests/ -v
 pip install pytest-cov
 
 # Run with coverage
-pytest --cov=mett_dataportal tests/
+pytest --cov=mett_client tests/
 ```
 
 ## Code Quality
@@ -172,28 +172,28 @@ pytest --cov=mett_dataportal tests/
 
 ```bash
 # Check code style (using uv)
-uv run ruff check mett_dataportal/ scripts/ tests/
+uv run ruff check mett_client/ scripts/ tests/
 
 # Or directly
-ruff check mett_dataportal/ scripts/ tests/
+ruff check mett_client/ scripts/ tests/
 ```
 
 # Check specific files
-ruff check mett_dataportal/client.py
+ruff check mett_client/client.py
 ```
 
 ### Formatting
 
 ```bash
 # Format code (using uv)
-uv run ruff format mett_dataportal/ scripts/ tests/
+uv run ruff format mett_client/ scripts/ tests/
 
 # Or directly
-ruff format mett_dataportal/ scripts/ tests/
+ruff format mett_client/ scripts/ tests/
 ```
 
 # Check formatting without changes
-ruff format --check mett_dataportal/
+ruff format --check mett_client/
 ```
 
 ### Type Checking
@@ -203,7 +203,7 @@ ruff format --check mett_dataportal/
 pip install mypy
 
 # Run type checker
-mypy mett_dataportal/
+mypy mett_client/
 ```
 
 ## Documentation
@@ -243,7 +243,7 @@ For detailed release instructions, see the **[Release Guide](RELEASE.md)**.
 
 1. **Update version** in `pyproject.toml`
 2. **Regenerate SDK** (if API changed): `./scripts/generate-sdk.sh`
-3. **Run tests**: `uv run pytest -v && uv run ruff check mett_dataportal/ scripts/ tests/`
+3. **Run tests**: `uv run pytest -v && uv run ruff check mett_client/ scripts/ tests/`
 4. **Commit and push**: `git commit -m "Release v0.1.1" && git push`
 5. **Create and push tag**: `git tag v0.1.1 && git push origin v0.1.1`
 6. **GitHub Actions** - Manually trigger publish workflows:
@@ -285,7 +285,7 @@ See **[Release Guide](RELEASE.md)** for complete instructions, including:
 
 ### Modifying Client API
 
-1. Update `mett_dataportal/client.py`
+1. Update `mett_client/client.py`
 2. Add/update tests in `tests/`
 3. Update documentation
 4. Ensure backward compatibility
@@ -301,7 +301,7 @@ mett --verbose species list
 
 # Test specific endpoint
 python -c "
-from mett_dataportal import DataPortalClient
+from mett_client import DataPortalClient
 client = DataPortalClient()
 print(client.list_species())
 "

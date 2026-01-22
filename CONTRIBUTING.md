@@ -27,10 +27,10 @@ We use `ruff` for linting and formatting:
 
 ```bash
 # Check code style (using uv)
-uv run ruff check mett_dataportal/ scripts/ tests/
+uv run ruff check mett_client/ scripts/ tests/
 
 # Format code (using uv)
-uv run ruff format mett_dataportal/ scripts/ tests/
+uv run ruff format mett_client/ scripts/ tests/
 ```
 
 ## Documentation
@@ -74,7 +74,7 @@ pytest tests/
 1. Create a feature branch from `main`
 2. Make your changes
 3. Ensure tests pass: `uv run pytest -v`
-4. Ensure code is formatted: `uv run ruff format mett_dataportal/ scripts/ tests/`
+4. Ensure code is formatted: `uv run ruff format mett_client/ scripts/ tests/`
 5. Update documentation if needed: `python3 scripts/generate-api-docs.py`
 6. Submit a pull request
 
@@ -82,7 +82,7 @@ pytest tests/
 
 ```
 mett-dataportal-client/
-├── mett_dataportal/          # Main package
+├── mett_client/          # Main package
 │   ├── cli/                  # CLI commands
 │   │   ├── core/             # Core APIs
 │   │   ├── experimental/     # Experimental APIs

@@ -51,7 +51,7 @@ This guide outlines the architecture and design decisions for the METT Data Port
 **Structure:**
 ```
 mett-dataportal-client/
-├── mett_dataportal/
+├── mett_client/
 │   ├── __init__.py
 │   ├── client.py          # Main API client
 │   ├── models/            # Pydantic models
@@ -113,7 +113,7 @@ openapi-generator generate \
   -i openapi.json \
   -g python \
   -o ./mett-dataportal-client \
-  --package-name mett_dataportal \
+  --package-name mett_client \
   --additional-properties=packageVersion={version}
 
 # 4. Customize for CLI and add features
@@ -144,10 +144,10 @@ openapi-generator generate \
 **Implementation Structure:**
 
 ```python
-# mett_dataportal/client.py
+# mett_client/client.py
 import requests
 from typing import Optional, Dict, Any
-from mett_dataportal.models import Genome, Gene, Species
+from mett_client.models import Genome, Gene, Species
 
 class DataPortalClient:
     def __init__(self, base_url: str, api_key: Optional[str] = None):
@@ -256,7 +256,7 @@ dev = [
 
 ```
 mett-dataportal-client/
-├── mett_dataportal/
+├── mett_client/
 │   ├── __init__.py                 # Package exports
 │   ├── client.py                   # Main API client
 │   ├── config.py                   # Configuration management
@@ -304,14 +304,14 @@ mett-dataportal-client/
 ### Client Implementation
 
 ```python
-# mett_dataportal/client.py
+# mett_client/client.py
 from typing import Optional, List, Dict, Any
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from mett_dataportal.models import Genome, Gene, Species
-from mett_dataportal.exceptions import APIError, AuthenticationError
+from mett_client.models import Genome, Gene, Species
+from mett_client.exceptions import APIError, AuthenticationError
 
 class DataPortalClient:
     """Main client for METT Data Portal API."""
@@ -407,14 +407,14 @@ class DataPortalClient:
 ### CLI Implementation
 
 ```python
-# mett_dataportal/cli/main.py
+# mett_client/cli/main.py
 import typer
 from typing import Optional
 from rich.console import Console
 from rich.table import Table
 
-from mett_dataportal.client import DataPortalClient
-from mett_dataportal.config import get_config
+from mett_client.client import DataPortalClient
+from mett_client.config import get_config
 
 app = typer.Typer(help="METT Data Portal CLI")
 console = Console()
@@ -477,7 +477,7 @@ if __name__ == "__main__":
 ### Configuration
 
 ```python
-# mett_dataportal/config.py
+# mett_client/config.py
 import os
 from dataclasses import dataclass
 from typing import Optional
@@ -557,10 +557,10 @@ dev = [
 ]
 
 [project.scripts]
-mett = "mett_dataportal.cli.main:app"
+mett = "mett_client.cli.main:app"
 
 [tool.setuptools]
-packages = ["mett_dataportal"]
+packages = ["mett_client"]
 
 [tool.setuptools.package-data]
 "*" = ["*.json", "*.yaml"]
@@ -695,7 +695,7 @@ Document the process in README:
 ### Python Package Usage
 
 ```python
-from mett_dataportal import DataPortalClient
+from mett_client import DataPortalClient
 
 client = DataPortalClient(
     base_url="http://www.gut-microbes.org",

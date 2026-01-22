@@ -112,10 +112,10 @@ quarto render docs/reference/api-reference.qmd
 uv run pytest -v
 
 # Run linters (using uv)
-uv run ruff check mett_dataportal/ scripts/ tests/
+uv run ruff check mett_client/ scripts/ tests/
 
 # Format code (using uv)
-uv run ruff format mett_dataportal/ scripts/ tests/
+uv run ruff format mett_client/ scripts/ tests/
 ```
 
 #### 1.5 Update Changelog (Recommended)
@@ -357,7 +357,7 @@ Always document what changed:
 - [ ] Regenerate SDK (if API changed)
 - [ ] Update documentation
 - [ ] Run tests locally (`uv run pytest -v`)
-- [ ] Run linters (`uv run ruff check mett_dataportal/ scripts/ tests/`)
+- [ ] Run linters (`uv run ruff check mett_client/ scripts/ tests/`)
 - [ ] Update CHANGELOG.md
 - [ ] Commit changes
 - [ ] Push to main branch
@@ -387,7 +387,7 @@ git tag -a v0.1.1 -m "Release v0.1.1"
 git push origin v0.1.1
 
 # Check version
-python -c "from mett_dataportal import __version__; print(__version__)"
+python -c "from mett_client import __version__; print(__version__)"
 ```
 
 ## See Also

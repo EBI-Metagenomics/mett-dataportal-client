@@ -147,13 +147,24 @@ class DataPortalClient:
             return self._request_tsv_paginated(
                 "/api/genomes/search", params=params, model=Genome
             )
-        response = self._call_api(
-            self._api(
-                GenomesApi
-            ).dataportal_api_core_genome_endpoints_search_genomes_by_string,
-            params=params,
+        # Use direct HTTP request to ensure format=json is included in query string
+        json_params = (params or {}).copy()
+        json_params["format"] = "json"
+        payload = request_json(
+            self._http, self.config, "/api/genomes/search", params=json_params
         )
-        return self._to_paginated(response)
+        # Parse paginated response
+        if isinstance(payload, dict):
+            data = payload.get("data", [])
+            pagination_dict = payload.get("pagination")
+            pagination = Pagination(**pagination_dict) if pagination_dict else None
+            raw = payload
+        else:
+            data = payload if isinstance(payload, list) else []
+            pagination = None
+            raw = {"data": data}
+        items = [Genome(**item) if isinstance(item, dict) else item for item in data]
+        return PaginatedResult(items=items, pagination=pagination, raw=raw)
 
     def get_genome_genes(
         self, isolate_name: str, **params: Any

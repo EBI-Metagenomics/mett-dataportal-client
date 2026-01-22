@@ -22,8 +22,8 @@ The package automatically reads the version from `pyproject.toml`:
 
 The following files automatically use the version from `pyproject.toml`:
 
-- **`mett_dataportal/__init__.py`**: Exports `__version__` for programmatic access
-- **`mett_dataportal/config.py`**: Uses version in default `user_agent` string
+- **`mett_client/__init__.py`**: Exports `__version__` for programmatic access
+- **`mett_client/config.py`**: Uses version in default `user_agent` string
 - **`scripts/generate-sdk.sh`**: Reads version from `pyproject.toml` for SDK generation
 
 ## Updating the Version
@@ -43,11 +43,11 @@ To update the version:
 ## Accessing Version Programmatically
 
 ```python
-from mett_dataportal import __version__
+from mett_client import __version__
 print(__version__)  # "0.1.0"
 
 # Or directly
-from mett_dataportal.version import __version__
+from mett_client.version import __version__
 print(__version__)
 ```
 
@@ -56,7 +56,7 @@ print(__version__)
 The default user agent string includes the version:
 
 ```python
-from mett_dataportal import DataPortalClient
+from mett_client import DataPortalClient
 
 client = DataPortalClient()
 print(client.config.user_agent)  # "mett-dataportal-client/0.1.0"

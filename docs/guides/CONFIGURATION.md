@@ -116,7 +116,7 @@ Configuration is loaded in this order (later values override earlier ones):
 ### Using Config Object
 
 ```python
-from mett_dataportal import DataPortalClient, Config
+from mett_client import DataPortalClient, Config
 
 # Create custom config
 config = Config(
@@ -133,7 +133,7 @@ client = DataPortalClient(config=config)
 ### Direct Initialization
 
 ```python
-from mett_dataportal import DataPortalClient
+from mett_client import DataPortalClient
 
 # Initialize with parameters
 client = DataPortalClient(
@@ -147,7 +147,7 @@ client = DataPortalClient(
 ### Loading Config from File
 
 ```python
-from mett_dataportal import get_config, DataPortalClient
+from mett_client import get_config, DataPortalClient
 from pathlib import Path
 
 # Load from custom path
@@ -222,7 +222,7 @@ env:
 ### Authentication Errors
 
 ```python
-from mett_dataportal.exceptions import AuthenticationError
+from mett_client.exceptions import AuthenticationError
 
 try:
     client = DataPortalClient()
