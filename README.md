@@ -76,7 +76,7 @@ The client/CLI can be configured using **environment variables** (recommended fo
 ### Common environment variables
 ```bash
 # Base URL for the METT Data Portal API (if your client supports overriding it)
-export METT_BASE_URL="http://www.gut-microbes.org/"
+export METT_BASE_URL="https://www.gut-microbes.org/"
 
 # If the API requires authentication (token / key), set it here (adjust name to match your implementation)
 # export METT_API_TOKEN="..."
