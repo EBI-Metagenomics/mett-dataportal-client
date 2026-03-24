@@ -35,12 +35,16 @@ class PPINetworkQuerySchema(BaseModel):
         ]
     ] = Field(default=0.8, description="Score threshold for network construction")
     species_acronym: Optional[StrictStr] = None
+    isolate_name: Optional[StrictStr] = None
+    locus_tag: Optional[StrictStr] = None
     include_properties: Optional[StrictBool] = Field(
         default=False, description="Whether to include network properties"
     )
     __properties: ClassVar[List[str]] = [
         "score_threshold",
         "species_acronym",
+        "isolate_name",
+        "locus_tag",
         "include_properties",
     ]
 
@@ -86,6 +90,16 @@ class PPINetworkQuerySchema(BaseModel):
         if self.species_acronym is None and "species_acronym" in self.model_fields_set:
             _dict["species_acronym"] = None
 
+        # set to None if isolate_name (nullable) is None
+        # and model_fields_set contains the field
+        if self.isolate_name is None and "isolate_name" in self.model_fields_set:
+            _dict["isolate_name"] = None
+
+        # set to None if locus_tag (nullable) is None
+        # and model_fields_set contains the field
+        if self.locus_tag is None and "locus_tag" in self.model_fields_set:
+            _dict["locus_tag"] = None
+
         return _dict
 
     @classmethod
@@ -103,6 +117,8 @@ class PPINetworkQuerySchema(BaseModel):
                 if obj.get("score_threshold") is not None
                 else 0.8,
                 "species_acronym": obj.get("species_acronym"),
+                "isolate_name": obj.get("isolate_name"),
+                "locus_tag": obj.get("locus_tag"),
                 "include_properties": obj.get("include_properties")
                 if obj.get("include_properties") is not None
                 else False,

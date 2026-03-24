@@ -21,6 +21,54 @@ def ppi_scores(
     handle_raw_response(response, format, title="PPI score types")
 
 
+@ppi_app.command("data-sources")
+def ppi_data_sources(
+    ctx: typer.Context,
+    format: Optional[str] = typer.Option(None, "--format", "-f"),
+) -> None:
+    client = ensure_client(ctx)
+    response = client.raw_request("GET", "/api/ppi/data-sources", format=format)
+    handle_raw_response(response, format, title="PPI data sources")
+
+
+@ppi_app.command("string-network")
+def ppi_string_network(
+    ctx: typer.Context,
+    locus_tag: Optional[str] = typer.Option(None, "--locus-tag"),
+    pair_id: Optional[str] = typer.Option(None, "--pair-id"),
+    species_acronym: Optional[str] = typer.Option(None, "--species", "-s"),
+    required_score: Optional[int] = typer.Option(None, "--required-score"),
+    add_nodes: Optional[int] = typer.Option(None, "--add-nodes"),
+    network_type: Optional[str] = typer.Option(None, "--network-type"),
+    evidence_channels: Optional[str] = typer.Option(
+        None,
+        "--evidence-channels",
+        help="Comma-separated STRING channels (e.g. experimental,database)",
+    ),
+    format: Optional[str] = typer.Option(None, "--format", "-f"),
+) -> None:
+    client = ensure_client(ctx)
+    params = merge_params(
+        {
+            "locus_tag": locus_tag,
+            "pair_id": pair_id,
+            "species_acronym": species_acronym,
+            "required_score": required_score,
+            "add_nodes": add_nodes,
+            "network_type": network_type,
+            "evidence_channels": [
+                c.strip() for c in evidence_channels.split(",") if c.strip()
+            ]
+            if evidence_channels
+            else None,
+        }
+    )
+    response = client.raw_request(
+        "GET", "/api/ppi/string-network", params=params, format=format
+    )
+    handle_raw_response(response, format, title="STRING PPI network")
+
+
 @ppi_app.command("interactions")
 def ppi_interactions(
     ctx: typer.Context,

@@ -17,32 +17,21 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional, Union
-from typing_extensions import Annotated
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Set
 from typing_extensions import Self
 
 
-class PPINetworkPropertiesQuerySchema(BaseModel):
+class PPINetworkNodeSchema(BaseModel):
     """
-    Schema for PPI network properties query parameters.
+    Schema for a PPI network node.
     """  # noqa: E501
 
-    score_type: StrictStr = Field(description="Score type for network construction")
-    score_threshold: Optional[
-        Union[
-            Annotated[float, Field(le=1, strict=True, ge=0)],
-            Annotated[int, Field(le=1, strict=True, ge=0)],
-        ]
-    ] = Field(default=0.8, description="Score threshold for network construction")
-    species_acronym: Optional[StrictStr] = None
-    isolate_name: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = [
-        "score_type",
-        "score_threshold",
-        "species_acronym",
-        "isolate_name",
-    ]
+    id: StrictStr = Field(description="Protein ID (UniProt ID)")
+    locus_tag: Optional[StrictStr] = None
+    name: Optional[StrictStr] = None
+    product: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["id", "locus_tag", "name", "product"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -61,7 +50,7 @@ class PPINetworkPropertiesQuerySchema(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of PPINetworkPropertiesQuerySchema from a JSON string"""
+        """Create an instance of PPINetworkNodeSchema from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -81,21 +70,26 @@ class PPINetworkPropertiesQuerySchema(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if species_acronym (nullable) is None
+        # set to None if locus_tag (nullable) is None
         # and model_fields_set contains the field
-        if self.species_acronym is None and "species_acronym" in self.model_fields_set:
-            _dict["species_acronym"] = None
+        if self.locus_tag is None and "locus_tag" in self.model_fields_set:
+            _dict["locus_tag"] = None
 
-        # set to None if isolate_name (nullable) is None
+        # set to None if name (nullable) is None
         # and model_fields_set contains the field
-        if self.isolate_name is None and "isolate_name" in self.model_fields_set:
-            _dict["isolate_name"] = None
+        if self.name is None and "name" in self.model_fields_set:
+            _dict["name"] = None
+
+        # set to None if product (nullable) is None
+        # and model_fields_set contains the field
+        if self.product is None and "product" in self.model_fields_set:
+            _dict["product"] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of PPINetworkPropertiesQuerySchema from a dict"""
+        """Create an instance of PPINetworkNodeSchema from a dict"""
         if obj is None:
             return None
 
@@ -104,12 +98,10 @@ class PPINetworkPropertiesQuerySchema(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "score_type": obj.get("score_type"),
-                "score_threshold": obj.get("score_threshold")
-                if obj.get("score_threshold") is not None
-                else 0.8,
-                "species_acronym": obj.get("species_acronym"),
-                "isolate_name": obj.get("isolate_name"),
+                "id": obj.get("id"),
+                "locus_tag": obj.get("locus_tag"),
+                "name": obj.get("name"),
+                "product": obj.get("product"),
             }
         )
         return _obj

@@ -17,32 +17,29 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional, Union
-from typing_extensions import Annotated
+from typing import Any, ClassVar, Dict, List, Optional
+from mett_dataportal_sdk.models.response_status import ResponseStatus
+from mett_dataportal_sdk.models.string_network_data_schema import (
+    StringNetworkDataSchema,
+)
 from typing import Set
 from typing_extensions import Self
 
 
-class PPINetworkPropertiesQuerySchema(BaseModel):
+class PPIStringNetworkResponseSchema(BaseModel):
     """
-    Schema for PPI network properties query parameters.
+    Response schema for STRING network data.
     """  # noqa: E501
 
-    score_type: StrictStr = Field(description="Score type for network construction")
-    score_threshold: Optional[
-        Union[
-            Annotated[float, Field(le=1, strict=True, ge=0)],
-            Annotated[int, Field(le=1, strict=True, ge=0)],
-        ]
-    ] = Field(default=0.8, description="Score threshold for network construction")
-    species_acronym: Optional[StrictStr] = None
-    isolate_name: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = [
-        "score_type",
-        "score_threshold",
-        "species_acronym",
-        "isolate_name",
-    ]
+    status: Optional[ResponseStatus] = Field(
+        default=None, description="Response status"
+    )
+    message: Optional[StrictStr] = None
+    timestamp: StrictStr = Field(description="ISO 8601 timestamp of the response")
+    data: StringNetworkDataSchema = Field(
+        description="STRING network data with locus tag mapping and focal gene info"
+    )
+    __properties: ClassVar[List[str]] = ["status", "message", "timestamp", "data"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -61,7 +58,7 @@ class PPINetworkPropertiesQuerySchema(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of PPINetworkPropertiesQuerySchema from a JSON string"""
+        """Create an instance of PPIStringNetworkResponseSchema from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -81,21 +78,19 @@ class PPINetworkPropertiesQuerySchema(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if species_acronym (nullable) is None
+        # override the default output from pydantic by calling `to_dict()` of data
+        if self.data:
+            _dict["data"] = self.data.to_dict()
+        # set to None if message (nullable) is None
         # and model_fields_set contains the field
-        if self.species_acronym is None and "species_acronym" in self.model_fields_set:
-            _dict["species_acronym"] = None
-
-        # set to None if isolate_name (nullable) is None
-        # and model_fields_set contains the field
-        if self.isolate_name is None and "isolate_name" in self.model_fields_set:
-            _dict["isolate_name"] = None
+        if self.message is None and "message" in self.model_fields_set:
+            _dict["message"] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of PPINetworkPropertiesQuerySchema from a dict"""
+        """Create an instance of PPIStringNetworkResponseSchema from a dict"""
         if obj is None:
             return None
 
@@ -104,12 +99,12 @@ class PPINetworkPropertiesQuerySchema(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "score_type": obj.get("score_type"),
-                "score_threshold": obj.get("score_threshold")
-                if obj.get("score_threshold") is not None
-                else 0.8,
-                "species_acronym": obj.get("species_acronym"),
-                "isolate_name": obj.get("isolate_name"),
+                "status": obj.get("status"),
+                "message": obj.get("message"),
+                "timestamp": obj.get("timestamp"),
+                "data": StringNetworkDataSchema.from_dict(obj["data"])
+                if obj.get("data") is not None
+                else None,
             }
         )
         return _obj

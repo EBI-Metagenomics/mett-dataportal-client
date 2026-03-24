@@ -19,6 +19,9 @@ from pydantic import StrictBool
 from mett_dataportal_sdk.models.ppi_all_neighbors_response_schema import (
     PPIAllNeighborsResponseSchema,
 )
+from mett_dataportal_sdk.models.ppi_data_sources_response_schema import (
+    PPIDataSourcesResponseSchema,
+)
 from mett_dataportal_sdk.models.ppi_network_properties_response_schema import (
     PPINetworkPropertiesResponseSchema,
 )
@@ -30,6 +33,9 @@ from mett_dataportal_sdk.models.ppi_score_types_response_schema import (
 )
 from mett_dataportal_sdk.models.ppi_search_response_schema import (
     PPISearchResponseSchema,
+)
+from mett_dataportal_sdk.models.ppi_string_network_response_schema import (
+    PPIStringNetworkResponseSchema,
 )
 
 from mett_dataportal_sdk.api_client import ApiClient, RequestSerialized
@@ -48,6 +54,471 @@ class ProteinProteinInteractionsApi:
         if api_client is None:
             api_client = ApiClient.get_default()
         self.api_client = api_client
+
+    @validate_call
+    def dataportal_api_external_string_network_endpoints_get_string_network(
+        self,
+        locus_tag: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Gene locus tag. With species_acronym, resolves to STRING ID via feature index and fetches neighborhood (no pair_id needed)."
+            ),
+        ] = None,
+        pair_id: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="PPI pair_id for lookup from PPI index (e.g. bu:A0A0X1ABC1__B0ABC123). Use with locus_tag for single-protein neighborhood."
+            ),
+        ] = None,
+        protein_ids: Annotated[
+            Optional[List[StrictStr]],
+            Field(
+                description="Direct STRING protein IDs (e.g. ['820.ERS852554_01920'])"
+            ),
+        ] = None,
+        species_acronym: Annotated[
+            Optional[StrictStr],
+            Field(description="Species acronym (BU, PV) for taxid resolution"),
+        ] = None,
+        required_score: Annotated[
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(description="Minimum STRING score threshold (0-1000)"),
+        ] = None,
+        add_nodes: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Number of additional interaction partners to add by confidence (default 10). Set higher (e.g. 50) to get more interactors."
+            ),
+        ] = None,
+        network_type: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Network type: physical (direct interactions) or functional (physical + indirect associations)"
+            ),
+        ] = None,
+        evidence_channels: Annotated[
+            Optional[List[StrictStr]],
+            Field(
+                description="Filter by STRING evidence channels. Include only edges with score>0 in at least one selected channel. Values: neighborhood, fusion, cooccurrence, coexpression, experimental, database, textmining. None or empty = no filter (all evidence). Accepts comma-separated string or list."
+            ),
+        ] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> PPIStringNetworkResponseSchema:
+        """Get STRING DB network for PPI pair
+
+        Fetch STRING DB interaction network for a PPI pair. Provide either pair_id (lookup from PPI index) or protein_ids (STRING protein IDs directly).
+
+        :param locus_tag: Gene locus tag. With species_acronym, resolves to STRING ID via feature index and fetches neighborhood (no pair_id needed).
+        :type locus_tag: str
+        :param pair_id: PPI pair_id for lookup from PPI index (e.g. bu:A0A0X1ABC1__B0ABC123). Use with locus_tag for single-protein neighborhood.
+        :type pair_id: str
+        :param protein_ids: Direct STRING protein IDs (e.g. ['820.ERS852554_01920'])
+        :type protein_ids: List[str]
+        :param species_acronym: Species acronym (BU, PV) for taxid resolution
+        :type species_acronym: str
+        :param required_score: Minimum STRING score threshold (0-1000)
+        :type required_score: int
+        :param add_nodes: Number of additional interaction partners to add by confidence (default 10). Set higher (e.g. 50) to get more interactors.
+        :type add_nodes: int
+        :param network_type: Network type: physical (direct interactions) or functional (physical + indirect associations)
+        :type network_type: str
+        :param evidence_channels: Filter by STRING evidence channels. Include only edges with score>0 in at least one selected channel. Values: neighborhood, fusion, cooccurrence, coexpression, experimental, database, textmining. None or empty = no filter (all evidence). Accepts comma-separated string or list.
+        :type evidence_channels: List[str]
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._dataportal_api_external_string_network_endpoints_get_string_network_serialize(
+            locus_tag=locus_tag,
+            pair_id=pair_id,
+            protein_ids=protein_ids,
+            species_acronym=species_acronym,
+            required_score=required_score,
+            add_nodes=add_nodes,
+            network_type=network_type,
+            evidence_channels=evidence_channels,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "PPIStringNetworkResponseSchema",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+    @validate_call
+    def dataportal_api_external_string_network_endpoints_get_string_network_with_http_info(
+        self,
+        locus_tag: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Gene locus tag. With species_acronym, resolves to STRING ID via feature index and fetches neighborhood (no pair_id needed)."
+            ),
+        ] = None,
+        pair_id: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="PPI pair_id for lookup from PPI index (e.g. bu:A0A0X1ABC1__B0ABC123). Use with locus_tag for single-protein neighborhood."
+            ),
+        ] = None,
+        protein_ids: Annotated[
+            Optional[List[StrictStr]],
+            Field(
+                description="Direct STRING protein IDs (e.g. ['820.ERS852554_01920'])"
+            ),
+        ] = None,
+        species_acronym: Annotated[
+            Optional[StrictStr],
+            Field(description="Species acronym (BU, PV) for taxid resolution"),
+        ] = None,
+        required_score: Annotated[
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(description="Minimum STRING score threshold (0-1000)"),
+        ] = None,
+        add_nodes: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Number of additional interaction partners to add by confidence (default 10). Set higher (e.g. 50) to get more interactors."
+            ),
+        ] = None,
+        network_type: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Network type: physical (direct interactions) or functional (physical + indirect associations)"
+            ),
+        ] = None,
+        evidence_channels: Annotated[
+            Optional[List[StrictStr]],
+            Field(
+                description="Filter by STRING evidence channels. Include only edges with score>0 in at least one selected channel. Values: neighborhood, fusion, cooccurrence, coexpression, experimental, database, textmining. None or empty = no filter (all evidence). Accepts comma-separated string or list."
+            ),
+        ] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[PPIStringNetworkResponseSchema]:
+        """Get STRING DB network for PPI pair
+
+        Fetch STRING DB interaction network for a PPI pair. Provide either pair_id (lookup from PPI index) or protein_ids (STRING protein IDs directly).
+
+        :param locus_tag: Gene locus tag. With species_acronym, resolves to STRING ID via feature index and fetches neighborhood (no pair_id needed).
+        :type locus_tag: str
+        :param pair_id: PPI pair_id for lookup from PPI index (e.g. bu:A0A0X1ABC1__B0ABC123). Use with locus_tag for single-protein neighborhood.
+        :type pair_id: str
+        :param protein_ids: Direct STRING protein IDs (e.g. ['820.ERS852554_01920'])
+        :type protein_ids: List[str]
+        :param species_acronym: Species acronym (BU, PV) for taxid resolution
+        :type species_acronym: str
+        :param required_score: Minimum STRING score threshold (0-1000)
+        :type required_score: int
+        :param add_nodes: Number of additional interaction partners to add by confidence (default 10). Set higher (e.g. 50) to get more interactors.
+        :type add_nodes: int
+        :param network_type: Network type: physical (direct interactions) or functional (physical + indirect associations)
+        :type network_type: str
+        :param evidence_channels: Filter by STRING evidence channels. Include only edges with score>0 in at least one selected channel. Values: neighborhood, fusion, cooccurrence, coexpression, experimental, database, textmining. None or empty = no filter (all evidence). Accepts comma-separated string or list.
+        :type evidence_channels: List[str]
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._dataportal_api_external_string_network_endpoints_get_string_network_serialize(
+            locus_tag=locus_tag,
+            pair_id=pair_id,
+            protein_ids=protein_ids,
+            species_acronym=species_acronym,
+            required_score=required_score,
+            add_nodes=add_nodes,
+            network_type=network_type,
+            evidence_channels=evidence_channels,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "PPIStringNetworkResponseSchema",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+    @validate_call
+    def dataportal_api_external_string_network_endpoints_get_string_network_without_preload_content(
+        self,
+        locus_tag: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Gene locus tag. With species_acronym, resolves to STRING ID via feature index and fetches neighborhood (no pair_id needed)."
+            ),
+        ] = None,
+        pair_id: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="PPI pair_id for lookup from PPI index (e.g. bu:A0A0X1ABC1__B0ABC123). Use with locus_tag for single-protein neighborhood."
+            ),
+        ] = None,
+        protein_ids: Annotated[
+            Optional[List[StrictStr]],
+            Field(
+                description="Direct STRING protein IDs (e.g. ['820.ERS852554_01920'])"
+            ),
+        ] = None,
+        species_acronym: Annotated[
+            Optional[StrictStr],
+            Field(description="Species acronym (BU, PV) for taxid resolution"),
+        ] = None,
+        required_score: Annotated[
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(description="Minimum STRING score threshold (0-1000)"),
+        ] = None,
+        add_nodes: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Number of additional interaction partners to add by confidence (default 10). Set higher (e.g. 50) to get more interactors."
+            ),
+        ] = None,
+        network_type: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Network type: physical (direct interactions) or functional (physical + indirect associations)"
+            ),
+        ] = None,
+        evidence_channels: Annotated[
+            Optional[List[StrictStr]],
+            Field(
+                description="Filter by STRING evidence channels. Include only edges with score>0 in at least one selected channel. Values: neighborhood, fusion, cooccurrence, coexpression, experimental, database, textmining. None or empty = no filter (all evidence). Accepts comma-separated string or list."
+            ),
+        ] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get STRING DB network for PPI pair
+
+        Fetch STRING DB interaction network for a PPI pair. Provide either pair_id (lookup from PPI index) or protein_ids (STRING protein IDs directly).
+
+        :param locus_tag: Gene locus tag. With species_acronym, resolves to STRING ID via feature index and fetches neighborhood (no pair_id needed).
+        :type locus_tag: str
+        :param pair_id: PPI pair_id for lookup from PPI index (e.g. bu:A0A0X1ABC1__B0ABC123). Use with locus_tag for single-protein neighborhood.
+        :type pair_id: str
+        :param protein_ids: Direct STRING protein IDs (e.g. ['820.ERS852554_01920'])
+        :type protein_ids: List[str]
+        :param species_acronym: Species acronym (BU, PV) for taxid resolution
+        :type species_acronym: str
+        :param required_score: Minimum STRING score threshold (0-1000)
+        :type required_score: int
+        :param add_nodes: Number of additional interaction partners to add by confidence (default 10). Set higher (e.g. 50) to get more interactors.
+        :type add_nodes: int
+        :param network_type: Network type: physical (direct interactions) or functional (physical + indirect associations)
+        :type network_type: str
+        :param evidence_channels: Filter by STRING evidence channels. Include only edges with score>0 in at least one selected channel. Values: neighborhood, fusion, cooccurrence, coexpression, experimental, database, textmining. None or empty = no filter (all evidence). Accepts comma-separated string or list.
+        :type evidence_channels: List[str]
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._dataportal_api_external_string_network_endpoints_get_string_network_serialize(
+            locus_tag=locus_tag,
+            pair_id=pair_id,
+            protein_ids=protein_ids,
+            species_acronym=species_acronym,
+            required_score=required_score,
+            add_nodes=add_nodes,
+            network_type=network_type,
+            evidence_channels=evidence_channels,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "PPIStringNetworkResponseSchema",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+    def _dataportal_api_external_string_network_endpoints_get_string_network_serialize(
+        self,
+        locus_tag,
+        pair_id,
+        protein_ids,
+        species_acronym,
+        required_score,
+        add_nodes,
+        network_type,
+        evidence_channels,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+            "protein_ids": "multi",
+            "evidence_channels": "multi",
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if locus_tag is not None:
+            _query_params.append(("locus_tag", locus_tag))
+
+        if pair_id is not None:
+            _query_params.append(("pair_id", pair_id))
+
+        if protein_ids is not None:
+            _query_params.append(("protein_ids", protein_ids))
+
+        if species_acronym is not None:
+            _query_params.append(("species_acronym", species_acronym))
+
+        if required_score is not None:
+            _query_params.append(("required_score", required_score))
+
+        if add_nodes is not None:
+            _query_params.append(("add_nodes", add_nodes))
+
+        if network_type is not None:
+            _query_params.append(("network_type", network_type))
+
+        if evidence_channels is not None:
+            _query_params.append(("evidence_channels", evidence_channels))
+
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+        # set the HTTP header `Accept`
+        if "Accept" not in _header_params:
+            _header_params["Accept"] = self.api_client.select_header_accept(
+                ["application/json"]
+            )
+
+        # authentication setting
+        _auth_settings: List[str] = ["RoleBasedJWTAuth"]
+
+        return self.api_client.param_serialize(
+            method="GET",
+            resource_path="/api/ppi/string-network",
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth,
+        )
 
     @validate_call
     def dataportal_api_interactions_ppi_endpoints_get_all_protein_neighbors(
@@ -568,6 +1039,232 @@ class ProteinProteinInteractionsApi:
         )
 
     @validate_call
+    def dataportal_api_interactions_ppi_endpoints_get_ppi_data_sources(
+        self,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> PPIDataSourcesResponseSchema:
+        """Get available PPI data sources
+
+        Get list of available data sources for PPI interactions (e.g., local ES index, STRING DB API).
+
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._dataportal_api_interactions_ppi_endpoints_get_ppi_data_sources_serialize(
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "PPIDataSourcesResponseSchema",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+    @validate_call
+    def dataportal_api_interactions_ppi_endpoints_get_ppi_data_sources_with_http_info(
+        self,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[PPIDataSourcesResponseSchema]:
+        """Get available PPI data sources
+
+        Get list of available data sources for PPI interactions (e.g., local ES index, STRING DB API).
+
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._dataportal_api_interactions_ppi_endpoints_get_ppi_data_sources_serialize(
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "PPIDataSourcesResponseSchema",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+    @validate_call
+    def dataportal_api_interactions_ppi_endpoints_get_ppi_data_sources_without_preload_content(
+        self,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get available PPI data sources
+
+        Get list of available data sources for PPI interactions (e.g., local ES index, STRING DB API).
+
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """  # noqa: E501
+
+        _param = self._dataportal_api_interactions_ppi_endpoints_get_ppi_data_sources_serialize(
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "PPIDataSourcesResponseSchema",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+    def _dataportal_api_interactions_ppi_endpoints_get_ppi_data_sources_serialize(
+        self,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+        _host = None
+
+        _collection_formats: Dict[str, str] = {}
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+        # set the HTTP header `Accept`
+        if "Accept" not in _header_params:
+            _header_params["Accept"] = self.api_client.select_header_accept(
+                ["application/json"]
+            )
+
+        # authentication setting
+        _auth_settings: List[str] = ["RoleBasedJWTAuth"]
+
+        return self.api_client.param_serialize(
+            method="GET",
+            resource_path="/api/ppi/data-sources",
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth,
+        )
+
+    @validate_call
     def dataportal_api_interactions_ppi_endpoints_get_ppi_network(
         self,
         score_type: StrictStr,
@@ -582,6 +1279,18 @@ class ProteinProteinInteractionsApi:
         ] = None,
         species_acronym: Annotated[
             Optional[StrictStr], Field(description="Species acronym filter")
+        ] = None,
+        isolate_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')"
+            ),
+        ] = None,
+        locus_tag: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Filter to PPIs involving this locus_tag (creates neighborhood view)"
+            ),
         ] = None,
         include_properties: Annotated[
             Optional[StrictBool],
@@ -609,6 +1318,10 @@ class ProteinProteinInteractionsApi:
         :type score_threshold: float
         :param species_acronym: Species acronym filter
         :type species_acronym: str
+        :param isolate_name: Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')
+        :type isolate_name: str
+        :param locus_tag: Filter to PPIs involving this locus_tag (creates neighborhood view)
+        :type locus_tag: str
         :param include_properties: Whether to include network properties
         :type include_properties: bool
         :param _request_timeout: timeout setting for this request. If one
@@ -638,6 +1351,8 @@ class ProteinProteinInteractionsApi:
                 score_type=score_type,
                 score_threshold=score_threshold,
                 species_acronym=species_acronym,
+                isolate_name=isolate_name,
+                locus_tag=locus_tag,
                 include_properties=include_properties,
                 _request_auth=_request_auth,
                 _content_type=_content_type,
@@ -674,6 +1389,18 @@ class ProteinProteinInteractionsApi:
         species_acronym: Annotated[
             Optional[StrictStr], Field(description="Species acronym filter")
         ] = None,
+        isolate_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')"
+            ),
+        ] = None,
+        locus_tag: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Filter to PPIs involving this locus_tag (creates neighborhood view)"
+            ),
+        ] = None,
         include_properties: Annotated[
             Optional[StrictBool],
             Field(description="Whether to include network properties"),
@@ -700,6 +1427,10 @@ class ProteinProteinInteractionsApi:
         :type score_threshold: float
         :param species_acronym: Species acronym filter
         :type species_acronym: str
+        :param isolate_name: Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')
+        :type isolate_name: str
+        :param locus_tag: Filter to PPIs involving this locus_tag (creates neighborhood view)
+        :type locus_tag: str
         :param include_properties: Whether to include network properties
         :type include_properties: bool
         :param _request_timeout: timeout setting for this request. If one
@@ -729,6 +1460,8 @@ class ProteinProteinInteractionsApi:
                 score_type=score_type,
                 score_threshold=score_threshold,
                 species_acronym=species_acronym,
+                isolate_name=isolate_name,
+                locus_tag=locus_tag,
                 include_properties=include_properties,
                 _request_auth=_request_auth,
                 _content_type=_content_type,
@@ -765,6 +1498,18 @@ class ProteinProteinInteractionsApi:
         species_acronym: Annotated[
             Optional[StrictStr], Field(description="Species acronym filter")
         ] = None,
+        isolate_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')"
+            ),
+        ] = None,
+        locus_tag: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Filter to PPIs involving this locus_tag (creates neighborhood view)"
+            ),
+        ] = None,
         include_properties: Annotated[
             Optional[StrictBool],
             Field(description="Whether to include network properties"),
@@ -791,6 +1536,10 @@ class ProteinProteinInteractionsApi:
         :type score_threshold: float
         :param species_acronym: Species acronym filter
         :type species_acronym: str
+        :param isolate_name: Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')
+        :type isolate_name: str
+        :param locus_tag: Filter to PPIs involving this locus_tag (creates neighborhood view)
+        :type locus_tag: str
         :param include_properties: Whether to include network properties
         :type include_properties: bool
         :param _request_timeout: timeout setting for this request. If one
@@ -820,6 +1569,8 @@ class ProteinProteinInteractionsApi:
                 score_type=score_type,
                 score_threshold=score_threshold,
                 species_acronym=species_acronym,
+                isolate_name=isolate_name,
+                locus_tag=locus_tag,
                 include_properties=include_properties,
                 _request_auth=_request_auth,
                 _content_type=_content_type,
@@ -841,6 +1592,8 @@ class ProteinProteinInteractionsApi:
         score_type,
         score_threshold,
         species_acronym,
+        isolate_name,
+        locus_tag,
         include_properties,
         _request_auth,
         _content_type,
@@ -869,6 +1622,12 @@ class ProteinProteinInteractionsApi:
 
         if species_acronym is not None:
             _query_params.append(("species_acronym", species_acronym))
+
+        if isolate_name is not None:
+            _query_params.append(("isolate_name", isolate_name))
+
+        if locus_tag is not None:
+            _query_params.append(("locus_tag", locus_tag))
 
         if include_properties is not None:
             _query_params.append(("include_properties", include_properties))
@@ -919,6 +1678,12 @@ class ProteinProteinInteractionsApi:
         species_acronym: Annotated[
             Optional[StrictStr], Field(description="Species acronym filter")
         ] = None,
+        isolate_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')"
+            ),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -941,6 +1706,8 @@ class ProteinProteinInteractionsApi:
         :type score_threshold: float
         :param species_acronym: Species acronym filter
         :type species_acronym: str
+        :param isolate_name: Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')
+        :type isolate_name: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -967,6 +1734,7 @@ class ProteinProteinInteractionsApi:
             score_type=score_type,
             score_threshold=score_threshold,
             species_acronym=species_acronym,
+            isolate_name=isolate_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1003,6 +1771,12 @@ class ProteinProteinInteractionsApi:
         species_acronym: Annotated[
             Optional[StrictStr], Field(description="Species acronym filter")
         ] = None,
+        isolate_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')"
+            ),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1025,6 +1799,8 @@ class ProteinProteinInteractionsApi:
         :type score_threshold: float
         :param species_acronym: Species acronym filter
         :type species_acronym: str
+        :param isolate_name: Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')
+        :type isolate_name: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1051,6 +1827,7 @@ class ProteinProteinInteractionsApi:
             score_type=score_type,
             score_threshold=score_threshold,
             species_acronym=species_acronym,
+            isolate_name=isolate_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1087,6 +1864,12 @@ class ProteinProteinInteractionsApi:
         species_acronym: Annotated[
             Optional[StrictStr], Field(description="Species acronym filter")
         ] = None,
+        isolate_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')"
+            ),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1109,6 +1892,8 @@ class ProteinProteinInteractionsApi:
         :type score_threshold: float
         :param species_acronym: Species acronym filter
         :type species_acronym: str
+        :param isolate_name: Isolate name filter (e.g., 'BU_ATCC8492', 'PV_ATCC8482')
+        :type isolate_name: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1135,6 +1920,7 @@ class ProteinProteinInteractionsApi:
             score_type=score_type,
             score_threshold=score_threshold,
             species_acronym=species_acronym,
+            isolate_name=isolate_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1154,6 +1940,7 @@ class ProteinProteinInteractionsApi:
         score_type,
         score_threshold,
         species_acronym,
+        isolate_name,
         _request_auth,
         _content_type,
         _headers,
@@ -1182,6 +1969,9 @@ class ProteinProteinInteractionsApi:
 
         if species_acronym is not None:
             _query_params.append(("species_acronym", species_acronym))
+
+        if isolate_name is not None:
+            _query_params.append(("isolate_name", isolate_name))
 
         # process the header parameters
         # process the form parameters

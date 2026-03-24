@@ -55,3 +55,35 @@ def orthologs_pair(
         "GET", "/api/orthologs/pair", params=params, format=format
     )
     handle_raw_response(response, format, title="Ortholog pair")
+
+
+@orthologs_app.command("batch")
+def orthologs_batch(
+    ctx: typer.Context,
+    locus_tags: str = typer.Option(
+        ...,
+        "--locus-tags",
+        help="Comma-separated locus tags (e.g. BU_ATCC8492_00001,BU_ATCC8492_00002)",
+    ),
+    species_acronym: Optional[str] = typer.Option(None, "--species", "-s"),
+    orthology_type: Optional[str] = typer.Option(None, "--orthology-type"),
+    one_to_one_only: Optional[bool] = typer.Option(None, "--one-to-one-only"),
+    cross_species_only: Optional[bool] = typer.Option(None, "--cross-species-only"),
+    max_results_per_gene: Optional[int] = typer.Option(None, "--max-results-per-gene"),
+    format: Optional[str] = typer.Option(None, "--format", "-f"),
+) -> None:
+    client = ensure_client(ctx)
+    params = merge_params(
+        {
+            "locus_tags": locus_tags,
+            "species_acronym": species_acronym,
+            "orthology_type": orthology_type,
+            "one_to_one_only": one_to_one_only,
+            "cross_species_only": cross_species_only,
+            "max_results_per_gene": max_results_per_gene,
+        }
+    )
+    response = client.raw_request(
+        "GET", "/api/orthologs/batch", params=params, format=format
+    )
+    handle_raw_response(response, format, title="Ortholog batch")

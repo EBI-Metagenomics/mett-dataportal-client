@@ -60,14 +60,22 @@ from mett_dataportal_sdk.models.get_all_genomes_query_schema import (
 from mett_dataportal_sdk.models.mutant_growth_search_query_schema import (
     MutantGrowthSearchQuerySchema,
 )
+from mett_dataportal_sdk.models.ortholog_batch_query_schema import (
+    OrthologBatchQuerySchema,
+)
 from mett_dataportal_sdk.models.ppi_all_neighbors_response_schema import (
     PPIAllNeighborsResponseSchema,
 )
 from mett_dataportal_sdk.models.ppi_all_neighbors_schema import PPIAllNeighborsSchema
+from mett_dataportal_sdk.models.ppi_data_sources_response_schema import (
+    PPIDataSourcesResponseSchema,
+)
 from mett_dataportal_sdk.models.ppi_interaction_schema import PPIInteractionSchema
 from mett_dataportal_sdk.models.ppi_neighbors_query_schema import (
     PPINeighborsQuerySchema,
 )
+from mett_dataportal_sdk.models.ppi_network_edge_schema import PPINetworkEdgeSchema
+from mett_dataportal_sdk.models.ppi_network_node_schema import PPINetworkNodeSchema
 from mett_dataportal_sdk.models.ppi_network_properties_query_schema import (
     PPINetworkPropertiesQuerySchema,
 )
@@ -88,6 +96,12 @@ from mett_dataportal_sdk.models.ppi_score_types_response_schema import (
 from mett_dataportal_sdk.models.ppi_search_query_schema import PPISearchQuerySchema
 from mett_dataportal_sdk.models.ppi_search_response_schema import (
     PPISearchResponseSchema,
+)
+from mett_dataportal_sdk.models.ppi_string_network_query_schema import (
+    PPIStringNetworkQuerySchema,
+)
+from mett_dataportal_sdk.models.ppi_string_network_response_schema import (
+    PPIStringNetworkResponseSchema,
 )
 from mett_dataportal_sdk.models.paginated_response_schema import PaginatedResponseSchema
 from mett_dataportal_sdk.models.paginated_strain_drug_mic_response_schema import (
@@ -113,6 +127,9 @@ from mett_dataportal_sdk.models.species_genome_search_query_schema import (
 )
 from mett_dataportal_sdk.models.strain_drug_data_response_schema import (
     StrainDrugDataResponseSchema,
+)
+from mett_dataportal_sdk.models.string_network_data_schema import (
+    StringNetworkDataSchema,
 )
 from mett_dataportal_sdk.models.success_response_schema import SuccessResponseSchema
 from mett_dataportal_sdk.models.ttp_compound_interactions_query_schema import (

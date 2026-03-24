@@ -18,6 +18,8 @@ import json
 
 from pydantic import BaseModel, ConfigDict
 from typing import Any, ClassVar, Dict, List
+from mett_dataportal_sdk.models.ppi_network_edge_schema import PPINetworkEdgeSchema
+from mett_dataportal_sdk.models.ppi_network_node_schema import PPINetworkNodeSchema
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,8 +29,8 @@ class PPINetworkSchema(BaseModel):
     Schema for PPI network data.
     """  # noqa: E501
 
-    nodes: List[Dict[str, Any]]
-    edges: List[Dict[str, Any]]
+    nodes: List[PPINetworkNodeSchema]
+    edges: List[PPINetworkEdgeSchema]
     properties: Dict[str, Any]
     __properties: ClassVar[List[str]] = ["nodes", "edges", "properties"]
 
@@ -69,6 +71,20 @@ class PPINetworkSchema(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in nodes (list)
+        _items = []
+        if self.nodes:
+            for _item_nodes in self.nodes:
+                if _item_nodes:
+                    _items.append(_item_nodes.to_dict())
+            _dict["nodes"] = _items
+        # override the default output from pydantic by calling `to_dict()` of each item in edges (list)
+        _items = []
+        if self.edges:
+            for _item_edges in self.edges:
+                if _item_edges:
+                    _items.append(_item_edges.to_dict())
+            _dict["edges"] = _items
         return _dict
 
     @classmethod
@@ -82,8 +98,16 @@ class PPINetworkSchema(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "nodes": obj.get("nodes"),
-                "edges": obj.get("edges"),
+                "nodes": [
+                    PPINetworkNodeSchema.from_dict(_item) for _item in obj["nodes"]
+                ]
+                if obj.get("nodes") is not None
+                else None,
+                "edges": [
+                    PPINetworkEdgeSchema.from_dict(_item) for _item in obj["edges"]
+                ]
+                if obj.get("edges") is not None
+                else None,
                 "properties": obj.get("properties"),
             }
         )

@@ -41,6 +41,7 @@ class PPIInteractionSchema(BaseModel):
     protein_a: StrictStr
     protein_b: StrictStr
     participants: List[StrictStr]
+    participants_locus_tag: Optional[List[StrictStr]] = None
     is_self_interaction: Optional[StrictBool] = False
     protein_a_locus_tag: Optional[StrictStr] = None
     protein_a_uniprot_id: Optional[StrictStr] = None
@@ -50,6 +51,8 @@ class PPIInteractionSchema(BaseModel):
     protein_b_uniprot_id: Optional[StrictStr] = None
     protein_b_name: Optional[StrictStr] = None
     protein_b_product: Optional[StrictStr] = None
+    string_protein_a_id: Optional[StrictStr] = None
+    string_protein_b_id: Optional[StrictStr] = None
     dl_score: Optional[Union[StrictFloat, StrictInt]] = None
     comelt_score: Optional[Union[StrictFloat, StrictInt]] = None
     perturbation_score: Optional[Union[StrictFloat, StrictInt]] = None
@@ -75,6 +78,7 @@ class PPIInteractionSchema(BaseModel):
         "protein_a",
         "protein_b",
         "participants",
+        "participants_locus_tag",
         "is_self_interaction",
         "protein_a_locus_tag",
         "protein_a_uniprot_id",
@@ -84,6 +88,8 @@ class PPIInteractionSchema(BaseModel):
         "protein_b_uniprot_id",
         "protein_b_name",
         "protein_b_product",
+        "string_protein_a_id",
+        "string_protein_b_id",
         "dl_score",
         "comelt_score",
         "perturbation_score",
@@ -158,6 +164,14 @@ class PPIInteractionSchema(BaseModel):
         if self.isolate_name is None and "isolate_name" in self.model_fields_set:
             _dict["isolate_name"] = None
 
+        # set to None if participants_locus_tag (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.participants_locus_tag is None
+            and "participants_locus_tag" in self.model_fields_set
+        ):
+            _dict["participants_locus_tag"] = None
+
         # set to None if protein_a_locus_tag (nullable) is None
         # and model_fields_set contains the field
         if (
@@ -215,6 +229,22 @@ class PPIInteractionSchema(BaseModel):
             and "protein_b_product" in self.model_fields_set
         ):
             _dict["protein_b_product"] = None
+
+        # set to None if string_protein_a_id (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.string_protein_a_id is None
+            and "string_protein_a_id" in self.model_fields_set
+        ):
+            _dict["string_protein_a_id"] = None
+
+        # set to None if string_protein_b_id (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.string_protein_b_id is None
+            and "string_protein_b_id" in self.model_fields_set
+        ):
+            _dict["string_protein_b_id"] = None
 
         # set to None if dl_score (nullable) is None
         # and model_fields_set contains the field
@@ -299,6 +329,7 @@ class PPIInteractionSchema(BaseModel):
                 "protein_a": obj.get("protein_a"),
                 "protein_b": obj.get("protein_b"),
                 "participants": obj.get("participants"),
+                "participants_locus_tag": obj.get("participants_locus_tag"),
                 "is_self_interaction": obj.get("is_self_interaction")
                 if obj.get("is_self_interaction") is not None
                 else False,
@@ -310,6 +341,8 @@ class PPIInteractionSchema(BaseModel):
                 "protein_b_uniprot_id": obj.get("protein_b_uniprot_id"),
                 "protein_b_name": obj.get("protein_b_name"),
                 "protein_b_product": obj.get("protein_b_product"),
+                "string_protein_a_id": obj.get("string_protein_a_id"),
+                "string_protein_b_id": obj.get("string_protein_b_id"),
                 "dl_score": obj.get("dl_score"),
                 "comelt_score": obj.get("comelt_score"),
                 "perturbation_score": obj.get("perturbation_score"),

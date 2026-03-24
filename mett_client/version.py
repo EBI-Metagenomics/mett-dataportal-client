@@ -28,6 +28,6 @@ except PackageNotFoundError:
         __version__ = pyproject["project"]["version"]
     except (FileNotFoundError, KeyError, ImportError):
         # Fallback if pyproject.toml is not found or can't be parsed
-        __version__ = "0.0.1a1"
+        __version__ = "0.0.1a7"
 
 __all__ = ["__version__"]

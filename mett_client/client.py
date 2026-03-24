@@ -30,6 +30,7 @@ from mett_dataportal_sdk.api.fitness_api import FitnessApi
 from mett_dataportal_sdk.api.genes_api import GenesApi
 from mett_dataportal_sdk.api.genomes_api import GenomesApi
 from mett_dataportal_sdk.api.mutant_growth_api import MutantGrowthApi
+from mett_dataportal_sdk.api.orthologs_api import OrthologsApi
 from mett_dataportal_sdk.api.pooled_ttp_interactions_api import PooledTTPInteractionsApi
 from mett_dataportal_sdk.api.protein_protein_interactions_api import (
     ProteinProteinInteractionsApi,
@@ -361,6 +362,89 @@ class DataPortalClient:
             self._api(
                 ProteinProteinInteractionsApi
             ).dataportal_api_interactions_ppi_endpoints_get_all_protein_neighbors,
+            params=params,
+        )
+        return response.model_dump()
+
+    def get_ppi_string_network(self, **params: Any) -> Dict[str, Any]:
+        """Fetch STRING interaction network (``/api/ppi/string-network``)."""
+        response = self._call_api(
+            self._api(
+                ProteinProteinInteractionsApi
+            ).dataportal_api_external_string_network_endpoints_get_string_network,
+            params=params,
+        )
+        return response.model_dump()
+
+    def get_ppi_data_sources(self) -> Dict[str, Any]:
+        """List PPI data sources (``/api/ppi/data-sources``)."""
+        response = self._call_api(
+            self._api(
+                ProteinProteinInteractionsApi
+            ).dataportal_api_interactions_ppi_endpoints_get_ppi_data_sources,
+        )
+        return response.model_dump()
+
+    def get_ppi_available_score_types(self) -> Dict[str, Any]:
+        """List PPI score types (``/api/ppi/scores/available``)."""
+        response = self._call_api(
+            self._api(
+                ProteinProteinInteractionsApi
+            ).dataportal_api_interactions_ppi_endpoints_get_available_score_types,
+        )
+        return response.model_dump()
+
+    def get_ppi_network(self, score_type: str, **params: Any) -> Dict[str, Any]:
+        """PPI network for a score type (``/api/ppi/network/{score_type}``)."""
+        response = self._call_api(
+            self._api(
+                ProteinProteinInteractionsApi
+            ).dataportal_api_interactions_ppi_endpoints_get_ppi_network,
+            params=params,
+            score_type=score_type,
+        )
+        return response.model_dump()
+
+    def get_ppi_network_properties(
+        self, score_type: str, **params: Any
+    ) -> Dict[str, Any]:
+        """PPI network summary statistics (``/api/ppi/network-properties``)."""
+        response = self._call_api(
+            self._api(
+                ProteinProteinInteractionsApi
+            ).dataportal_api_interactions_ppi_endpoints_get_ppi_network_properties,
+            params=params,
+            score_type=score_type,
+        )
+        return response.model_dump()
+
+    def search_orthologs(self, **params: Any) -> PaginatedResult[Any]:
+        """Search ortholog pairs with filters and pagination."""
+        response = self._call_api(
+            self._api(
+                OrthologsApi
+            ).dataportal_api_interactions_ortholog_endpoints_search_orthologs,
+            params=params,
+        )
+        return self._to_paginated(response)
+
+    def get_ortholog_pair(self, locus_tag_a: str, locus_tag_b: str) -> Dict[str, Any]:
+        """Ortholog relationship between two locus tags."""
+        response = self._call_api(
+            self._api(
+                OrthologsApi
+            ).dataportal_api_interactions_ortholog_endpoints_get_ortholog_pair,
+            locus_tag_a=locus_tag_a,
+            locus_tag_b=locus_tag_b,
+        )
+        return response.model_dump()
+
+    def get_orthologs_batch(self, **params: Any) -> Dict[str, Any]:
+        """Batch ortholog lookup for multiple locus tags (``/api/orthologs/batch``)."""
+        response = self._call_api(
+            self._api(
+                OrthologsApi
+            ).dataportal_api_interactions_ortholog_endpoints_get_orthologs_batch,
             params=params,
         )
         return response.model_dump()

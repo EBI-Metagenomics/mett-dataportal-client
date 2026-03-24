@@ -37,6 +37,32 @@ def test_ppi_scores_available(monkeypatch) -> None:
     assert result.exit_code == 0
 
 
+def test_ppi_data_sources(monkeypatch) -> None:
+    """Friendly CLI: mett ppi data-sources --format json"""
+    _patch_dummy_client(monkeypatch)
+    result = runner.invoke(cli_cmd, ["ppi", "data-sources", "--format", "json"])
+    assert result.exit_code == 0
+
+
+def test_ppi_string_network(monkeypatch) -> None:
+    """Friendly CLI: mett ppi string-network --locus-tag X --species BU --format json"""
+    _patch_dummy_client(monkeypatch)
+    result = runner.invoke(
+        cli_cmd,
+        [
+            "ppi",
+            "string-network",
+            "--locus-tag",
+            "BU_ATCC8492_00001",
+            "--species",
+            "BU",
+            "--format",
+            "json",
+        ],
+    )
+    assert result.exit_code == 0
+
+
 def test_ppi_network_properties_ds_score(monkeypatch) -> None:
     """Friendly CLI: mett ppi network-properties --score-type ds_score --score-threshold 0.8 --species PV --format json"""
     _patch_dummy_client(monkeypatch)
@@ -70,6 +96,23 @@ def test_orthologs_pair(monkeypatch) -> None:
             "BU_ATCC8492_00001",
             "--gene-b",
             "PV_ATCC8482_00001",
+            "--format",
+            "json",
+        ],
+    )
+    assert result.exit_code == 0
+
+
+def test_orthologs_batch(monkeypatch) -> None:
+    """Friendly CLI: mett orthologs batch --locus-tags A,B --format json"""
+    _patch_dummy_client(monkeypatch)
+    result = runner.invoke(
+        cli_cmd,
+        [
+            "orthologs",
+            "batch",
+            "--locus-tags",
+            "BU_ATCC8492_00001,BU_ATCC8492_00002",
             "--format",
             "json",
         ],
