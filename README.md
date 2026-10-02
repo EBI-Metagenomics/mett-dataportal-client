@@ -103,49 +103,62 @@ Complete documentation is available in the [docs/](https://github.com/EBI-Metage
 
 ### Development
 
-#### From Source (with `uv`) — recommended
+#### From source (conda) — recommended
+
+Use a single conda environment. You do **not** need a separate `.venv`.
 
 ```bash
 git clone https://github.com/EBI-Metagenomics/mett-dataportal-client.git
 cd mett-dataportal-client
 
-# Create a virtual environment and install all dependencies from pyproject.toml
-uv sync --all-extras --dev
+# Create / activate a conda env (name is arbitrary; mett-client is conventional)
+conda create -n mett-client python=3.12 -y
+conda activate mett-client
 
-# Run the CLI via uv (no manual activation needed)
-uv run mett --help
-```
-
-### Running tests and linting (with `uv`)
-
-```bash
-# Install all dev dependencies (if not already done)
-uv sync --all-extras --dev
-
-# Run tests
-uv run pytest -v
-
-# Run Ruff lint and formatting checks
-uv run ruff check mett_client/ scripts/ tests/
-uv run ruff format --check mett_client/ scripts/ tests/
-
-# (Optional) Run pre-commit hooks on all files
-uv run pre-commit run --all-files
-```
-
-#### Alternative (classic `pip` workflow)
-
-If you prefer not to use `uv`, you can still work with a standard virtual environment:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-
-pip install --upgrade pip
+# Editable install with dev tools (pytest, ruff, pre-commit, …)
 pip install -e ".[dev]"
 
-# CLI is now on PATH inside the venv
+# Install git hooks once per clone (uses the active conda env)
+pre-commit install
+
 mett --help
+```
+
+#### Running tests and linting
+
+With `mett-client` activated:
+
+```bash
+pytest -v
+
+ruff check mett_client/ scripts/ tests/
+ruff format --check mett_client/ scripts/ tests/
+
+# Optional: run all pre-commit hooks
+pre-commit run --all-files
+```
+
+If commits fail with ``pre-commit` not found`, activate the conda env and reinstall the hook:
+
+```bash
+conda activate mett-client
+pip install -e ".[dev]"
+pre-commit install
+```
+
+#### Alternative: `uv`
+
+```bash
+git clone https://github.com/EBI-Metagenomics/mett-dataportal-client.git
+cd mett-dataportal-client
+
+uv sync --all-extras --dev
+uv run mett --help
+
+uv run pytest -v
+uv run ruff check mett_client/ scripts/ tests/
+uv run pre-commit install
+uv run pre-commit run --all-files
 ```
 
 ## Requirements
