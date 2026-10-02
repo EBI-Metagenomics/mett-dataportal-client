@@ -87,3 +87,13 @@ def test_genes_search_advanced_locus_tag(monkeypatch) -> None:
         ],
     )
     assert result.exit_code == 0
+
+
+def test_genes_release_history(monkeypatch) -> None:
+    """Friendly CLI: mett genes release-history BU_ATCC8492_00001 --format json"""
+    _patch_dummy_client(monkeypatch)
+    result = runner.invoke(
+        cli_cmd,
+        ["genes", "release-history", "BU_ATCC8492_00001", "--format", "json"],
+    )
+    assert result.exit_code == 0

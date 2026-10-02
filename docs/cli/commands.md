@@ -41,6 +41,9 @@ mett genomes download
 # Get genes for a genome
 mett genomes genes <genome_id> [--format json|tsv|table]
 
+# Releases that contain this genome
+mett genomes release-history <isolate_name> [--format json]
+
 # Get essentiality for a genome contig
 mett genomes essentiality <genome_id> <contig_id> [--format json]
 ```
@@ -59,6 +62,9 @@ mett genes search-advanced [--query <query>] [--species <acronym>] [--isolate <n
 
 # Get gene by locus tag
 mett genes get <locus_tag> [--format json]
+
+# Releases that contain this locus tag
+mett genes release-history <locus_tag> [--format json]
 
 # Autocomplete
 mett genes autocomplete --query <query> [--species <acronym>] [--isolate <name> ...] [--filter <filter>]
@@ -81,6 +87,9 @@ mett system features [--format json]
 
 # Get COG categories
 mett system cog-categories [--format json]
+
+# List METT data releases
+mett system releases [--format json]
 ```
 
 ## Experimental Commands
@@ -212,6 +221,9 @@ mett genes correlations <locus_tag> [--format json]
 ```bash
 # Search PPI interactions
 mett ppi interactions [--locus-tag <tag>] [--protein-id <id>] [--species <acronym>] [--score-type <type>] [--score-threshold <n>] [--has-string <true|false>] [--has-xlms <true|false>] [--page <n>] [--per-page <n>] [--format json]
+
+# Get a single PPI interaction by pair ID
+mett ppi interaction <pair_id> [--format json]
 
 # Get neighbors
 mett ppi neighbors [--locus-tag <tag>] [--protein-id <id>] [--species <acronym>] [--n <n>] [--format json]

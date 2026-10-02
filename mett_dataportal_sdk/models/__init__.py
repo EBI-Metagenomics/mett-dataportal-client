@@ -35,11 +35,27 @@ from mett_dataportal_sdk.models.fitness_search_query_schema import (
 from mett_dataportal_sdk.models.gene_advanced_search_query_schema import (
     GeneAdvancedSearchQuerySchema,
 )
+from mett_dataportal_sdk.models.gene_bgc_annotation_schema import (
+    GeneBgcAnnotationSchema,
+)
+from mett_dataportal_sdk.models.gene_dbcan_annotation_schema import (
+    GeneDbcanAnnotationSchema,
+)
+from mett_dataportal_sdk.models.gene_defense_annotation_schema import (
+    GeneDefenseAnnotationSchema,
+)
+from mett_dataportal_sdk.models.gene_metadata_schema import GeneMetadataSchema
+from mett_dataportal_sdk.models.gene_mobilome_annotation_schema import (
+    GeneMobilomeAnnotationSchema,
+)
 from mett_dataportal_sdk.models.gene_paginated_response_schema import (
     GenePaginatedResponseSchema,
 )
 from mett_dataportal_sdk.models.gene_response_schema import GeneResponseSchema
 from mett_dataportal_sdk.models.gene_search_query_schema import GeneSearchQuerySchema
+from mett_dataportal_sdk.models.gene_unifire_annotation_schema import (
+    GeneUnifireAnnotationSchema,
+)
 from mett_dataportal_sdk.models.genes_by_genome_query_schema import (
     GenesByGenomeQuerySchema,
 )
@@ -69,6 +85,9 @@ from mett_dataportal_sdk.models.ppi_all_neighbors_response_schema import (
 from mett_dataportal_sdk.models.ppi_all_neighbors_schema import PPIAllNeighborsSchema
 from mett_dataportal_sdk.models.ppi_data_sources_response_schema import (
     PPIDataSourcesResponseSchema,
+)
+from mett_dataportal_sdk.models.ppi_interaction_detail_response_schema import (
+    PPIInteractionDetailResponseSchema,
 )
 from mett_dataportal_sdk.models.ppi_interaction_schema import PPIInteractionSchema
 from mett_dataportal_sdk.models.ppi_neighbors_query_schema import (
@@ -125,6 +144,7 @@ from mett_dataportal_sdk.models.search_request_schema import SearchRequestSchema
 from mett_dataportal_sdk.models.species_genome_search_query_schema import (
     SpeciesGenomeSearchQuerySchema,
 )
+from mett_dataportal_sdk.models.strain_annotation_schema import StrainAnnotationSchema
 from mett_dataportal_sdk.models.strain_drug_data_response_schema import (
     StrainDrugDataResponseSchema,
 )

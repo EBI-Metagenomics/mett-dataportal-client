@@ -37,6 +37,7 @@ from mett_dataportal_sdk.api.protein_protein_interactions_api import (
 )
 from mett_dataportal_sdk.api.proteomics_api import ProteomicsApi
 from mett_dataportal_sdk.api.reactions_api import ReactionsApi
+from mett_dataportal_sdk.api.releases_api import ReleasesApi
 from mett_dataportal_sdk.api.species_api import SpeciesApi
 from mett_dataportal_sdk.exceptions import ApiException
 
@@ -73,6 +74,7 @@ class DataPortalClient:
         config: Config | None = None,
         base_url: str | None = None,
         jwt_token: str | None = None,
+        release: str | None = None,
         timeout: int | None = None,
         verify_ssl: bool | None = None,
         user_agent: str | None = None,
@@ -83,6 +85,8 @@ class DataPortalClient:
             self.config.base_url = base_url.rstrip("/")
         if jwt_token:
             self.config.jwt_token = jwt_token
+        if release is not None:
+            self.config.release = release
         if timeout is not None:
             self.config.timeout = timeout
         if verify_ssl is not None:
@@ -94,12 +98,21 @@ class DataPortalClient:
         self._sdk_client = sdk_client or SDKApiClient(configuration=configuration)
         # align UA with the rest of the project
         self._sdk_client.user_agent = self.config.user_agent
+        if self.config.release:
+            self._sdk_client.set_default_header("X-METT-Release", self.config.release)
         self._apis: Dict[Type[Any], Any] = {}
         self._http = self._build_http_session()
 
     # ------------------------------------------------------------------
     # Core API Methods
     # ------------------------------------------------------------------
+    def list_releases(self) -> Dict[str, Any]:
+        """List scientist-visible METT data releases (``/api/releases``)."""
+        response = self._call_api(
+            self._api(ReleasesApi).dataportal_api_core_release_endpoints_list_releases,
+        )
+        return response.model_dump()
+
     def list_species(self, *, format: str = "json") -> List[Species]:
         """List all species. Supports format='json' (default) or format='tsv'."""
         payload = request_json(
@@ -204,7 +217,32 @@ class DataPortalClient:
             ).dataportal_api_core_gene_endpoints_get_gene_by_locus_tag,
             locus_tag=locus_tag,
         )
-        return response
+        data = getattr(response, "data", response)
+        if isinstance(data, Gene):
+            return data
+        if isinstance(data, dict):
+            return Gene.model_validate(data)
+        raise APIError(f"Unexpected gene response for locus tag {locus_tag}")
+
+    def get_gene_release_history(self, locus_tag: str) -> Dict[str, Any]:
+        """Releases that contain this locus tag (``/api/genes/{locus_tag}/release-history``)."""
+        response = self._call_api(
+            self._api(
+                GenesApi
+            ).dataportal_api_core_gene_endpoints_get_gene_release_history,
+            locus_tag=locus_tag,
+        )
+        return response.model_dump()
+
+    def get_genome_release_history(self, isolate_name: str) -> Dict[str, Any]:
+        """Releases that contain this genome (``/api/genomes/{isolate_name}/release-history``)."""
+        response = self._call_api(
+            self._api(
+                GenomesApi
+            ).dataportal_api_core_genome_endpoints_get_genome_release_history,
+            isolate_name=isolate_name,
+        )
+        return response.model_dump()
 
     # ------------------------------------------------------------------
     # Experimental API Methods
@@ -354,6 +392,16 @@ class DataPortalClient:
                 ProteinProteinInteractionsApi
             ).dataportal_api_interactions_ppi_endpoints_search_ppi_interactions,
             params=params,
+        )
+        return response.model_dump()
+
+    def get_ppi_interaction(self, pair_id: str) -> Dict[str, Any]:
+        """Get a single PPI interaction by pair ID (``/api/ppi/interactions/{pair_id}``)."""
+        response = self._call_api(
+            self._api(
+                ProteinProteinInteractionsApi
+            ).dataportal_api_interactions_ppi_endpoints_get_ppi_interaction_by_pair_id,
+            pair_id=pair_id,
         )
         return response.model_dump()
 
@@ -534,6 +582,8 @@ class DataPortalClient:
         token = self.config.jwt_token
         if token:
             session.headers["Authorization"] = f"Bearer {token}"
+        if self.config.release:
+            session.headers["X-METT-Release"] = self.config.release
         return session
 
     @property

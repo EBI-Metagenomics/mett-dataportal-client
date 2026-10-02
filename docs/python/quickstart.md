@@ -101,6 +101,14 @@ result = client.search_genes_advanced(
 # Get gene by locus tag
 gene = client.get_gene("BU_ATCC8492_00001")
 print(gene.product)
+
+# List data releases and inspect gene/genome history
+releases = client.list_releases()
+gene_history = client.get_gene_release_history("BU_ATCC8492_00001")
+genome_history = client.get_genome_release_history("BU_ATCC8492")
+
+# Or pin requests to a specific release (X-METT-Release header)
+archived = DataPortalClient(release="v1")
 ```
 
 ### Experimental Data (Requires Authentication)
@@ -130,6 +138,9 @@ result = client.search_ppi(
     locus_tag="BU_ATCC8492_01788",
     species_acronym="BU"
 )
+
+# Single PPI interaction by pair ID
+interaction = client.get_ppi_interaction("bu:A0A0X1ABC1__B0ABC123")
 ```
 
 ## Working with Results

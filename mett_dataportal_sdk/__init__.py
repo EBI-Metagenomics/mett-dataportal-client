@@ -32,6 +32,7 @@ __all__ = [
     "PyHMMERResultsApi",
     "PyHMMERSearchApi",
     "ReactionsApi",
+    "ReleasesApi",
     "SpeciesApi",
     "ApiResponse",
     "ApiClient",
@@ -52,9 +53,15 @@ __all__ = [
     "EssentialitySearchQuerySchema",
     "FitnessSearchQuerySchema",
     "GeneAdvancedSearchQuerySchema",
+    "GeneBgcAnnotationSchema",
+    "GeneDbcanAnnotationSchema",
+    "GeneDefenseAnnotationSchema",
+    "GeneMetadataSchema",
+    "GeneMobilomeAnnotationSchema",
     "GenePaginatedResponseSchema",
     "GeneResponseSchema",
     "GeneSearchQuerySchema",
+    "GeneUnifireAnnotationSchema",
     "GenesByGenomeQuerySchema",
     "GenomePaginatedResponseSchema",
     "GenomeResponseSchema",
@@ -67,6 +74,7 @@ __all__ = [
     "PPIAllNeighborsResponseSchema",
     "PPIAllNeighborsSchema",
     "PPIDataSourcesResponseSchema",
+    "PPIInteractionDetailResponseSchema",
     "PPIInteractionSchema",
     "PPINeighborsQuerySchema",
     "PPINetworkEdgeSchema",
@@ -92,6 +100,7 @@ __all__ = [
     "ResultQuerySchema",
     "SearchRequestSchema",
     "SpeciesGenomeSearchQuerySchema",
+    "StrainAnnotationSchema",
     "StrainDrugDataResponseSchema",
     "StringNetworkDataSchema",
     "SuccessResponseSchema",
@@ -126,6 +135,7 @@ from mett_dataportal_sdk.api.py_hmmer_search_api import (
     PyHMMERSearchApi as PyHMMERSearchApi,
 )
 from mett_dataportal_sdk.api.reactions_api import ReactionsApi as ReactionsApi
+from mett_dataportal_sdk.api.releases_api import ReleasesApi as ReleasesApi
 from mett_dataportal_sdk.api.species_api import SpeciesApi as SpeciesApi
 
 # import ApiClient
@@ -164,6 +174,21 @@ from mett_dataportal_sdk.models.fitness_search_query_schema import (
 from mett_dataportal_sdk.models.gene_advanced_search_query_schema import (
     GeneAdvancedSearchQuerySchema as GeneAdvancedSearchQuerySchema,
 )
+from mett_dataportal_sdk.models.gene_bgc_annotation_schema import (
+    GeneBgcAnnotationSchema as GeneBgcAnnotationSchema,
+)
+from mett_dataportal_sdk.models.gene_dbcan_annotation_schema import (
+    GeneDbcanAnnotationSchema as GeneDbcanAnnotationSchema,
+)
+from mett_dataportal_sdk.models.gene_defense_annotation_schema import (
+    GeneDefenseAnnotationSchema as GeneDefenseAnnotationSchema,
+)
+from mett_dataportal_sdk.models.gene_metadata_schema import (
+    GeneMetadataSchema as GeneMetadataSchema,
+)
+from mett_dataportal_sdk.models.gene_mobilome_annotation_schema import (
+    GeneMobilomeAnnotationSchema as GeneMobilomeAnnotationSchema,
+)
 from mett_dataportal_sdk.models.gene_paginated_response_schema import (
     GenePaginatedResponseSchema as GenePaginatedResponseSchema,
 )
@@ -172,6 +197,9 @@ from mett_dataportal_sdk.models.gene_response_schema import (
 )
 from mett_dataportal_sdk.models.gene_search_query_schema import (
     GeneSearchQuerySchema as GeneSearchQuerySchema,
+)
+from mett_dataportal_sdk.models.gene_unifire_annotation_schema import (
+    GeneUnifireAnnotationSchema as GeneUnifireAnnotationSchema,
 )
 from mett_dataportal_sdk.models.genes_by_genome_query_schema import (
     GenesByGenomeQuerySchema as GenesByGenomeQuerySchema,
@@ -208,6 +236,9 @@ from mett_dataportal_sdk.models.ppi_all_neighbors_schema import (
 )
 from mett_dataportal_sdk.models.ppi_data_sources_response_schema import (
     PPIDataSourcesResponseSchema as PPIDataSourcesResponseSchema,
+)
+from mett_dataportal_sdk.models.ppi_interaction_detail_response_schema import (
+    PPIInteractionDetailResponseSchema as PPIInteractionDetailResponseSchema,
 )
 from mett_dataportal_sdk.models.ppi_interaction_schema import (
     PPIInteractionSchema as PPIInteractionSchema,
@@ -281,6 +312,9 @@ from mett_dataportal_sdk.models.search_request_schema import (
 )
 from mett_dataportal_sdk.models.species_genome_search_query_schema import (
     SpeciesGenomeSearchQuerySchema as SpeciesGenomeSearchQuerySchema,
+)
+from mett_dataportal_sdk.models.strain_annotation_schema import (
+    StrainAnnotationSchema as StrainAnnotationSchema,
 )
 from mett_dataportal_sdk.models.strain_drug_data_response_schema import (
     StrainDrugDataResponseSchema as StrainDrugDataResponseSchema,

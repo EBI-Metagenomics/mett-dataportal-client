@@ -105,6 +105,13 @@ def test_system_health(monkeypatch) -> None:
     assert result.exit_code == 0
 
 
+def test_system_releases(monkeypatch) -> None:
+    """Friendly CLI: mett system releases --format json"""
+    _patch_dummy_client(monkeypatch)
+    result = runner.invoke(cli_cmd, ["system", "releases", "--format", "json"])
+    assert result.exit_code == 0
+
+
 def test_api_request_generic(monkeypatch) -> None:
     """Generic CLI: mett api request GET /api/species/ --format json"""
     _patch_dummy_client(monkeypatch)

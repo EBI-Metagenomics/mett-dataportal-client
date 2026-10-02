@@ -237,6 +237,16 @@ def test_ppi_interactions(monkeypatch) -> None:
     assert result.exit_code == 0
 
 
+def test_ppi_interaction_by_pair_id(monkeypatch) -> None:
+    """Friendly CLI: mett ppi interaction bu:A0A0X1ABC1__B0ABC123 --format json"""
+    _patch_dummy_client(monkeypatch)
+    result = runner.invoke(
+        cli_cmd,
+        ["ppi", "interaction", "bu:A0A0X1ABC1__B0ABC123", "--format", "json"],
+    )
+    assert result.exit_code == 0
+
+
 def test_ttp_hits(monkeypatch) -> None:
     """Friendly CLI: mett ttp hits --max-fdr 0.05 --min-ttp-score 1.0 --format json"""
     _patch_dummy_client(monkeypatch)

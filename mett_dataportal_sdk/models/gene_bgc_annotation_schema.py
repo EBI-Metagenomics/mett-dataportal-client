@@ -16,30 +16,26 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional, Union
+from pydantic import BaseModel, ConfigDict, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Set
 from typing_extensions import Self
 
 
-class PPINetworkEdgeSchema(BaseModel):
+class GeneBgcAnnotationSchema(BaseModel):
     """
-    Schema for a PPI network edge.
+    Biosynthetic gene cluster annotations.
     """  # noqa: E501
 
-    source: StrictStr = Field(description="Source node ID")
-    target: StrictStr = Field(description="Target node ID")
-    weight: Optional[Union[StrictFloat, StrictInt]] = None
-    pair_id: Optional[StrictStr] = None
-    n_sources: Optional[StrictInt] = None
-    evidence_scores: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = None
+    gecco_bgc_type: Optional[StrictStr] = None
+    nearest_mibig: Optional[StrictStr] = None
+    nearest_mibig_class: Optional[StrictStr] = None
+    antismash_bgc_function: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = [
-        "source",
-        "target",
-        "weight",
-        "pair_id",
-        "n_sources",
-        "evidence_scores",
+        "gecco_bgc_type",
+        "nearest_mibig",
+        "nearest_mibig_class",
+        "antismash_bgc_function",
     ]
 
     model_config = ConfigDict(
@@ -59,7 +55,7 @@ class PPINetworkEdgeSchema(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of PPINetworkEdgeSchema from a JSON string"""
+        """Create an instance of GeneBgcAnnotationSchema from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -79,31 +75,37 @@ class PPINetworkEdgeSchema(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if weight (nullable) is None
+        # set to None if gecco_bgc_type (nullable) is None
         # and model_fields_set contains the field
-        if self.weight is None and "weight" in self.model_fields_set:
-            _dict["weight"] = None
+        if self.gecco_bgc_type is None and "gecco_bgc_type" in self.model_fields_set:
+            _dict["gecco_bgc_type"] = None
 
-        # set to None if pair_id (nullable) is None
+        # set to None if nearest_mibig (nullable) is None
         # and model_fields_set contains the field
-        if self.pair_id is None and "pair_id" in self.model_fields_set:
-            _dict["pair_id"] = None
+        if self.nearest_mibig is None and "nearest_mibig" in self.model_fields_set:
+            _dict["nearest_mibig"] = None
 
-        # set to None if n_sources (nullable) is None
+        # set to None if nearest_mibig_class (nullable) is None
         # and model_fields_set contains the field
-        if self.n_sources is None and "n_sources" in self.model_fields_set:
-            _dict["n_sources"] = None
+        if (
+            self.nearest_mibig_class is None
+            and "nearest_mibig_class" in self.model_fields_set
+        ):
+            _dict["nearest_mibig_class"] = None
 
-        # set to None if evidence_scores (nullable) is None
+        # set to None if antismash_bgc_function (nullable) is None
         # and model_fields_set contains the field
-        if self.evidence_scores is None and "evidence_scores" in self.model_fields_set:
-            _dict["evidence_scores"] = None
+        if (
+            self.antismash_bgc_function is None
+            and "antismash_bgc_function" in self.model_fields_set
+        ):
+            _dict["antismash_bgc_function"] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of PPINetworkEdgeSchema from a dict"""
+        """Create an instance of GeneBgcAnnotationSchema from a dict"""
         if obj is None:
             return None
 
@@ -112,12 +114,10 @@ class PPINetworkEdgeSchema(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "source": obj.get("source"),
-                "target": obj.get("target"),
-                "weight": obj.get("weight"),
-                "pair_id": obj.get("pair_id"),
-                "n_sources": obj.get("n_sources"),
-                "evidence_scores": obj.get("evidence_scores"),
+                "gecco_bgc_type": obj.get("gecco_bgc_type"),
+                "nearest_mibig": obj.get("nearest_mibig"),
+                "nearest_mibig_class": obj.get("nearest_mibig_class"),
+                "antismash_bgc_function": obj.get("antismash_bgc_function"),
             }
         )
         return _obj

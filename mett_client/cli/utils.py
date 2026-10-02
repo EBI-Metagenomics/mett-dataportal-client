@@ -17,6 +17,7 @@ def _build_client(
     jwt: Optional[str],
     timeout: Optional[int],
     verify_ssl: Optional[bool],
+    release: Optional[str] = None,
 ) -> DataPortalClient:
     """Build a DataPortalClient with the given configuration."""
     config = get_config()
@@ -24,6 +25,8 @@ def _build_client(
         config.base_url = base_url.rstrip("/")
     if jwt:
         config.jwt_token = jwt
+    if release is not None:
+        config.release = release
     if timeout is not None:
         config.timeout = timeout
     if verify_ssl is not None:

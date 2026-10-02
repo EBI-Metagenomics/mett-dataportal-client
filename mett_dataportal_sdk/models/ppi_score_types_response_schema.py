@@ -33,7 +33,9 @@ class PPIScoreTypesResponseSchema(BaseModel):
     )
     message: Optional[StrictStr] = None
     timestamp: StrictStr = Field(description="ISO 8601 timestamp of the response")
-    data: Dict[str, List[StrictStr]] = Field(description="Available score types")
+    data: Dict[str, Any] = Field(
+        description="Available score types and evidence channel metadata. Example: {'score_types': [...], 'default': 'consensus_score', 'evidence_channels': {'ds_score': 'Deep learning', ...}}."
+    )
     __properties: ClassVar[List[str]] = ["status", "message", "timestamp", "data"]
 
     model_config = ConfigDict(

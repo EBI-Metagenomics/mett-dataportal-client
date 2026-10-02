@@ -53,6 +53,26 @@ class PPIInteractionSchema(BaseModel):
     protein_b_product: Optional[StrictStr] = None
     string_protein_a_id: Optional[StrictStr] = None
     string_protein_b_id: Optional[StrictStr] = None
+    consensus_score: Optional[Union[StrictFloat, StrictInt]] = None
+    consensus_rank: Optional[StrictInt] = None
+    consensus_avg_rank: Optional[Union[StrictFloat, StrictInt]] = None
+    edge_id: Optional[StrictStr] = None
+    interaction_weight: Optional[Union[StrictFloat, StrictInt]] = None
+    n_sources: Optional[StrictInt] = None
+    weight_coexp: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_operons_annogesic: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_operons_opdetect: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_operons_opmapper: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_phenocorr_neg: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_phenocorr_pos: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_pmi_gsms: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_pmi: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_ppi_gp_score_neg: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_ppi_gp_score_pos: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_ppi_perturb_score_neg: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_ppi_perturb_score_pos: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_ppi_xlms_files: Optional[Union[StrictFloat, StrictInt]] = None
+    weight_ppi_xlms_peptides: Optional[Union[StrictFloat, StrictInt]] = None
     dl_score: Optional[Union[StrictFloat, StrictInt]] = None
     comelt_score: Optional[Union[StrictFloat, StrictInt]] = None
     perturbation_score: Optional[Union[StrictFloat, StrictInt]] = None
@@ -90,6 +110,26 @@ class PPIInteractionSchema(BaseModel):
         "protein_b_product",
         "string_protein_a_id",
         "string_protein_b_id",
+        "consensus_score",
+        "consensus_rank",
+        "consensus_avg_rank",
+        "edge_id",
+        "interaction_weight",
+        "n_sources",
+        "weight_coexp",
+        "weight_operons_annogesic",
+        "weight_operons_opdetect",
+        "weight_operons_opmapper",
+        "weight_phenocorr_neg",
+        "weight_phenocorr_pos",
+        "weight_pmi_gsms",
+        "weight_pmi",
+        "weight_ppi_gp_score_neg",
+        "weight_ppi_gp_score_pos",
+        "weight_ppi_perturb_score_neg",
+        "weight_ppi_perturb_score_pos",
+        "weight_ppi_xlms_files",
+        "weight_ppi_xlms_peptides",
         "dl_score",
         "comelt_score",
         "perturbation_score",
@@ -246,6 +286,145 @@ class PPIInteractionSchema(BaseModel):
         ):
             _dict["string_protein_b_id"] = None
 
+        # set to None if consensus_score (nullable) is None
+        # and model_fields_set contains the field
+        if self.consensus_score is None and "consensus_score" in self.model_fields_set:
+            _dict["consensus_score"] = None
+
+        # set to None if consensus_rank (nullable) is None
+        # and model_fields_set contains the field
+        if self.consensus_rank is None and "consensus_rank" in self.model_fields_set:
+            _dict["consensus_rank"] = None
+
+        # set to None if consensus_avg_rank (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.consensus_avg_rank is None
+            and "consensus_avg_rank" in self.model_fields_set
+        ):
+            _dict["consensus_avg_rank"] = None
+
+        # set to None if edge_id (nullable) is None
+        # and model_fields_set contains the field
+        if self.edge_id is None and "edge_id" in self.model_fields_set:
+            _dict["edge_id"] = None
+
+        # set to None if interaction_weight (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.interaction_weight is None
+            and "interaction_weight" in self.model_fields_set
+        ):
+            _dict["interaction_weight"] = None
+
+        # set to None if n_sources (nullable) is None
+        # and model_fields_set contains the field
+        if self.n_sources is None and "n_sources" in self.model_fields_set:
+            _dict["n_sources"] = None
+
+        # set to None if weight_coexp (nullable) is None
+        # and model_fields_set contains the field
+        if self.weight_coexp is None and "weight_coexp" in self.model_fields_set:
+            _dict["weight_coexp"] = None
+
+        # set to None if weight_operons_annogesic (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_operons_annogesic is None
+            and "weight_operons_annogesic" in self.model_fields_set
+        ):
+            _dict["weight_operons_annogesic"] = None
+
+        # set to None if weight_operons_opdetect (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_operons_opdetect is None
+            and "weight_operons_opdetect" in self.model_fields_set
+        ):
+            _dict["weight_operons_opdetect"] = None
+
+        # set to None if weight_operons_opmapper (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_operons_opmapper is None
+            and "weight_operons_opmapper" in self.model_fields_set
+        ):
+            _dict["weight_operons_opmapper"] = None
+
+        # set to None if weight_phenocorr_neg (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_phenocorr_neg is None
+            and "weight_phenocorr_neg" in self.model_fields_set
+        ):
+            _dict["weight_phenocorr_neg"] = None
+
+        # set to None if weight_phenocorr_pos (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_phenocorr_pos is None
+            and "weight_phenocorr_pos" in self.model_fields_set
+        ):
+            _dict["weight_phenocorr_pos"] = None
+
+        # set to None if weight_pmi_gsms (nullable) is None
+        # and model_fields_set contains the field
+        if self.weight_pmi_gsms is None and "weight_pmi_gsms" in self.model_fields_set:
+            _dict["weight_pmi_gsms"] = None
+
+        # set to None if weight_pmi (nullable) is None
+        # and model_fields_set contains the field
+        if self.weight_pmi is None and "weight_pmi" in self.model_fields_set:
+            _dict["weight_pmi"] = None
+
+        # set to None if weight_ppi_gp_score_neg (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_ppi_gp_score_neg is None
+            and "weight_ppi_gp_score_neg" in self.model_fields_set
+        ):
+            _dict["weight_ppi_gp_score_neg"] = None
+
+        # set to None if weight_ppi_gp_score_pos (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_ppi_gp_score_pos is None
+            and "weight_ppi_gp_score_pos" in self.model_fields_set
+        ):
+            _dict["weight_ppi_gp_score_pos"] = None
+
+        # set to None if weight_ppi_perturb_score_neg (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_ppi_perturb_score_neg is None
+            and "weight_ppi_perturb_score_neg" in self.model_fields_set
+        ):
+            _dict["weight_ppi_perturb_score_neg"] = None
+
+        # set to None if weight_ppi_perturb_score_pos (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_ppi_perturb_score_pos is None
+            and "weight_ppi_perturb_score_pos" in self.model_fields_set
+        ):
+            _dict["weight_ppi_perturb_score_pos"] = None
+
+        # set to None if weight_ppi_xlms_files (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_ppi_xlms_files is None
+            and "weight_ppi_xlms_files" in self.model_fields_set
+        ):
+            _dict["weight_ppi_xlms_files"] = None
+
+        # set to None if weight_ppi_xlms_peptides (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.weight_ppi_xlms_peptides is None
+            and "weight_ppi_xlms_peptides" in self.model_fields_set
+        ):
+            _dict["weight_ppi_xlms_peptides"] = None
+
         # set to None if dl_score (nullable) is None
         # and model_fields_set contains the field
         if self.dl_score is None and "dl_score" in self.model_fields_set:
@@ -343,6 +522,26 @@ class PPIInteractionSchema(BaseModel):
                 "protein_b_product": obj.get("protein_b_product"),
                 "string_protein_a_id": obj.get("string_protein_a_id"),
                 "string_protein_b_id": obj.get("string_protein_b_id"),
+                "consensus_score": obj.get("consensus_score"),
+                "consensus_rank": obj.get("consensus_rank"),
+                "consensus_avg_rank": obj.get("consensus_avg_rank"),
+                "edge_id": obj.get("edge_id"),
+                "interaction_weight": obj.get("interaction_weight"),
+                "n_sources": obj.get("n_sources"),
+                "weight_coexp": obj.get("weight_coexp"),
+                "weight_operons_annogesic": obj.get("weight_operons_annogesic"),
+                "weight_operons_opdetect": obj.get("weight_operons_opdetect"),
+                "weight_operons_opmapper": obj.get("weight_operons_opmapper"),
+                "weight_phenocorr_neg": obj.get("weight_phenocorr_neg"),
+                "weight_phenocorr_pos": obj.get("weight_phenocorr_pos"),
+                "weight_pmi_gsms": obj.get("weight_pmi_gsms"),
+                "weight_pmi": obj.get("weight_pmi"),
+                "weight_ppi_gp_score_neg": obj.get("weight_ppi_gp_score_neg"),
+                "weight_ppi_gp_score_pos": obj.get("weight_ppi_gp_score_pos"),
+                "weight_ppi_perturb_score_neg": obj.get("weight_ppi_perturb_score_neg"),
+                "weight_ppi_perturb_score_pos": obj.get("weight_ppi_perturb_score_pos"),
+                "weight_ppi_xlms_files": obj.get("weight_ppi_xlms_files"),
+                "weight_ppi_xlms_peptides": obj.get("weight_ppi_xlms_peptides"),
                 "dl_score": obj.get("dl_score"),
                 "comelt_score": obj.get("comelt_score"),
                 "perturbation_score": obj.get("perturbation_score"),

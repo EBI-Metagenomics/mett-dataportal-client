@@ -39,6 +39,14 @@ export METT_VERIFY_SSL=false
 export METT_USER_AGENT="my-app/1.0"
 ```
 
+### Data Release
+
+```bash
+# Optional: query an archived/ready release instead of the promoted set
+# Sent as the X-METT-Release header (e.g. v1, current)
+export METT_RELEASE=v1
+```
+
 ## Config File
 
 Create a configuration file at `~/.mett/config.toml`:
@@ -46,6 +54,9 @@ Create a configuration file at `~/.mett/config.toml`:
 ```toml
 # Base URL for the API
 base_url = "http://www.gut-microbes.org"
+
+# Optional release selector (X-METT-Release)
+# release = "v1"
 
 # Request settings
 timeout = 60

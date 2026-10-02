@@ -20,6 +20,22 @@ from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from mett_dataportal_sdk.models.amr_schema import AMRSchema
 from mett_dataportal_sdk.models.dbx_ref_schema import DBXRefSchema
+from mett_dataportal_sdk.models.gene_bgc_annotation_schema import (
+    GeneBgcAnnotationSchema,
+)
+from mett_dataportal_sdk.models.gene_dbcan_annotation_schema import (
+    GeneDbcanAnnotationSchema,
+)
+from mett_dataportal_sdk.models.gene_defense_annotation_schema import (
+    GeneDefenseAnnotationSchema,
+)
+from mett_dataportal_sdk.models.gene_metadata_schema import GeneMetadataSchema
+from mett_dataportal_sdk.models.gene_mobilome_annotation_schema import (
+    GeneMobilomeAnnotationSchema,
+)
+from mett_dataportal_sdk.models.gene_unifire_annotation_schema import (
+    GeneUnifireAnnotationSchema,
+)
 from typing import Set
 from typing_extensions import Self
 
@@ -63,6 +79,15 @@ class GeneResponseSchema(BaseModel):
     has_mutant_growth: Optional[StrictBool] = None
     has_reactions: Optional[StrictBool] = None
     feature_type: Optional[StrictStr] = None
+    ig_locus_tag_a: Optional[StrictStr] = None
+    ig_locus_tag_b: Optional[StrictStr] = None
+    flanking_locus_tags: Optional[List[StrictStr]] = None
+    unifire: Optional[GeneUnifireAnnotationSchema] = None
+    dbcan: Optional[GeneDbcanAnnotationSchema] = None
+    bgc: Optional[GeneBgcAnnotationSchema] = None
+    mobilome: Optional[GeneMobilomeAnnotationSchema] = None
+    defense: Optional[GeneDefenseAnnotationSchema] = None
+    metadata: Optional[GeneMetadataSchema] = None
     __properties: ClassVar[List[str]] = [
         "locus_tag",
         "gene_name",
@@ -98,6 +123,15 @@ class GeneResponseSchema(BaseModel):
         "has_mutant_growth",
         "has_reactions",
         "feature_type",
+        "ig_locus_tag_a",
+        "ig_locus_tag_b",
+        "flanking_locus_tags",
+        "unifire",
+        "dbcan",
+        "bgc",
+        "mobilome",
+        "defense",
+        "metadata",
     ]
 
     model_config = ConfigDict(
@@ -151,6 +185,24 @@ class GeneResponseSchema(BaseModel):
                 if _item_amr:
                     _items.append(_item_amr.to_dict())
             _dict["amr"] = _items
+        # override the default output from pydantic by calling `to_dict()` of unifire
+        if self.unifire:
+            _dict["unifire"] = self.unifire.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of dbcan
+        if self.dbcan:
+            _dict["dbcan"] = self.dbcan.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of bgc
+        if self.bgc:
+            _dict["bgc"] = self.bgc.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of mobilome
+        if self.mobilome:
+            _dict["mobilome"] = self.mobilome.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of defense
+        if self.defense:
+            _dict["defense"] = self.defense.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of metadata
+        if self.metadata:
+            _dict["metadata"] = self.metadata.to_dict()
         # set to None if locus_tag (nullable) is None
         # and model_fields_set contains the field
         if self.locus_tag is None and "locus_tag" in self.model_fields_set:
@@ -333,6 +385,54 @@ class GeneResponseSchema(BaseModel):
         if self.feature_type is None and "feature_type" in self.model_fields_set:
             _dict["feature_type"] = None
 
+        # set to None if ig_locus_tag_a (nullable) is None
+        # and model_fields_set contains the field
+        if self.ig_locus_tag_a is None and "ig_locus_tag_a" in self.model_fields_set:
+            _dict["ig_locus_tag_a"] = None
+
+        # set to None if ig_locus_tag_b (nullable) is None
+        # and model_fields_set contains the field
+        if self.ig_locus_tag_b is None and "ig_locus_tag_b" in self.model_fields_set:
+            _dict["ig_locus_tag_b"] = None
+
+        # set to None if flanking_locus_tags (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.flanking_locus_tags is None
+            and "flanking_locus_tags" in self.model_fields_set
+        ):
+            _dict["flanking_locus_tags"] = None
+
+        # set to None if unifire (nullable) is None
+        # and model_fields_set contains the field
+        if self.unifire is None and "unifire" in self.model_fields_set:
+            _dict["unifire"] = None
+
+        # set to None if dbcan (nullable) is None
+        # and model_fields_set contains the field
+        if self.dbcan is None and "dbcan" in self.model_fields_set:
+            _dict["dbcan"] = None
+
+        # set to None if bgc (nullable) is None
+        # and model_fields_set contains the field
+        if self.bgc is None and "bgc" in self.model_fields_set:
+            _dict["bgc"] = None
+
+        # set to None if mobilome (nullable) is None
+        # and model_fields_set contains the field
+        if self.mobilome is None and "mobilome" in self.model_fields_set:
+            _dict["mobilome"] = None
+
+        # set to None if defense (nullable) is None
+        # and model_fields_set contains the field
+        if self.defense is None and "defense" in self.model_fields_set:
+            _dict["defense"] = None
+
+        # set to None if metadata (nullable) is None
+        # and model_fields_set contains the field
+        if self.metadata is None and "metadata" in self.model_fields_set:
+            _dict["metadata"] = None
+
         return _dict
 
     @classmethod
@@ -384,6 +484,27 @@ class GeneResponseSchema(BaseModel):
                 "has_mutant_growth": obj.get("has_mutant_growth"),
                 "has_reactions": obj.get("has_reactions"),
                 "feature_type": obj.get("feature_type"),
+                "ig_locus_tag_a": obj.get("ig_locus_tag_a"),
+                "ig_locus_tag_b": obj.get("ig_locus_tag_b"),
+                "flanking_locus_tags": obj.get("flanking_locus_tags"),
+                "unifire": GeneUnifireAnnotationSchema.from_dict(obj["unifire"])
+                if obj.get("unifire") is not None
+                else None,
+                "dbcan": GeneDbcanAnnotationSchema.from_dict(obj["dbcan"])
+                if obj.get("dbcan") is not None
+                else None,
+                "bgc": GeneBgcAnnotationSchema.from_dict(obj["bgc"])
+                if obj.get("bgc") is not None
+                else None,
+                "mobilome": GeneMobilomeAnnotationSchema.from_dict(obj["mobilome"])
+                if obj.get("mobilome") is not None
+                else None,
+                "defense": GeneDefenseAnnotationSchema.from_dict(obj["defense"])
+                if obj.get("defense") is not None
+                else None,
+                "metadata": GeneMetadataSchema.from_dict(obj["metadata"])
+                if obj.get("metadata") is not None
+                else None,
             }
         )
         return _obj

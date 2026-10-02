@@ -112,6 +112,20 @@ def genes_get(
     handle_raw_response(response, format, title=f"Gene {locus_tag}")
 
 
+@genes_app.command("release-history")
+def genes_release_history(
+    ctx: typer.Context,
+    locus_tag: str = typer.Argument(..., help="Locus tag"),
+    format: Optional[str] = typer.Option(None, "--format", "-f"),
+) -> None:
+    """List releases that contain this locus tag."""
+    client = ensure_client(ctx)
+    response = client.raw_request(
+        "GET", f"/api/genes/{locus_tag}/release-history", format=format
+    )
+    handle_raw_response(response, format, title=f"Release history ({locus_tag})")
+
+
 @genes_app.command("proteomics")
 def genes_proteomics(
     ctx: typer.Context,

@@ -27,6 +27,7 @@ class Config:
 
     base_url: str = DEFAULT_BASE_URL
     jwt_token: str | None = None
+    release: str | None = None
     timeout: int = DEFAULT_TIMEOUT
     verify_ssl: bool = True
     user_agent: str = field(default_factory=lambda: f"mett-client/{__version__}")
@@ -74,6 +75,7 @@ def get_config(
 
     cfg.base_url = env.get("METT_BASE_URL") or file_data.get("base_url", cfg.base_url)
     cfg.jwt_token = env.get("METT_JWT") or file_data.get("jwt_token")
+    cfg.release = env.get("METT_RELEASE") or file_data.get("release")
 
     timeout_val = env.get("METT_TIMEOUT") or file_data.get("timeout")
     if timeout_val:

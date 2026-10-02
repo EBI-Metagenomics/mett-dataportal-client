@@ -69,6 +69,22 @@ def ppi_string_network(
     handle_raw_response(response, format, title="STRING PPI network")
 
 
+@ppi_app.command("interaction")
+def ppi_interaction(
+    ctx: typer.Context,
+    pair_id: str = typer.Argument(
+        ..., help="PPI pair ID (e.g. bu:A0A0X1ABC1__B0ABC123)"
+    ),
+    format: Optional[str] = typer.Option(None, "--format", "-f"),
+) -> None:
+    """Get a single PPI interaction by pair ID."""
+    client = ensure_client(ctx)
+    response = client.raw_request(
+        "GET", f"/api/ppi/interactions/{pair_id}", format=format
+    )
+    handle_raw_response(response, format, title=f"PPI interaction ({pair_id})")
+
+
 @ppi_app.command("interactions")
 def ppi_interactions(
     ctx: typer.Context,

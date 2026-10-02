@@ -79,3 +79,13 @@ def test_genomes_by_isolates(monkeypatch) -> None:
     ]
     result = runner.invoke(cli_cmd, args)
     assert result.exit_code == 0
+
+
+def test_genomes_release_history(monkeypatch) -> None:
+    """Friendly CLI: mett genomes release-history BU_ATCC8492 --format json"""
+    _patch_dummy_client(monkeypatch)
+    result = runner.invoke(
+        cli_cmd,
+        ["genomes", "release-history", "BU_ATCC8492", "--format", "json"],
+    )
+    assert result.exit_code == 0

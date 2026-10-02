@@ -136,6 +136,20 @@ def genomes_by_isolates(
     handle_raw_response(response, format, title="Genomes by isolate")
 
 
+@genomes_app.command("release-history")
+def genomes_release_history(
+    ctx: typer.Context,
+    isolate_name: str = typer.Argument(..., help="Genome isolate name"),
+    format: Optional[str] = typer.Option(None, "--format", "-f"),
+) -> None:
+    """List releases that contain this genome."""
+    client = ensure_client(ctx)
+    response = client.raw_request(
+        "GET", f"/api/genomes/{isolate_name}/release-history", format=format
+    )
+    handle_raw_response(response, format, title=f"Release history ({isolate_name})")
+
+
 @genomes_app.command("genes")
 def genomes_genes(
     ctx: typer.Context,
