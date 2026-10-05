@@ -70,7 +70,7 @@ mett genomes search --query PV --format tsv > genomes.tsv
 ### Genomes and genes
 
 ```bash
-mett genomes search --query "Bacteroides" --format json
+mett genomes search --query "BU" --format json
 mett genomes search --query ATCC --species BU --format json
 mett genomes by-isolates --isolate BU_909 --isolate BU_61 --format json
 mett genomes type-strains --format json

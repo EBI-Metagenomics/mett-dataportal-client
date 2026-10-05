@@ -619,12 +619,17 @@ class DataPortalClient:
         *,
         params: Optional[Dict[str, Any]] = None,
         model: Type[T] | None = None,
-    ) -> PaginatedResult[T]:
+    ) -> PaginatedResult[Any]:
         """Make TSV request and parse into paginated result.
 
-        Note: TSV responses may not include pagination metadata.
-        If pagination info is missing, pagination will be None.
+        TSV is a flat tabular export: cells are strings (nested objects often
+        appear as JSON text). Rows are returned as coerced dicts — not as
+        strict SDK pydantic models — because required nested fields like
+        ``contigs`` may be omitted or shaped differently than JSON.
+
+        ``model`` is accepted for call-site compatibility but ignored.
         """
+        del model  # TSV rows are dicts; see docstring.
         tsv_params = (params or {}).copy()
         tsv_params["format"] = "tsv"
 
@@ -645,25 +650,12 @@ class DataPortalClient:
             )
             resp.raise_for_status()
 
-            # Parse TSV
-            rows = parse_tsv_response(resp.text)
+            items = parse_tsv_response(resp.text)
 
-            # Convert to model instances if model provided
-            items: List[T]
-            if model is None:
-                items = rows  # type: ignore[assignment]
-            else:
-                items = [model(**row) for row in rows]
-
-            # TSV responses typically don't include pagination metadata
-            # Check response headers or assume no pagination info
+            # Keep the original TSV body for CLI passthrough (avoids re-encoding
+            # nested JSON cells). Parsed dicts remain available as ``items``.
             pagination = None
-            raw = {
-                "data": [
-                    dict(item) if hasattr(item, "model_dump") else item
-                    for item in items
-                ]
-            }
+            raw = {"data": items, "tsv_text": resp.text}
 
             return PaginatedResult(items=items, pagination=pagination, raw=raw)
         except requests.exceptions.HTTPError as exc:

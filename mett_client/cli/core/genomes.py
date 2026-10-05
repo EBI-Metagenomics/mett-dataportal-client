@@ -6,7 +6,7 @@ from typing import List, Optional
 
 import typer  # type: ignore[import]
 
-from ..output import print_full_table, print_json, print_tsv
+from ..output import print_full_table, print_json
 from ..utils import (
     comma_join,
     ensure_client,
@@ -64,7 +64,7 @@ def search_genomes(
     )
 
     if format == "tsv":
-        print_tsv(result.items)
+        print_paginated_result(result, format, title="Genomes")
     elif format == "json":
         print_json(result.raw)
     else:

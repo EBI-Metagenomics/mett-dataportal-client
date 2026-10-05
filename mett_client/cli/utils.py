@@ -135,6 +135,13 @@ def comma_join(values: Optional[Sequence[str]]) -> Optional[str]:
 def print_paginated_result(result: Any, format: Optional[str], *, title: str) -> None:
     """Print a paginated result in the requested format."""
     if format == "tsv":
+        # Prefer the API's original TSV body when available (nested fields stay
+        # as JSON-in-cell exactly as the portal emitted them).
+        raw = getattr(result, "raw", None)
+        if isinstance(raw, dict) and isinstance(raw.get("tsv_text"), str):
+            text = raw["tsv_text"]
+            typer.echo(text, nl=not text.endswith("\n"))
+            return
         print_tsv(result.items)
         return
     if format == "json":

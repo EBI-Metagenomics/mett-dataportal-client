@@ -6,8 +6,13 @@ from typing import Optional
 
 import typer  # type: ignore[import]
 
-from ..output import print_full_table, print_json, print_tsv
-from ..utils import ensure_client, handle_raw_response, merge_params
+from ..output import print_full_table, print_json
+from ..utils import (
+    ensure_client,
+    handle_raw_response,
+    merge_params,
+    print_paginated_result,
+)
 
 drugs_app = typer.Typer(help="Drug endpoints")
 
@@ -50,7 +55,7 @@ def drug_mic_search(
     )
 
     if format == "tsv":
-        print_tsv(result.items)
+        print_paginated_result(result, format, title="Drug MIC")
     elif format == "json":
         print_json(result.raw)
     else:

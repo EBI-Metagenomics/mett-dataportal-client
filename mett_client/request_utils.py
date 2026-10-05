@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import io
+import json
 from typing import Any, Dict, List, Optional
 
 import requests  # type: ignore[import]
@@ -15,13 +16,41 @@ from .exceptions import APIError, AuthenticationError
 def parse_tsv_response(tsv_text: str) -> List[Dict[str, Any]]:
     """Parse TSV response into a list of dictionaries.
 
-    Assumes first row contains headers. Returns list of dicts where keys are header names.
+    Assumes first row contains headers. Cell values are lightly coerced:
+    booleans, JSON objects/arrays, and empty cells become native Python types.
+    Nested OpenAPI models are *not* reconstructed — TSV is a tabular export.
     """
     if not tsv_text.strip():
         return []
 
     reader = csv.DictReader(io.StringIO(tsv_text), delimiter="\t")
-    return [dict(row) for row in reader]
+    return [coerce_tsv_row(dict(row)) for row in reader]
+
+
+def coerce_tsv_row(row: Dict[str, Any]) -> Dict[str, Any]:
+    """Coerce a raw TSV row (all strings) into friendlier Python values."""
+    return {key: coerce_tsv_value(value) for key, value in row.items()}
+
+
+def coerce_tsv_value(value: Any) -> Any:
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        return value
+
+    stripped = value.strip()
+    if stripped == "":
+        return None
+    if stripped in {"True", "true"}:
+        return True
+    if stripped in {"False", "false"}:
+        return False
+    if stripped[0] in "{[":
+        try:
+            return json.loads(stripped)
+        except json.JSONDecodeError:
+            return value
+    return value
 
 
 def request_json(
@@ -74,4 +103,9 @@ def request_json(
         raise APIError(f"Failed to parse TSV response: {exc}") from exc
 
 
-__all__ = ["parse_tsv_response", "request_json"]
+__all__ = [
+    "parse_tsv_response",
+    "coerce_tsv_row",
+    "coerce_tsv_value",
+    "request_json",
+]
