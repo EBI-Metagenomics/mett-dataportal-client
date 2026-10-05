@@ -39,7 +39,6 @@ class GenomeResponseSchema(BaseModel):
     fasta_url: Optional[StrictStr] = None
     gff_url: Optional[StrictStr] = None
     type_strain: StrictBool
-    enabled: Optional[StrictBool] = True
     contigs: List[ContigSchema]
     annotation: Optional[StrainAnnotationSchema] = None
     __properties: ClassVar[List[str]] = [
@@ -53,7 +52,6 @@ class GenomeResponseSchema(BaseModel):
         "fasta_url",
         "gff_url",
         "type_strain",
-        "enabled",
         "contigs",
         "annotation",
     ]
@@ -169,9 +167,6 @@ class GenomeResponseSchema(BaseModel):
                 "fasta_url": obj.get("fasta_url"),
                 "gff_url": obj.get("gff_url"),
                 "type_strain": obj.get("type_strain"),
-                "enabled": obj.get("enabled")
-                if obj.get("enabled") is not None
-                else True,
                 "contigs": [ContigSchema.from_dict(_item) for _item in obj["contigs"]]
                 if obj.get("contigs") is not None
                 else None,

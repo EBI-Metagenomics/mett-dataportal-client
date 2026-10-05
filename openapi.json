@@ -5789,11 +5789,6 @@
             "title": "Type Strain",
             "type": "boolean"
           },
-          "enabled": {
-            "default": true,
-            "title": "Enabled",
-            "type": "boolean"
-          },
           "contigs": {
             "items": {
               "$ref": "#/components/schemas/ContigSchema"
