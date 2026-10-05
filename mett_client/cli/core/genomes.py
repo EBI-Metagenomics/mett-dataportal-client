@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import List, Optional
 
 import typer  # type: ignore[import]
@@ -81,45 +80,6 @@ def genomes_type_strains(
     client = ensure_client(ctx)
     response = client.raw_request("GET", "/api/genomes/type-strains", format=format)
     handle_raw_response(response, format, title="Type Strains")
-
-
-@genomes_app.command("autocomplete")
-def genomes_autocomplete(
-    ctx: typer.Context,
-    query: str = typer.Option(..., "--query", "-q", help="Search term"),
-    limit: Optional[int] = typer.Option(5, "--limit"),
-    species_acronym: Optional[str] = typer.Option(None, "--species", "-s"),
-    format: Optional[str] = typer.Option(None, "--format", "-f", help="json|tsv"),
-) -> None:
-    client = ensure_client(ctx)
-    params = merge_params(
-        {
-            "query": query,
-            "limit": limit,
-            "species_acronym": species_acronym,
-        }
-    )
-    response = client.raw_request(
-        "GET", "/api/genomes/autocomplete", params=params, format=format
-    )
-    handle_raw_response(response, format, title="Genome Autocomplete")
-
-
-@genomes_app.command("download")
-def genomes_download_tsv(
-    ctx: typer.Context,
-    output: Optional[Path] = typer.Option(
-        None, "--output", "-o", help="Destination file (defaults to stdout)"
-    ),
-) -> None:
-    client = ensure_client(ctx)
-    response = client.raw_request("GET", "/api/genomes/download/tsv", format="tsv")
-    content = response.text
-    if output:
-        output.write_text(content)
-        typer.echo(f"Wrote {output}")
-    else:
-        typer.echo(content)
 
 
 @genomes_app.command("by-isolates")

@@ -47,23 +47,6 @@ def test_genomes_type_strains(monkeypatch) -> None:
     assert result.exit_code == 0
 
 
-def test_genomes_autocomplete(monkeypatch) -> None:
-    """Friendly CLI: mett genomes autocomplete --query cc --limit 5 --format json"""
-    _patch_dummy_client(monkeypatch)
-    args = [
-        "genomes",
-        "autocomplete",
-        "--query",
-        "cc",
-        "--limit",
-        "5",
-        "--format",
-        "json",
-    ]
-    result = runner.invoke(cli_cmd, args)
-    assert result.exit_code == 0
-
-
 def test_genomes_by_isolates(monkeypatch) -> None:
     """Friendly CLI: mett genomes by-isolates --isolate BU_ATCC8492 --isolate PV_ATCC8482 --format json"""
     _patch_dummy_client(monkeypatch)

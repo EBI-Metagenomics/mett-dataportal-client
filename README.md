@@ -89,11 +89,12 @@ export METT_VERIFY_SSL=false
 
 Complete documentation is available in the [docs/](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/) directory:
 
-- **[Getting Started](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/index.md)** - Overview and quick start
-- **[CLI Guide](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/cli/overview.md)** - Command-line interface
-- **[Python API](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/python/quickstart.md)** - Python client library
-- **[Configuration](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/config/configuration.md)** - Setup and authentication
-- **[Troubleshooting](https://github.com/EBI-Metagenomics/mett-dataportal-client/tree/main/docs/troubleshooting.md)** - Common issues and solutions
+- **[Getting Started](https://github.com/EBI-Metagenomics/mett-dataportal-client/blob/main/docs/index.md)** — overview
+- **[CLI Guide](https://github.com/EBI-Metagenomics/mett-dataportal-client/blob/main/docs/cli.md)** — commands and recipes
+- **[Python API](https://github.com/EBI-Metagenomics/mett-dataportal-client/blob/main/docs/python.md)** — client library
+- **[Configuration](https://github.com/EBI-Metagenomics/mett-dataportal-client/blob/main/docs/config.md)** — env, JWT, releases
+- **[Examples](https://github.com/EBI-Metagenomics/mett-dataportal-client/blob/main/docs/examples.md)** — curated OpenAPI-backed examples
+- **[Troubleshooting](https://github.com/EBI-Metagenomics/mett-dataportal-client/blob/main/docs/troubleshooting.md)** — common issues
 
 ## Source & Support
 

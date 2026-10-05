@@ -149,7 +149,9 @@ TimeoutError: Request timed out
 
 2. **Check network connectivity**:
    ```bash
-   curl http://www.gut-microbes.org/api/health
+   curl "${METT_BASE_URL:-http://www.gut-microbes.org}/api/species/"
+   # or
+   mett species list --format json
    ```
 
 3. **Check base URL**:
@@ -236,18 +238,19 @@ Getting rate limit errors or requests being throttled.
 
 If you're still experiencing issues:
 
-1. **Check the documentation**: Review the [Configuration Guide](config/configuration.md) and [Python Quickstart](python/quickstart.md)
+1. **Check the documentation**: Review [Configuration](config.md) and the [Python API](python.md)
 
 2. **Report issues**: [Open an issue on GitHub](https://github.com/EBI-Metagenomics/mett-dataportal-client/issues)
 
-3. **Check API status**: Verify the API is operational:
+3. **Check releases / connectivity**:
    ```bash
-   mett system health --format json
+   mett system releases --format json
+   mett species list --format json
    ```
 
 ## See Also
 
-- **[Configuration Guide](config/configuration.md)** - Configuration options
-- **[Authentication Guide](config/authentication.md)** - Authentication setup
-- **[CLI Overview](cli/overview.md)** - CLI usage
-- **[Python Quickstart](python/quickstart.md)** - Python API usage
+- **[Configuration](config.md)** — env vars, JWT, release pinning
+- **[CLI Guide](cli.md)** — commands and recipes
+- **[Python API](python.md)** — client usage
+- **[Examples](examples.md)** — curated OpenAPI-backed examples

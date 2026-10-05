@@ -147,30 +147,6 @@ def ppi_neighbors(
     handle_raw_response(response, format, title="PPI neighbors")
 
 
-@ppi_app.command("neighborhood")
-def ppi_neighborhood(
-    ctx: typer.Context,
-    protein_id: Optional[str] = typer.Option(None, "--protein-id"),
-    locus_tag: Optional[str] = typer.Option(None, "--locus-tag"),
-    species_acronym: Optional[str] = typer.Option(None, "--species", "-s"),
-    n: Optional[int] = typer.Option(None, "--n"),
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    params = merge_params(
-        {
-            "protein_id": protein_id,
-            "locus_tag": locus_tag,
-            "species_acronym": species_acronym,
-            "n": n,
-        }
-    )
-    response = client.raw_request(
-        "GET", "/api/ppi/neighborhood", params=params, format=format
-    )
-    handle_raw_response(response, format, title="PPI neighborhood")
-
-
 @ppi_app.command("network")
 def ppi_network(
     ctx: typer.Context,
