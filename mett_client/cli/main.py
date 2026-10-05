@@ -52,6 +52,11 @@ def main(
     jwt: Optional[str] = typer.Option(
         None, help="JWT token for experimental endpoints"
     ),
+    release: Optional[str] = typer.Option(
+        None,
+        "--release",
+        help="METT data release to query (e.g. v1, current). Sent as X-METT-Release.",
+    ),
     timeout: Optional[int] = typer.Option(None, help="HTTP timeout (seconds)"),
     verify_ssl: Optional[bool] = typer.Option(
         None, help="Set false to skip TLS verification"
@@ -69,6 +74,7 @@ def main(
     ctx.obj = _build_client(
         base_url=base_url,
         jwt=jwt,
+        release=release,
         timeout=timeout,
         verify_ssl=verify_ssl,
     )

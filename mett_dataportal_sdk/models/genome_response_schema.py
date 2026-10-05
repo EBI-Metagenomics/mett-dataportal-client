@@ -19,6 +19,7 @@ import json
 from pydantic import BaseModel, ConfigDict, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from mett_dataportal_sdk.models.contig_schema import ContigSchema
+from mett_dataportal_sdk.models.strain_annotation_schema import StrainAnnotationSchema
 from typing import Set
 from typing_extensions import Self
 
@@ -35,10 +36,11 @@ class GenomeResponseSchema(BaseModel):
     assembly_accession: Optional[StrictStr]
     fasta_file: StrictStr
     gff_file: StrictStr
-    fasta_url: StrictStr
-    gff_url: StrictStr
+    fasta_url: Optional[StrictStr] = None
+    gff_url: Optional[StrictStr] = None
     type_strain: StrictBool
     contigs: List[ContigSchema]
+    annotation: Optional[StrainAnnotationSchema] = None
     __properties: ClassVar[List[str]] = [
         "species_scientific_name",
         "species_acronym",
@@ -51,6 +53,7 @@ class GenomeResponseSchema(BaseModel):
         "gff_url",
         "type_strain",
         "contigs",
+        "annotation",
     ]
 
     model_config = ConfigDict(
@@ -97,6 +100,9 @@ class GenomeResponseSchema(BaseModel):
                 if _item_contigs:
                     _items.append(_item_contigs.to_dict())
             _dict["contigs"] = _items
+        # override the default output from pydantic by calling `to_dict()` of annotation
+        if self.annotation:
+            _dict["annotation"] = self.annotation.to_dict()
         # set to None if species_scientific_name (nullable) is None
         # and model_fields_set contains the field
         if (
@@ -123,6 +129,21 @@ class GenomeResponseSchema(BaseModel):
         ):
             _dict["assembly_accession"] = None
 
+        # set to None if fasta_url (nullable) is None
+        # and model_fields_set contains the field
+        if self.fasta_url is None and "fasta_url" in self.model_fields_set:
+            _dict["fasta_url"] = None
+
+        # set to None if gff_url (nullable) is None
+        # and model_fields_set contains the field
+        if self.gff_url is None and "gff_url" in self.model_fields_set:
+            _dict["gff_url"] = None
+
+        # set to None if annotation (nullable) is None
+        # and model_fields_set contains the field
+        if self.annotation is None and "annotation" in self.model_fields_set:
+            _dict["annotation"] = None
+
         return _dict
 
     @classmethod
@@ -148,6 +169,9 @@ class GenomeResponseSchema(BaseModel):
                 "type_strain": obj.get("type_strain"),
                 "contigs": [ContigSchema.from_dict(_item) for _item in obj["contigs"]]
                 if obj.get("contigs") is not None
+                else None,
+                "annotation": StrainAnnotationSchema.from_dict(obj["annotation"])
+                if obj.get("annotation") is not None
                 else None,
             }
         )

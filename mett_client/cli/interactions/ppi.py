@@ -69,6 +69,22 @@ def ppi_string_network(
     handle_raw_response(response, format, title="STRING PPI network")
 
 
+@ppi_app.command("interaction")
+def ppi_interaction(
+    ctx: typer.Context,
+    pair_id: str = typer.Argument(
+        ..., help="PPI pair ID (e.g. bu:A0A0X1ABC1__B0ABC123)"
+    ),
+    format: Optional[str] = typer.Option(None, "--format", "-f"),
+) -> None:
+    """Get a single PPI interaction by pair ID."""
+    client = ensure_client(ctx)
+    response = client.raw_request(
+        "GET", f"/api/ppi/interactions/{pair_id}", format=format
+    )
+    handle_raw_response(response, format, title=f"PPI interaction ({pair_id})")
+
+
 @ppi_app.command("interactions")
 def ppi_interactions(
     ctx: typer.Context,
@@ -129,30 +145,6 @@ def ppi_neighbors(
         "GET", "/api/ppi/neighbors", params=params, format=format
     )
     handle_raw_response(response, format, title="PPI neighbors")
-
-
-@ppi_app.command("neighborhood")
-def ppi_neighborhood(
-    ctx: typer.Context,
-    protein_id: Optional[str] = typer.Option(None, "--protein-id"),
-    locus_tag: Optional[str] = typer.Option(None, "--locus-tag"),
-    species_acronym: Optional[str] = typer.Option(None, "--species", "-s"),
-    n: Optional[int] = typer.Option(None, "--n"),
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    params = merge_params(
-        {
-            "protein_id": protein_id,
-            "locus_tag": locus_tag,
-            "species_acronym": species_acronym,
-            "n": n,
-        }
-    )
-    response = client.raw_request(
-        "GET", "/api/ppi/neighborhood", params=params, format=format
-    )
-    handle_raw_response(response, format, title="PPI neighborhood")
 
 
 @ppi_app.command("network")

@@ -142,15 +142,6 @@ def test_operons_search_min_genes(monkeypatch) -> None:
     assert result.exit_code == 0
 
 
-def test_operons_statistics_species(monkeypatch) -> None:
-    """Friendly CLI: mett operons statistics --species BU --format json"""
-    _patch_dummy_client(monkeypatch)
-    result = runner.invoke(
-        cli_cmd, ["operons", "statistics", "--species", "BU", "--format", "json"]
-    )
-    assert result.exit_code == 0
-
-
 def test_fitness_search_locus_tag(monkeypatch) -> None:
     """Friendly CLI: mett fitness search --locus-tag BU_ATCC8492_00002 --format json"""
     _patch_dummy_client(monkeypatch)
@@ -237,25 +228,25 @@ def test_ppi_interactions(monkeypatch) -> None:
     assert result.exit_code == 0
 
 
-def test_ttp_hits(monkeypatch) -> None:
-    """Friendly CLI: mett ttp hits --max-fdr 0.05 --min-ttp-score 1.0 --format json"""
+def test_ppi_interaction_by_pair_id(monkeypatch) -> None:
+    """Friendly CLI: mett ppi interaction bu:A0A0X1ABC1__B0ABC123 --format json"""
     _patch_dummy_client(monkeypatch)
-    args = [
-        "ttp",
-        "hits",
-        "--max-fdr",
-        "0.05",
-        "--min-ttp-score",
-        "1.0",
-        "--format",
-        "json",
-    ]
-    result = runner.invoke(cli_cmd, args)
+    result = runner.invoke(
+        cli_cmd,
+        ["ppi", "interaction", "bu:A0A0X1ABC1__B0ABC123", "--format", "json"],
+    )
     assert result.exit_code == 0
 
 
-def test_pyhmmer_databases(monkeypatch) -> None:
-    """Friendly CLI: mett pyhmmer databases --format json"""
+def test_ttp_search(monkeypatch) -> None:
+    """Friendly CLI: mett ttp search --format json"""
     _patch_dummy_client(monkeypatch)
-    result = runner.invoke(cli_cmd, ["pyhmmer", "databases", "--format", "json"])
+    result = runner.invoke(cli_cmd, ["ttp", "search", "--format", "json"])
     assert result.exit_code == 0
+
+
+def test_pyhmmer_search_requires_body(monkeypatch) -> None:
+    """Friendly CLI: mett pyhmmer search without body should fail."""
+    _patch_dummy_client(monkeypatch)
+    result = runner.invoke(cli_cmd, ["pyhmmer", "search", "--format", "json"])
+    assert result.exit_code != 0

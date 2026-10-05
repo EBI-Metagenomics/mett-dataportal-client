@@ -98,10 +98,10 @@ def _patch_dummy_client(monkeypatch) -> None:
 # Domain-specific tests are in test_cli_*.py files
 
 
-def test_system_health(monkeypatch) -> None:
-    """Friendly CLI: mett system health --format json"""
+def test_system_releases(monkeypatch) -> None:
+    """Friendly CLI: mett system releases --format json"""
     _patch_dummy_client(monkeypatch)
-    result = runner.invoke(cli_cmd, ["system", "health", "--format", "json"])
+    result = runner.invoke(cli_cmd, ["system", "releases", "--format", "json"])
     assert result.exit_code == 0
 
 

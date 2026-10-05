@@ -8,12 +8,14 @@ website:
     left:
       - href: index.md
         text: Home
-      - href: cli/overview.md
+      - href: cli.md
         text: CLI
-      - href: python/quickstart.md
-        text: Python API
-      - href: config/configuration.md
-        text: Configuration
+      - href: python.md
+        text: Python
+      - href: config.md
+        text: Config
+      - href: examples.md
+        text: Examples
       - href: troubleshooting.md
         text: Troubleshooting
       - href: changelog.md
@@ -24,27 +26,21 @@ website:
       - icon: python
         href: https://pypi.org/project/mett
   sidebar:
-    - section: "For Users"
+    - section: "Guides"
       contents:
-        - cli/overview.md
-        - cli/commands.md
-        - cli/recipes.md
-        - python/quickstart.md
-        - python/pagination.md
-        - config/configuration.md
-        - config/authentication.md
+        - index.md
+        - cli.md
+        - python.md
+        - config.md
+        - examples.md
         - troubleshooting.md
         - changelog.md
     - section: "Reference"
       contents:
         - reference/api-reference.qmd
-        - reference/cli-examples.md
-    - section: "For Maintainers"
+    - section: "Maintainers"
       contents:
         - dev/codegen.md
-        - dev/docs-site.md
-        - dev/architecture.md
-        - dev/releasing.md
 
 format:
   html:

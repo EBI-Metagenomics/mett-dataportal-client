@@ -17,6 +17,7 @@ def _build_client(
     jwt: Optional[str],
     timeout: Optional[int],
     verify_ssl: Optional[bool],
+    release: Optional[str] = None,
 ) -> DataPortalClient:
     """Build a DataPortalClient with the given configuration."""
     config = get_config()
@@ -24,6 +25,8 @@ def _build_client(
         config.base_url = base_url.rstrip("/")
     if jwt:
         config.jwt_token = jwt
+    if release is not None:
+        config.release = release
     if timeout is not None:
         config.timeout = timeout
     if verify_ssl is not None:
@@ -132,6 +135,13 @@ def comma_join(values: Optional[Sequence[str]]) -> Optional[str]:
 def print_paginated_result(result: Any, format: Optional[str], *, title: str) -> None:
     """Print a paginated result in the requested format."""
     if format == "tsv":
+        # Prefer the API's original TSV body when available (nested fields stay
+        # as JSON-in-cell exactly as the portal emitted them).
+        raw = getattr(result, "raw", None)
+        if isinstance(raw, dict) and isinstance(raw.get("tsv_text"), str):
+            text = raw["tsv_text"]
+            typer.echo(text, nl=not text.endswith("\n"))
+            return
         print_tsv(result.items)
         return
     if format == "json":

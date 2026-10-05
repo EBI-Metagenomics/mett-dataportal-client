@@ -16,31 +16,26 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional, Union
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
+from mett_dataportal_sdk.models.ppi_interaction_schema import PPIInteractionSchema
+from mett_dataportal_sdk.models.response_status import ResponseStatus
 from typing import Set
 from typing_extensions import Self
 
 
-class PPINetworkEdgeSchema(BaseModel):
+class PPIInteractionDetailResponseSchema(BaseModel):
     """
-    Schema for a PPI network edge.
+    Response schema for a single PPI interaction by pair_id.
     """  # noqa: E501
 
-    source: StrictStr = Field(description="Source node ID")
-    target: StrictStr = Field(description="Target node ID")
-    weight: Optional[Union[StrictFloat, StrictInt]] = None
-    pair_id: Optional[StrictStr] = None
-    n_sources: Optional[StrictInt] = None
-    evidence_scores: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = None
-    __properties: ClassVar[List[str]] = [
-        "source",
-        "target",
-        "weight",
-        "pair_id",
-        "n_sources",
-        "evidence_scores",
-    ]
+    status: Optional[ResponseStatus] = Field(
+        default=None, description="Response status"
+    )
+    message: Optional[StrictStr] = None
+    timestamp: StrictStr = Field(description="ISO 8601 timestamp of the response")
+    data: PPIInteractionSchema
+    __properties: ClassVar[List[str]] = ["status", "message", "timestamp", "data"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -59,7 +54,7 @@ class PPINetworkEdgeSchema(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of PPINetworkEdgeSchema from a JSON string"""
+        """Create an instance of PPIInteractionDetailResponseSchema from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -79,31 +74,19 @@ class PPINetworkEdgeSchema(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if weight (nullable) is None
+        # override the default output from pydantic by calling `to_dict()` of data
+        if self.data:
+            _dict["data"] = self.data.to_dict()
+        # set to None if message (nullable) is None
         # and model_fields_set contains the field
-        if self.weight is None and "weight" in self.model_fields_set:
-            _dict["weight"] = None
-
-        # set to None if pair_id (nullable) is None
-        # and model_fields_set contains the field
-        if self.pair_id is None and "pair_id" in self.model_fields_set:
-            _dict["pair_id"] = None
-
-        # set to None if n_sources (nullable) is None
-        # and model_fields_set contains the field
-        if self.n_sources is None and "n_sources" in self.model_fields_set:
-            _dict["n_sources"] = None
-
-        # set to None if evidence_scores (nullable) is None
-        # and model_fields_set contains the field
-        if self.evidence_scores is None and "evidence_scores" in self.model_fields_set:
-            _dict["evidence_scores"] = None
+        if self.message is None and "message" in self.model_fields_set:
+            _dict["message"] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of PPINetworkEdgeSchema from a dict"""
+        """Create an instance of PPIInteractionDetailResponseSchema from a dict"""
         if obj is None:
             return None
 
@@ -112,12 +95,12 @@ class PPINetworkEdgeSchema(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "source": obj.get("source"),
-                "target": obj.get("target"),
-                "weight": obj.get("weight"),
-                "pair_id": obj.get("pair_id"),
-                "n_sources": obj.get("n_sources"),
-                "evidence_scores": obj.get("evidence_scores"),
+                "status": obj.get("status"),
+                "message": obj.get("message"),
+                "timestamp": obj.get("timestamp"),
+                "data": PPIInteractionSchema.from_dict(obj["data"])
+                if obj.get("data") is not None
+                else None,
             }
         )
         return _obj

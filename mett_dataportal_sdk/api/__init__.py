@@ -20,4 +20,5 @@ from mett_dataportal_sdk.api.proteomics_api import ProteomicsApi
 from mett_dataportal_sdk.api.py_hmmer_results_api import PyHMMERResultsApi
 from mett_dataportal_sdk.api.py_hmmer_search_api import PyHMMERSearchApi
 from mett_dataportal_sdk.api.reactions_api import ReactionsApi
+from mett_dataportal_sdk.api.releases_api import ReleasesApi
 from mett_dataportal_sdk.api.species_api import SpeciesApi

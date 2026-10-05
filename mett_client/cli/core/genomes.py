@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import List, Optional
 
 import typer  # type: ignore[import]
 
-from ..output import print_full_table, print_json, print_tsv
+from ..output import print_full_table, print_json
 from ..utils import (
     comma_join,
     ensure_client,
@@ -65,7 +64,7 @@ def search_genomes(
     )
 
     if format == "tsv":
-        print_tsv(result.items)
+        print_paginated_result(result, format, title="Genomes")
     elif format == "json":
         print_json(result.raw)
     else:
@@ -83,45 +82,6 @@ def genomes_type_strains(
     handle_raw_response(response, format, title="Type Strains")
 
 
-@genomes_app.command("autocomplete")
-def genomes_autocomplete(
-    ctx: typer.Context,
-    query: str = typer.Option(..., "--query", "-q", help="Search term"),
-    limit: Optional[int] = typer.Option(5, "--limit"),
-    species_acronym: Optional[str] = typer.Option(None, "--species", "-s"),
-    format: Optional[str] = typer.Option(None, "--format", "-f", help="json|tsv"),
-) -> None:
-    client = ensure_client(ctx)
-    params = merge_params(
-        {
-            "query": query,
-            "limit": limit,
-            "species_acronym": species_acronym,
-        }
-    )
-    response = client.raw_request(
-        "GET", "/api/genomes/autocomplete", params=params, format=format
-    )
-    handle_raw_response(response, format, title="Genome Autocomplete")
-
-
-@genomes_app.command("download")
-def genomes_download_tsv(
-    ctx: typer.Context,
-    output: Optional[Path] = typer.Option(
-        None, "--output", "-o", help="Destination file (defaults to stdout)"
-    ),
-) -> None:
-    client = ensure_client(ctx)
-    response = client.raw_request("GET", "/api/genomes/download/tsv", format="tsv")
-    content = response.text
-    if output:
-        output.write_text(content)
-        typer.echo(f"Wrote {output}")
-    else:
-        typer.echo(content)
-
-
 @genomes_app.command("by-isolates")
 def genomes_by_isolates(
     ctx: typer.Context,
@@ -134,6 +94,20 @@ def genomes_by_isolates(
         "GET", "/api/genomes/by-isolate-names", params=params, format=format
     )
     handle_raw_response(response, format, title="Genomes by isolate")
+
+
+@genomes_app.command("release-history")
+def genomes_release_history(
+    ctx: typer.Context,
+    isolate_name: str = typer.Argument(..., help="Genome isolate name"),
+    format: Optional[str] = typer.Option(None, "--format", "-f"),
+) -> None:
+    """List releases that contain this genome."""
+    client = ensure_client(ctx)
+    response = client.raw_request(
+        "GET", f"/api/genomes/{isolate_name}/release-history", format=format
+    )
+    handle_raw_response(response, format, title=f"Release history ({isolate_name})")
 
 
 @genomes_app.command("genes")

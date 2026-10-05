@@ -54,17 +54,3 @@ def operons_get(
     client = ensure_client(ctx)
     response = client.raw_request("GET", f"/api/operons/{operon_id}", format=format)
     handle_raw_response(response, format, title=f"Operon {operon_id}")
-
-
-@operons_app.command("statistics")
-def operons_statistics(
-    ctx: typer.Context,
-    species_acronym: Optional[str] = typer.Option(None, "--species", "-s"),
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    params = merge_params({"species_acronym": species_acronym})
-    response = client.raw_request(
-        "GET", "/api/operons/statistics", params=params, format=format
-    )
-    handle_raw_response(response, format, title="Operon statistics")

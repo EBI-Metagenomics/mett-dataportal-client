@@ -111,31 +111,3 @@ def ttp_compound_interactions(
         format=format,
     )
     handle_raw_response(response, format, title=f"TTP interactions ({compound})")
-
-
-@ttp_app.command("hits")
-def ttp_hits(
-    ctx: typer.Context,
-    min_ttp_score: Optional[float] = typer.Option(None, "--min-ttp-score"),
-    max_fdr: Optional[float] = typer.Option(None, "--max-fdr"),
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    params = merge_params({"min_ttp_score": min_ttp_score, "max_fdr": max_fdr})
-    response = client.raw_request("GET", "/api/ttp/hits", params=params, format=format)
-    handle_raw_response(response, format, title="TTP hits")
-
-
-@ttp_app.command("pools-analysis")
-def ttp_pools_analysis(
-    ctx: typer.Context,
-    pool_a: str = typer.Option(..., "--pool-a"),
-    pool_b: str = typer.Option(..., "--pool-b"),
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    params = {"poolA": pool_a, "poolB": pool_b}
-    response = client.raw_request(
-        "GET", "/api/ttp/pools/analysis", params=params, format=format
-    )
-    handle_raw_response(response, format, title="TTP pools analysis")

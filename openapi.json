@@ -410,11 +410,11 @@
                   "type": "null"
                 }
               ],
-              "description": "Optional list of isolate names to filter.",
+              "description": "Isolate names to include. Comma-separated or repeated. Matches any of the names (OR).",
               "title": "Isolates"
             },
             "required": false,
-            "description": "Optional list of isolate names to filter."
+            "description": "Isolate names to include. Comma-separated or repeated. Matches any of the names (OR)."
           },
           {
             "in": "query",
@@ -428,11 +428,11 @@
                   "type": "null"
                 }
               ],
-              "description": "Optional species acronym filter (BU, PV).",
+              "description": "Optional species acronym filter. Comma-separated values are supported (e.g. 'BU,PV').",
               "title": "Species Acronym"
             },
             "required": false,
-            "description": "Optional species acronym filter (BU, PV)."
+            "description": "Optional species acronym filter. Comma-separated values are supported (e.g. 'BU,PV')."
           }
         ],
         "responses": {
@@ -569,6 +569,43 @@
           }
         },
         "description": "Retrieves a paginated list of all genomes available in the system. Supports optional sorting by 'isolate_name' or 'species'. ",
+        "tags": [
+          "Genomes"
+        ]
+      }
+    },
+    "/api/genomes/{isolate_name}/release-history": {
+      "get": {
+        "operationId": "dataportal_api_core_genome_endpoints_get_genome_release_history",
+        "summary": "Releases that contain this genome",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "isolate_name",
+            "schema": {
+              "description": "Unique isolate name identifying the genome.",
+              "example": "BU_ATCC8492",
+              "title": "Isolate Name",
+              "type": "string"
+            },
+            "required": true,
+            "description": "Unique isolate name identifying the genome.",
+            "example": "BU_ATCC8492"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponseSchema"
+                }
+              }
+            }
+          }
+        },
+        "description": "Searches readable METT strain aliases (mett-vN-strains) for this isolate. Does not query mett-current-strains, which would duplicate the promoted version. Each appearance includes that snapshot's annotation pipeline provenance.",
         "tags": [
           "Genomes"
         ]
@@ -1028,6 +1065,43 @@
         ]
       }
     },
+    "/api/genes/{locus_tag}/release-history": {
+      "get": {
+        "operationId": "dataportal_api_core_gene_endpoints_get_gene_release_history",
+        "summary": "Releases that contain this locus tag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "locus_tag",
+            "schema": {
+              "description": "Unique locus tag identifier for the gene (e.g., 'ABC_123').",
+              "example": "BU_ATCC8492_00001",
+              "title": "Locus Tag",
+              "type": "string"
+            },
+            "required": true,
+            "description": "Unique locus tag identifier for the gene (e.g., 'ABC_123').",
+            "example": "BU_ATCC8492_00001"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponseSchema"
+                }
+              }
+            }
+          }
+        },
+        "description": "Searches readable METT feature aliases (mett-vN-features) for this locus tag. Does not query mett-current-features, which would duplicate the promoted version. Processing provenance is inherited from the strain document in the same release. Locus tags are not a stable ID across re-annotation: absence in an older release may mean the gene was merged or split, not that the strain was missing.",
+        "tags": [
+          "Genes"
+        ]
+      }
+    },
     "/api/genes/{locus_tag}": {
       "get": {
         "operationId": "dataportal_api_core_gene_endpoints_get_gene_by_locus_tag",
@@ -1179,11 +1253,11 @@
                   "type": "null"
                 }
               ],
-              "description": "Species acronym to filter (e.g., 'BU', 'PV').",
+              "description": "Species acronym to filter (e.g., 'BU', 'PV', or comma-separated 'BU,PV').",
               "title": "Species Acronym"
             },
             "required": false,
-            "description": "Species acronym to filter (e.g., 'BU', 'PV')."
+            "description": "Species acronym to filter (e.g., 'BU', 'PV', or comma-separated 'BU,PV')."
           },
           {
             "in": "query",
@@ -1825,6 +1899,29 @@
           {
             "RoleBasedJWTAuth": []
           }
+        ]
+      }
+    },
+    "/api/releases": {
+      "get": {
+        "operationId": "dataportal_api_core_release_endpoints_list_releases",
+        "summary": "List METT data releases",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponseSchema"
+                }
+              }
+            }
+          }
+        },
+        "description": "Scientist-visible Elasticsearch release sets. Pass X-METT-Release or ?release=v1 to read an archived or ready set. 'current' follows whichever release is promoted.",
+        "tags": [
+          "Releases"
         ]
       }
     },
@@ -2477,7 +2574,7 @@
             }
           }
         },
-        "description": "Get list of available score types for PPI filtering",
+        "description": "Get list of available score types for PPI filtering. Also returns evidence channel labels for interaction detail panels. Network graphs use the selected score type as edge weight (default: consensus_score); per-channel evidence scores are available when an edge is selected.",
         "tags": [
           "Protein-Protein Interactions"
         ],
@@ -2506,6 +2603,44 @@
           }
         },
         "description": "Get list of available data sources for PPI interactions (e.g., local ES index, STRING DB API).",
+        "tags": [
+          "Protein-Protein Interactions"
+        ],
+        "security": [
+          {
+            "RoleBasedJWTAuth": []
+          }
+        ]
+      }
+    },
+    "/api/ppi/interactions/{pair_id}": {
+      "get": {
+        "operationId": "dataportal_api_interactions_ppi_endpoints_get_ppi_interaction_by_pair_id",
+        "summary": "Get PPI interaction by pair ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pair_id",
+            "schema": {
+              "title": "Pair Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PPIInteractionDetailResponseSchema"
+                }
+              }
+            }
+          }
+        },
+        "description": "Fetch a single protein-protein interaction including consensus score and all evidence-channel weights for the interaction details panel.",
         "tags": [
           "Protein-Protein Interactions"
         ],
@@ -5452,6 +5587,12 @@
         "example": {
           "data": [
             {
+              "annotation": {
+                "pipeline": "mettannotator",
+                "pipeline_version": "2.0",
+                "processing_document_url": "https://example.org/processing-v2.0.md",
+                "processing_reference": "processing-v2.0"
+              },
               "assembly_accession": "",
               "assembly_name": "BU_ATCC8492VPI0062_NT5002",
               "contigs": [
@@ -5536,6 +5677,12 @@
       },
       "GenomeResponseSchema": {
         "example": {
+          "annotation": {
+            "pipeline": "mettannotator",
+            "pipeline_version": "2.0",
+            "processing_document_url": "https://example.org/processing-v2.0.md",
+            "processing_reference": "processing-v2.0"
+          },
           "assembly_accession": "",
           "assembly_name": "BU_ATCC8492VPI0062_NT5002",
           "contigs": [
@@ -5615,12 +5762,28 @@
             "type": "string"
           },
           "fasta_url": {
-            "title": "Fasta Url",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "",
+            "title": "Fasta Url"
           },
           "gff_url": {
-            "title": "Gff Url",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "",
+            "title": "Gff Url"
           },
           "type_strain": {
             "title": "Type Strain",
@@ -5632,6 +5795,16 @@
             },
             "title": "Contigs",
             "type": "array"
+          },
+          "annotation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StrainAnnotationSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -5640,8 +5813,6 @@
           "assembly_accession",
           "fasta_file",
           "gff_file",
-          "fasta_url",
-          "gff_url",
           "type_strain",
           "contigs"
         ],
@@ -5699,6 +5870,56 @@
           "per_page"
         ],
         "title": "PaginationMetadataSchema",
+        "type": "object"
+      },
+      "StrainAnnotationSchema": {
+        "properties": {
+          "pipeline": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pipeline"
+          },
+          "pipeline_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pipeline Version"
+          },
+          "processing_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Processing Reference"
+          },
+          "processing_document_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Processing Document Url"
+          }
+        },
+        "title": "StrainAnnotationSchema",
         "type": "object"
       },
       "GenomeSearchQuerySchema": {
@@ -5772,7 +5993,7 @@
                 "type": "null"
               }
             ],
-            "description": "Optional list of isolate names to filter.",
+            "description": "Isolate names to include. Comma-separated or repeated. Matches any of the names (OR).",
             "title": "Isolates"
           },
           "species_acronym": {
@@ -5784,7 +6005,7 @@
                 "type": "null"
               }
             ],
-            "description": "Optional species acronym filter (BU, PV).",
+            "description": "Optional species acronym filter. Comma-separated values are supported (e.g. 'BU,PV').",
             "title": "Species Acronym"
           }
         },
@@ -6062,6 +6283,201 @@
         "title": "DBXRefSchema",
         "type": "object"
       },
+      "GeneBgcAnnotationSchema": {
+        "description": "Biosynthetic gene cluster annotations.",
+        "properties": {
+          "gecco_bgc_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gecco Bgc Type"
+          },
+          "nearest_mibig": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nearest Mibig"
+          },
+          "nearest_mibig_class": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nearest Mibig Class"
+          },
+          "antismash_bgc_function": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Antismash Bgc Function"
+          }
+        },
+        "title": "GeneBgcAnnotationSchema",
+        "type": "object"
+      },
+      "GeneDbcanAnnotationSchema": {
+        "description": "dbCAN / CAZyme annotations.",
+        "properties": {
+          "prot_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prot Type"
+          },
+          "prot_family": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prot Family"
+          },
+          "substrate_pul": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Substrate Pul"
+          },
+          "substrate_sub": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Substrate Sub"
+          }
+        },
+        "title": "GeneDbcanAnnotationSchema",
+        "type": "object"
+      },
+      "GeneDefenseAnnotationSchema": {
+        "description": "Defense system annotations (DefenseFinder).",
+        "properties": {
+          "finder_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finder Type"
+          },
+          "finder_subtype": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finder Subtype"
+          }
+        },
+        "title": "GeneDefenseAnnotationSchema",
+        "type": "object"
+      },
+      "GeneMetadataSchema": {
+        "description": "Additional per-gene metadata from GFF.",
+        "properties": {
+          "extra_copy_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extra Copy Number"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "title": "GeneMetadataSchema",
+        "type": "object"
+      },
+      "GeneMobilomeAnnotationSchema": {
+        "description": "Mobile genetic element annotations.",
+        "properties": {
+          "mge_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mge Id"
+          },
+          "mge_types": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mge Types"
+          }
+        },
+        "title": "GeneMobilomeAnnotationSchema",
+        "type": "object"
+      },
       "GenePaginatedResponseSchema": {
         "description": "Paginated response specialized for gene listings.",
         "example": {
@@ -6074,6 +6490,18 @@
               "cog_funcats": [
                 "L"
               ],
+              "cog_id": [
+                "COG0593"
+              ],
+              "dbxref": [
+                {
+                  "db": "UniProt",
+                  "ref": "A7V2E8"
+                }
+              ],
+              "ec_number": null,
+              "eggnog": null,
+              "end_position": 1386,
               "essentiality": "essential",
               "feature_type": "gene",
               "gene_name": "dnaA",
@@ -6082,27 +6510,56 @@
               "has_mutant_growth": false,
               "has_proteomics": true,
               "has_reactions": false,
+              "inference": "ab initio prediction:Prodigal:002006",
               "interpro": [
                 "IPR001957",
                 "IPR010921",
-                "IPR013159",
-                "IPR013317",
-                "IPR020591",
-                "IPR024633",
-                "IPR027417",
-                "IPR038454"
+                "IPR013159"
               ],
               "isolate_name": "BU_ATCC8492",
               "locus_tag": "BU_ATCC8492_00001",
+              "ontology_terms": [
+                {
+                  "ontology_description": null,
+                  "ontology_id": "GO:0006270",
+                  "ontology_type": "GO"
+                }
+              ],
               "pfam": [
                 "PF00308",
                 "PF08299",
                 "PF11638"
               ],
               "product": "Chromosomal replication initiator protein DnaA",
+              "product_source": "Prokka",
               "seq_id": "contig_1",
               "species_acronym": "BU",
               "species_scientific_name": "Bacteroides uniformis",
+              "start_position": 1,
+              "uf_gene_name": "dnaA",
+              "uf_keyword": [
+                "ATP-binding",
+                "DNA-binding",
+                "Cytoplasm"
+              ],
+              "uf_ontology_terms": [
+                "GO:0003688",
+                "GO:0005524"
+              ],
+              "uf_prot_rec_fullname": "Chromosomal replication initiator protein DnaA",
+              "unifire": {
+                "gene_name": "dnaA",
+                "keywords": [
+                  "ATP-binding",
+                  "DNA-binding",
+                  "Cytoplasm"
+                ],
+                "ontology_terms": [
+                  "GO:0003688",
+                  "GO:0005524"
+                ],
+                "protein_fullname": "Chromosomal replication initiator protein DnaA"
+              },
               "uniprot_id": "A7V2E8"
             }
           ],
@@ -6175,6 +6632,18 @@
           "cog_funcats": [
             "L"
           ],
+          "cog_id": [
+            "COG0593"
+          ],
+          "dbxref": [
+            {
+              "db": "UniProt",
+              "ref": "A7V2E8"
+            }
+          ],
+          "ec_number": null,
+          "eggnog": null,
+          "end_position": 1386,
           "essentiality": "essential",
           "feature_type": "gene",
           "gene_name": "dnaA",
@@ -6183,27 +6652,56 @@
           "has_mutant_growth": false,
           "has_proteomics": true,
           "has_reactions": false,
+          "inference": "ab initio prediction:Prodigal:002006",
           "interpro": [
             "IPR001957",
             "IPR010921",
-            "IPR013159",
-            "IPR013317",
-            "IPR020591",
-            "IPR024633",
-            "IPR027417",
-            "IPR038454"
+            "IPR013159"
           ],
           "isolate_name": "BU_ATCC8492",
           "locus_tag": "BU_ATCC8492_00001",
+          "ontology_terms": [
+            {
+              "ontology_description": null,
+              "ontology_id": "GO:0006270",
+              "ontology_type": "GO"
+            }
+          ],
           "pfam": [
             "PF00308",
             "PF08299",
             "PF11638"
           ],
           "product": "Chromosomal replication initiator protein DnaA",
+          "product_source": "Prokka",
           "seq_id": "contig_1",
           "species_acronym": "BU",
           "species_scientific_name": "Bacteroides uniformis",
+          "start_position": 1,
+          "uf_gene_name": "dnaA",
+          "uf_keyword": [
+            "ATP-binding",
+            "DNA-binding",
+            "Cytoplasm"
+          ],
+          "uf_ontology_terms": [
+            "GO:0003688",
+            "GO:0005524"
+          ],
+          "uf_prot_rec_fullname": "Chromosomal replication initiator protein DnaA",
+          "unifire": {
+            "gene_name": "dnaA",
+            "keywords": [
+              "ATP-binding",
+              "DNA-binding",
+              "Cytoplasm"
+            ],
+            "ontology_terms": [
+              "GO:0003688",
+              "GO:0005524"
+            ],
+            "protein_fullname": "Chromosomal replication initiator protein DnaA"
+          },
           "uniprot_id": "A7V2E8"
         },
         "properties": {
@@ -6616,9 +7114,253 @@
             ],
             "default": "gene",
             "title": "Feature Type"
+          },
+          "ig_locus_tag_a": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ig Locus Tag A"
+          },
+          "ig_locus_tag_b": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ig Locus Tag B"
+          },
+          "flanking_locus_tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flanking Locus Tags"
+          },
+          "unifire": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeneUnifireAnnotationSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dbcan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeneDbcanAnnotationSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "bgc": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeneBgcAnnotationSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mobilome": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeneMobilomeAnnotationSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "defense": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeneDefenseAnnotationSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GeneMetadataSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "title": "GeneResponseSchema",
+        "type": "object"
+      },
+      "GeneUnifireAnnotationSchema": {
+        "description": "UniFire (uf_*) annotations from merged GFF.",
+        "properties": {
+          "gene_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gene Name"
+          },
+          "gene_name_synonym": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gene Name Synonym"
+          },
+          "keywords": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keywords"
+          },
+          "ontology_terms": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ontology Terms"
+          },
+          "protein_fullname": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Protein Fullname"
+          },
+          "protein_shortname": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Protein Shortname"
+          },
+          "protein_ec_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Protein Ec Number"
+          },
+          "alt_protein_fullname": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alt Protein Fullname"
+          },
+          "alt_protein_shortname": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alt Protein Shortname"
+          },
+          "alt_ec_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alt Ec Number"
+          },
+          "chebi": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chebi"
+          },
+          "pirsr_cofactor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pirsr Cofactor"
+          }
+        },
+        "title": "GeneUnifireAnnotationSchema",
         "type": "object"
       },
       "DrugMICDataSchema": {
@@ -7199,7 +7941,7 @@
                 "type": "null"
               }
             ],
-            "description": "Species acronym to filter (e.g., 'BU', 'PV').",
+            "description": "Species acronym to filter (e.g., 'BU', 'PV', or comma-separated 'BU,PV').",
             "title": "Species Acronym"
           },
           "locus_tag": {
@@ -7683,13 +8425,8 @@
             "type": "string"
           },
           "data": {
-            "additionalProperties": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "description": "Available score types",
+            "additionalProperties": true,
+            "description": "Available score types and evidence channel metadata. Example: {'score_types': [...], 'default': 'consensus_score', 'evidence_channels': {'ds_score': 'Deep learning', ...}}.",
             "title": "Data",
             "type": "object"
           }
@@ -7744,10 +8481,19 @@
         "title": "PPIDataSourcesResponseSchema",
         "type": "object"
       },
-      "PPISearchQuerySchema": {
-        "description": "Schema for PPI search queries.",
+      "PPIInteractionDetailResponseSchema": {
+        "description": "Response schema for a single PPI interaction by pair_id.",
         "properties": {
-          "species_acronym": {
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ResponseStatus"
+              }
+            ],
+            "default": "success",
+            "description": "Response status"
+          },
+          "message": {
             "anyOf": [
               {
                 "type": "string"
@@ -7756,134 +8502,23 @@
                 "type": "null"
               }
             ],
-            "description": "Species acronym (e.g., 'PV', 'BU')",
-            "title": "Species Acronym"
+            "description": "Human-readable message",
+            "title": "Message"
           },
-          "isolate_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Isolate name (e.g., 'BU_ATCC8492', 'PV_ATCC8482')",
-            "title": "Isolate Name"
+          "timestamp": {
+            "description": "ISO 8601 timestamp of the response",
+            "title": "Timestamp",
+            "type": "string"
           },
-          "score_type": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Score type to filter by",
-            "title": "Score Type"
-          },
-          "score_threshold": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Minimum score threshold",
-            "title": "Score Threshold"
-          },
-          "has_xlms": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Filter by XL-MS evidence",
-            "title": "Has Xlms"
-          },
-          "has_string": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Filter by STRING evidence",
-            "title": "Has String"
-          },
-          "has_operon": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Filter by operon evidence",
-            "title": "Has Operon"
-          },
-          "has_ecocyc": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Filter by EcoCyc evidence",
-            "title": "Has Ecocyc"
-          },
-          "protein_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Filter interactions involving specific protein",
-            "title": "Protein Id"
-          },
-          "locus_tag": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Filter interactions involving specific locus tag",
-            "title": "Locus Tag"
-          },
-          "page": {
-            "default": 1,
-            "description": "Page number",
-            "minimum": 1,
-            "title": "Page",
-            "type": "integer"
-          },
-          "per_page": {
-            "default": 20,
-            "description": "Results per page",
-            "maximum": 100000,
-            "minimum": 1,
-            "title": "Per Page",
-            "type": "integer"
+          "data": {
+            "$ref": "#/components/schemas/PPIInteractionSchema"
           }
         },
-        "title": "PPISearchQuerySchema",
+        "required": [
+          "timestamp",
+          "data"
+        ],
+        "title": "PPIInteractionDetailResponseSchema",
         "type": "object"
       },
       "PPIInteractionSchema": {
@@ -8070,6 +8705,226 @@
             ],
             "title": "String Protein B Id"
           },
+          "consensus_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consensus Score"
+          },
+          "consensus_rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consensus Rank"
+          },
+          "consensus_avg_rank": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consensus Avg Rank"
+          },
+          "edge_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Edge Id"
+          },
+          "interaction_weight": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interaction Weight"
+          },
+          "n_sources": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "N Sources"
+          },
+          "weight_coexp": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Coexp"
+          },
+          "weight_operons_annogesic": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Operons Annogesic"
+          },
+          "weight_operons_opdetect": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Operons Opdetect"
+          },
+          "weight_operons_opmapper": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Operons Opmapper"
+          },
+          "weight_phenocorr_neg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Phenocorr Neg"
+          },
+          "weight_phenocorr_pos": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Phenocorr Pos"
+          },
+          "weight_pmi_gsms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Pmi Gsms"
+          },
+          "weight_pmi": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Pmi"
+          },
+          "weight_ppi_gp_score_neg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Ppi Gp Score Neg"
+          },
+          "weight_ppi_gp_score_pos": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Ppi Gp Score Pos"
+          },
+          "weight_ppi_perturb_score_neg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Ppi Perturb Score Neg"
+          },
+          "weight_ppi_perturb_score_pos": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Ppi Perturb Score Pos"
+          },
+          "weight_ppi_xlms_files": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Ppi Xlms Files"
+          },
+          "weight_ppi_xlms_peptides": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Ppi Xlms Peptides"
+          },
           "dl_score": {
             "anyOf": [
               {
@@ -8235,6 +9090,148 @@
           "participants"
         ],
         "title": "PPIInteractionSchema",
+        "type": "object"
+      },
+      "PPISearchQuerySchema": {
+        "description": "Schema for PPI search queries.",
+        "properties": {
+          "species_acronym": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Species acronym (e.g., 'PV', 'BU')",
+            "title": "Species Acronym"
+          },
+          "isolate_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Isolate name (e.g., 'BU_ATCC8492', 'PV_ATCC8482')",
+            "title": "Isolate Name"
+          },
+          "score_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Score type to filter by",
+            "title": "Score Type"
+          },
+          "score_threshold": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Minimum score threshold",
+            "title": "Score Threshold"
+          },
+          "has_xlms": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filter by XL-MS evidence",
+            "title": "Has Xlms"
+          },
+          "has_string": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filter by STRING evidence",
+            "title": "Has String"
+          },
+          "has_operon": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filter by operon evidence",
+            "title": "Has Operon"
+          },
+          "has_ecocyc": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filter by EcoCyc evidence",
+            "title": "Has Ecocyc"
+          },
+          "protein_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filter interactions involving specific protein",
+            "title": "Protein Id"
+          },
+          "locus_tag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Filter interactions involving specific locus tag",
+            "title": "Locus Tag"
+          },
+          "page": {
+            "default": 1,
+            "description": "Page number",
+            "minimum": 1,
+            "title": "Page",
+            "type": "integer"
+          },
+          "per_page": {
+            "default": 20,
+            "description": "Results per page",
+            "maximum": 100000,
+            "minimum": 1,
+            "title": "Per Page",
+            "type": "integer"
+          }
+        },
+        "title": "PPISearchQuerySchema",
         "type": "object"
       },
       "PPISearchResponseSchema": {
@@ -8484,8 +9481,47 @@
                 "type": "null"
               }
             ],
-            "description": "Edge weight (score)",
+            "description": "Edge weight (consensus score on graph)",
             "title": "Weight"
+          },
+          "pair_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Canonical interaction pair ID",
+            "title": "Pair Id"
+          },
+          "n_sources": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Number of evidence sources contributing to this interaction",
+            "title": "N Sources"
+          },
+          "evidence_scores": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Per-channel evidence weights (detail panel only)",
+            "title": "Evidence Scores"
           }
         },
         "required": [

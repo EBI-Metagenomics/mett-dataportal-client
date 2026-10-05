@@ -88,28 +88,6 @@ def api_request(
     handle_raw_response(response, format, title=f"{method.upper()} {path}")
 
 
-@pyhmmer_app.command("databases")
-def pyhmmer_databases(
-    ctx: typer.Context,
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    response = client.raw_request("GET", "/api/pyhmmer/search/databases", format=format)
-    handle_raw_response(response, format, title="PyHMMER databases")
-
-
-@pyhmmer_app.command("mx-choices")
-def pyhmmer_mx_choices(
-    ctx: typer.Context,
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    response = client.raw_request(
-        "GET", "/api/pyhmmer/search/mx-choices", format=format
-    )
-    handle_raw_response(response, format, title="PyHMMER mx choices")
-
-
 @pyhmmer_app.command("search")
 def pyhmmer_search(
     ctx: typer.Context,
@@ -205,63 +183,3 @@ def pyhmmer_download(
         typer.echo(f"Wrote {output}")
     else:
         typer.echo(content)
-
-
-@pyhmmer_app.command("debug-msa")
-def pyhmmer_debug_msa(
-    ctx: typer.Context,
-    job_id: str = typer.Argument(...),
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    response = client.raw_request(
-        "GET",
-        f"/api/pyhmmer/result/{job_id}/debug-pyhmmer-msa",
-        format=format,
-    )
-    handle_raw_response(response, format, title=f"PyHMMER MSA ({job_id})")
-
-
-@pyhmmer_app.command("debug-fasta")
-def pyhmmer_debug_fasta(
-    ctx: typer.Context,
-    job_id: str = typer.Argument(...),
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    response = client.raw_request(
-        "GET",
-        f"/api/pyhmmer/result/{job_id}/debug-fasta",
-        format=format,
-    )
-    handle_raw_response(response, format, title=f"PyHMMER FASTA ({job_id})")
-
-
-@pyhmmer_app.command("debug-task")
-def pyhmmer_debug_task(
-    ctx: typer.Context,
-    task_id: str = typer.Argument(...),
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    response = client.raw_request(
-        "GET", f"/api/pyhmmer/debug/task/{task_id}", format=format
-    )
-    handle_raw_response(response, format, title=f"PyHMMER task ({task_id})")
-
-
-@pyhmmer_app.command("testtask")
-def pyhmmer_testtask(
-    ctx: typer.Context,
-    body_json: Optional[str] = typer.Option(None, "--body-json"),
-    body_file: Optional[Path] = typer.Option(
-        None, "--body-file", exists=True, readable=True
-    ),
-    format: Optional[str] = typer.Option(None, "--format", "-f"),
-) -> None:
-    client = ensure_client(ctx)
-    payload = _load_body_json(body_json, body_file)
-    response = client.raw_request(
-        "POST", "/api/pyhmmer/testtask", json_body=payload, format=format
-    )
-    handle_raw_response(response, format, title="PyHMMER test task")
