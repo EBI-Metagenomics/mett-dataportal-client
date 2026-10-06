@@ -104,6 +104,8 @@ Complete documentation is available in the [docs/](https://github.com/EBI-Metage
 
 ### Development
 
+See **[docs/dev/releasing.md](docs/dev/releasing.md)** for publishing a new version to TestPyPI / PyPI.
+
 #### From source (conda) — recommended
 
 Use a single conda environment. You do **not** need a separate `.venv`.

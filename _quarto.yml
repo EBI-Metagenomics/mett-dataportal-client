@@ -41,6 +41,7 @@ website:
     - section: "Maintainers"
       contents:
         - dev/codegen.md
+        - dev/releasing.md
 
 format:
   html:

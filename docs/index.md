@@ -32,5 +32,6 @@ print(len(client.list_species()))
 | [Troubleshooting](troubleshooting.md) | Common failures |
 | [Changelog](changelog.md) | Release notes |
 | [SDK codegen](dev/codegen.md) | Regenerating `mett_dataportal_sdk/` |
+| [Releasing](dev/releasing.md) | Publish to TestPyPI / PyPI |
 
 Examples document only endpoints that appear in the public OpenAPI schema. Internal/hidden routes are not listed here even if a CLI wrapper still exists.

@@ -100,4 +100,4 @@ version=$(python -c "import tomllib; f=open('pyproject.toml','rb'); print(tomlli
 ## See Also
 
 - **[Architecture](architecture.md)** - Overall project architecture
-- **[Releasing](releasing.md)** - Release process including SDK updates
+- **[Releasing](releasing.md)** - Release process including SDK updates and PyPI

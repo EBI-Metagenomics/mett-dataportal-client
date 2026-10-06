@@ -7,10 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- Initial release
 
-## [0.0.1a4] - 2024-XX-XX
+## [0.0.1a8] - 2026-10-06
+
+### Changed
+- Annotations - multiple release version support
+- Updated documentation structure for better user experience
+
+### Fixed
+- Minor fixes to CLI commands and output formatting
+
+## [0.0.1a4] - 2024-01-22
 
 ### Changed
 - Renamed Python package from `mett_dataportal` to `mett_client`
@@ -19,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed `search_genomes` API call to correctly include `format=json` parameter
 
-## [0.0.1a2] - 2024-XX-XX
+## [0.0.1a2] - 22024-01-XX
 
 ### Added
 - Initial alpha release
